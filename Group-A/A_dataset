@@ -1,0 +1,46 @@
+#个人帐户表
+CREATE TABLE Personaccount
+(
+accountid int not null,#股票账户号码（11位从000...1顺序到009...9赋予新用户）
+date TIMESTAMP default CURRENT_TIMESTAMP,#登记日期
+name text,#姓名
+gender text CHECK (gender='male' or gender='female'),#性别
+identityid text,#身份证号码
+homeaddress text,#家庭地址
+work text,#职业
+educationback text,#学历
+workaddress text,#工作单位
+phonenumber text,#联系电话
+agentid text,#代办人身份证号码
+state text CHECK (state='normal' or state='frozon' or state='logout'),#状态
+personid int,#用户ID（10位，首位为0标记为个人账户，从00...1到09...9）
+PRIMARY KEY (accountid)
+)
+#法人帐户表
+CREATE TABLE Corporateaccount
+(
+accountid int not null,#法人股票账户号码（11位从010...1顺序到019...9赋予新用户）
+registrationid int,#法人注册登记号码
+licenseid int,#营业执照号码
+identityid text,#身份证号码
+name text,#姓名
+phonenumber text,#联系电话
+workaddress text,#联系地址
+authorizername text,#授权证券交易执行人姓名
+authorizeridentityid text,#授权人身份证号码
+authorizerphonenumber text,#授权人联系电话
+authorizeraddress text,#授权人地址
+state text CHECK (state='normal' or state='frozon' or state='logout'),#状态
+personid int,#用户ID（10位，首位为1标记为法人账户，从10...1到19...9）
+PRIMARY KEY (accountid)
+)
+#证券账户持股表
+CREATE TABLE Stockhold
+(
+personid int,#用户ID（10位，首位为0标记为个人账户，首位为1标记为法人账户）
+stockid int,#股票ID
+stocknum int,#该股票所持有的总数量
+stockcost int,#该股票持有总成本
+updatetime TIMESTAMP,#更新时间
+PRIMARY KEY (personid,stockid)#用户ID与股票ID共同构成主键
+)
