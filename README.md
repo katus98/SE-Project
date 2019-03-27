@@ -1,4 +1,4 @@
-# SE-Project: Stock Trading System（股票交易系统）
+# SE-Project: Stock Trading System 股票交易系统
 A Project for Software Engineering course in Zhejiang University.  
 **项目负责人：孙克染**  
 The project is devided into 5 parts.  
