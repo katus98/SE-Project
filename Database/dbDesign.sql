@@ -9,7 +9,8 @@ create table stock(
 	today_startprice numeric(25, 2),   -- 今日开盘价
 	amount bigint,   -- 总发行量
 	permission boolean default true,   -- 本股票是否允许交易
-	notification varchar(500) default null   -- 通知
+	notification varchar(500) default null,   -- 通知
+	st boolean default false   -- 是否为ST股票
 );
 
 -- 股票历史记录
