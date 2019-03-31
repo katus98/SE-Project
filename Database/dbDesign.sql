@@ -48,7 +48,7 @@ create table personalaccount(
 	workaddress varchar(100),   -- 工作单位
 	phonenumber varchar(30),   -- 联系电话
 	agentid varchar(18),   -- 代办人身份证号码
-	state enum('normal', 'frozon', 'logout') default 'normal',   -- 状态
+	state enum('normal', 'frozen', 'logout') default 'normal',   -- 状态
 	personid bigint not null references idreference(personid)   -- 用户ID（10位，首位为0标记为个人账户，从00...1到09...9）
 );
 
@@ -66,7 +66,7 @@ create table corporateaccount(
 	authorizeridentityid varchar(18),   -- 授权人身份证号码
 	authorizerphonenumber varchar(30),   -- 授权人联系电话
 	authorizeraddress varchar(100),   -- 授权人地址
-	state enum('normal', 'frozon', 'logout') default 'normal',   -- 状态
+	state enum('normal', 'frozen', 'logout') default 'normal',   -- 状态
 	personid bigint not null references idreference(personid)   -- 用户ID（10位，首位为1标记为法人账户，从10...1到19...9）
 );
 
