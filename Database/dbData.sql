@@ -68,6 +68,9 @@ insert into
 insert into
 	stockhold(personid, stockid, stocknum, stockcost) 
 	select distinct personid, code, 0 as stocknum, 0.00 as stockcost from idreference cross join stock;
+update stockhold set stocknum = 10000, stockcost = 120000 where personid <> 3 and stockid = "000001";
+update stockhold set stocknum = 59124, stockcost = 240015 where personid <> 3 and stockid = "000004";
+-- 请根据需要进一步补充
 
 -- Group-B
 insert into 
