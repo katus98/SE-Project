@@ -118,8 +118,8 @@ create table capitalaccountio(
 -- 股票买入指令表
 drop table if exists bids;
 create table bids(
-	id bigint primary key,   -- 编号：唯一性的编号 作为指向该指令的索引
-	time timestamp default current_timestamp,   -- 时间 
+	id serial primary key,   -- 编号：唯一性的编号 作为指向该指令的索引
+	time timestamp default current_timestamp,   -- 时间
 	uid bigint not null references idreference(personid),   -- 用户ID标识
 	code varchar(20) not null references stock(code),   -- 代交易的股票代码 例如'BABA','MSFT'
 	shares bigint not null,   -- 所有交易的股数
@@ -132,8 +132,8 @@ create table bids(
 -- 股票卖出指令表
 drop table if exists asks;
 create table asks(
-	id bigint primary key,   -- 编号：唯一性的编号 作为指向该指令的索引
-	time timestamp default current_timestamp,   -- 时间 
+	id serial primary key,   -- 编号：唯一性的编号 作为指向该指令的索引
+	time timestamp default current_timestamp,   -- 时间
 	uid bigint not null references idreference(personid),   -- 用户ID标识
 	code varchar(20) not null references stock(code),   -- 代交易的股票代码 例如'BABA','MSFT'
 	shares bigint not null,   -- 所有交易的股数
@@ -146,35 +146,37 @@ create table asks(
 -- 交易撮合表
 drop table if exists matchs;
 create table matchs(
-	matchid bigint primary key,   -- 撮合编号
+	matchid serial primary key,   -- 撮合编号
 	askid bigint references asks(id),   -- 卖指令编号
 	bidid bigint references bids(id),   -- 买指令编号
 	shares bigint,   -- 交易数量
 	askPrice numeric(25, 2),   -- 卖指令价格
 	bidPrice numeric(25, 2),   -- 买指令价格
-	matchprice numeric(25, 2),   -- 撮合价格	
+	matchprice numeric(25, 2),   -- 撮合价格
 	matchtime timestamp default current_timestamp,   -- 撮合时间
-	code varchar(20) not null references stock(code)   -- 待交易的股票代码 例如'BABA','MSFT'
+	code varchar(20) not null references stock(code) on delete set null on update cascade  -- 待交易的股票代码 例如'BABA','MSFT'
 );
 
 -- 买入成交表
 drop table if exists dealsbid;
 create table dealsbid(
-	id bigint,   -- 买指令编号
+	id bigint unsigned primary key,   -- 买指令编号
 	shares bigint,   -- 指令规定的交易数
 	sharesdealed bigint,   -- 成交数
 	price numeric(25, 2),   -- 成交价格(单价)
 	time timestamp default current_timestamp,   -- 成交时间
-	code varchar(20) not null references stock(code)   -- 代交易的股票代码 例如'BABA','MSFT'
+	code varchar(20) not null references stock(code),   -- 代交易的股票代码 例如'BABA','MSFT'
+	foreign key (id) references bids(id) on delete cascade on update cascade
 );
 
 -- 卖出成交表
 drop table if exists dealsask;
 create table dealsask(
-	id bigint,   -- 卖指令编号
+	id bigint unsigned primary key,   -- 卖指令编号
 	shares bigint,   -- 指令规定的交易数
 	sharesdealed bigint,   -- 成交数
 	price numeric(25, 2),   -- 成交价格(单价)
 	time timestamp default current_timestamp,   -- 成交时间
-	code varchar(20) not null references stock(code)   -- 代交易的股票代码 例如'BABA','MSFT'
+	code varchar(20) not null references stock(code),   -- 代交易的股票代码 例如'BABA','MSFT'
+	foreign key (id) references asks(id) on delete cascade on update cascade
 );
