@@ -90,7 +90,7 @@ create table capitalaccount(
 	cashpassWord varchar(100) not null,   -- 存取款密码（用于存取款）
 	identificationid varchar(18) not null,   -- 开户身份证号码
 	relatedsecuritiesaccountid bigint references idreference(accountid),   -- 相关联的证券账户ID（外键）
-	capitalaccountstate enum('normal', 'frozon', 'logout') default 'normal',   -- 资金账户状态（正常，冻结，注销）
+	capitalaccountstate enum('normal', 'frozen', 'logout') default 'normal',   -- 资金账户状态（正常，冻结，注销）
 	availablemoney numeric(25, 2) default 0.000,   -- 可用资金
 	frozenmoney numeric(25, 2) default 0.000,   -- 冻结资金
 	interestremained numeric(25, 2) default 0.000   -- 利息余额
