@@ -16,18 +16,18 @@ delete from stock;
 
 -- Group-E
 insert into 
-	stock(code, name_stock, current_price, last_endprice, today_startprice, amount, permission, notification, st) 
+	stock(code, name_stock, current_price, last_endprice, today_startprice, amount, permission, notification, percentagePriceChange, st) 
 	values
-	("000001", "平安银行", 12.75, 12.79, 12.68, 1000000000, true, null, false), 
-	("000002", "万科A", 29.53, 29.15, 29.15, 1000000000, true, null, false), 
-	("000003", "国农科技", 19.6, 19.64, 19.99, 1000000000, true, null, false), 
-	("000004", "世纪星源", 3.73, 3.72, 3.72, 1000000000, true, null, false), 
-	("000005", "深振业A", 6.5, 6.5, 6.44, 1000000000, true, null, false), 
-	("000006", "全新好", 8.26, 8.41, 8.12, 1000000000, true, null, false), 
-	("000007", "神州高铁", 4.67, 4.59, 4.59, 1000000000, true, null, false), 
-	("000008", "中国宝安", 6.88, 6.57, 6.58, 1000000000, true, null, false), 
-	("000009", "美丽生态", 3.97, 3.87, 3.87, 1000000000, true, null, false), 
-	("000010", "深物业A", 11.15, 11.09, 11.09, 1000000000, true, null, false);
+	("000001", "平安银行", 12.75, 12.79, 12.68, 1000000000, true, null, 0.1, false), 
+	("000002", "万科A", 29.53, 29.15, 29.15, 1000000000, true, null, 0.1, false), 
+	("000003", "国农科技", 19.6, 19.64, 19.99, 1000000000, true, null, 0.1, false), 
+	("000004", "世纪星源", 3.73, 3.72, 3.72, 1000000000, true, null, 0.1, false), 
+	("000005", "深振业A", 6.5, 6.5, 6.44, 1000000000, true, null, 0.1, false), 
+	("000006", "全新好", 8.26, 8.41, 8.12, 1000000000, true, null, 0.1, false), 
+	("000007", "神州高铁", 4.67, 4.59, 4.59, 1000000000, true, null, 0.1, false), 
+	("000008", "中国宝安", 6.88, 6.57, 6.58, 1000000000, true, null, 0.1, false), 
+	("000009", "美丽生态", 3.97, 3.87, 3.87, 1000000000, true, null, 0.1, false), 
+	("000010", "深物业A", 11.15, 11.09, 11.09, 1000000000, true, null, 0.1, false);
 
 -- Group-A
 insert into 
