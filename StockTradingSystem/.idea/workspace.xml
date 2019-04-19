@@ -13,11 +13,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sqlClasses/SecuritiesAccount.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="638">
-              <caret line="29" column="13" selection-start-line="29" selection-start-column="12" selection-end-line="29" selection-end-column="13" />
+            <state relative-caret-position="110">
+              <caret line="5" column="9" lean-forward="true" selection-start-line="5" selection-start-column="9" selection-end-line="5" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -25,17 +25,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sqlClasses/CapitalAccount.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1606">
+            <state relative-caret-position="968">
               <caret line="73" column="18" selection-start-line="73" selection-start-column="18" selection-end-line="73" selection-end-column="18" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/interfaces/accountsRelated.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="990">
-              <caret line="45" column="6" selection-start-line="45" selection-start-column="6" selection-end-line="45" selection-end-column="6" />
+            <state relative-caret-position="-176">
+              <caret line="30" column="11" lean-forward="true" selection-start-line="30" selection-start-column="11" selection-end-line="30" selection-end-column="11" />
             </state>
           </provider>
         </entry>
@@ -65,10 +65,11 @@
         <option value="$PROJECT_DIR$/sqlClasses/Instructions.js" />
         <option value="$PROJECT_DIR$/sqlClasses/CapitalAccount.js" />
         <option value="$PROJECT_DIR$/sqlClasses/SecuritiesAccount.js" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="460" />
     <option name="y" value="-12" />
     <option name="width" value="1155" />
@@ -155,12 +156,12 @@
       <workItem from="1555657290639" duration="449000" />
       <workItem from="1555657795751" duration="1851000" />
       <workItem from="1555660417898" duration="5223000" />
-      <workItem from="1555682900855" duration="738000" />
+      <workItem from="1555682900855" duration="1012000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="8261000" />
+    <option name="totallyTimeSpent" value="8535000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="2576" height="1416" extended-state="6" />
@@ -249,24 +250,31 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="8" selection-start-column="8" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/sqlClasses/SecuritiesAccount.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="638">
-          <caret line="29" column="13" selection-start-line="29" selection-start-column="12" selection-end-line="29" selection-end-column="13" />
+        <state relative-caret-position="110">
+          <caret line="5" column="9" lean-forward="true" selection-start-line="5" selection-start-column="9" selection-end-line="5" selection-end-column="9" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/sqlClasses/CapitalAccount.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1606">
+        <state relative-caret-position="968">
           <caret line="73" column="18" selection-start-line="73" selection-start-column="18" selection-end-line="73" selection-end-column="18" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/interfaces/accountsRelated.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="990">
-          <caret line="45" column="6" selection-start-line="45" selection-start-column="6" selection-end-line="45" selection-end-column="6" />
+        <state relative-caret-position="-176">
+          <caret line="30" column="11" lean-forward="true" selection-start-line="30" selection-start-column="11" selection-end-line="30" selection-end-column="11" />
         </state>
       </provider>
     </entry>
