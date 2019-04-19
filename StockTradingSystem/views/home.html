@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home - Stock Trading</title>
+    <link rel='stylesheet' href='/stylesheets/homeStyle.css' />
+    <script src="/javascripts/jquery-3.3.1.js"></script>
+    <script src="/javascripts/homeTrading.js"></script>
+</head>
+<body>
+
+<h1>发出交易指令操作台</h1>
+<p>说明：使用此操作必须保证用户已经处于登录状态。</p>
+<form id="tradeOrder">
+    <p>用户ID: <input name="userId" type="number" value="" id="userId" /></p>
+    <p>
+        交易类型:
+        <input type="radio" name="tradeType" value="sell" checked="true" />卖出
+        <input type="radio" name="tradeType" value="buy" />购买
+    </p>
+    <p>股票ID: <input name="stockId" type="text" value="" /></p>
+    <p>股数: <input name="stockNum" type="number" value="" /></p>
+    <p>单价: <input name="pricePer" type="number" value="" />元/股</p>
+    <p><input type="button" value="提交" id="submit" />&nbsp;<input type="reset" value="重置" /></p>
+</form>
+
+<input type="button" value="查询全部的出售指令" id="queryAllCell" />
+<input type="button" value="查询全部的购买指令" id="queryAllBuy" />
+<input type="button" value="test" id="test" />
+<div id="cell">
+    出售指令查询结果:
+    <table id="tabCell"></table>
+</div>
+<div id="buy">
+    购买指令查询结果:
+    <table id="tabBuy"></table>
+</div>
+
+</body>
+</html>
