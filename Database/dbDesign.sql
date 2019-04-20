@@ -151,8 +151,8 @@ create table matchs(
 	askid bigint references asks(id),   -- 卖指令编号
 	bidid bigint references bids(id),   -- 买指令编号
 	shares bigint,   -- 交易数量
-	askPrice numeric(25, 2),   -- 卖指令价格
-	bidPrice numeric(25, 2),   -- 买指令价格
+	askprice numeric(25, 2),   -- 卖指令价格
+	bidprice numeric(25, 2),   -- 买指令价格
 	matchprice numeric(25, 2),   -- 撮合价格
 	matchtime timestamp default current_timestamp,   -- 撮合时间
 	code varchar(20) not null references stock(code) on delete set null on update cascade  -- 待交易的股票代码 例如'BABA','MSFT'
