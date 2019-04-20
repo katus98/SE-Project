@@ -9,6 +9,40 @@ function Instructions() {
     /****查询方法****/
     //Info查询
     //单项查询
+    /*
+    方法名称：getTheMostMatch
+    实现功能：获取最可能撮合的指令
+    传入参数：tradeType（'sell', 'buy'）、stockId、priceThreshold、callback、回调函数
+    回调参数：res = {result: false, id: 0, shares2trade: 0, price: 0, shares: 0}
+    编程者：孙克染
+    * */
+    this.getTheMostMatch = function (tradeType, stockId, priceThreshold, callback) {
+        let res = {result: false, id: 0, shares2trade: 0, price: 0, shares: 0};
+        let getSql = "SELECT id, shares2trade FROM ";
+        if (tradeType === "sell") {
+            getSql += "asks WHERE code = ? AND status = 'partial' AND price <= ? ORDER BY price asc, time asc limit 1";
+        } else {
+            getSql += "bids WHERE code = ? AND status = 'partial' AND price >= ? ORDER BY price desc, time asc limit 1";
+        }
+        let getSqlParams = [stockId, priceThreshold];
+        dbConnection.query(getSql, getSqlParams, function (err, result) {
+            if (err) {
+                console.log('[SELECT ERROR] - ', err.message);
+                callback(res);
+                return;
+            }
+            if (result.length > 0) {
+                res.result = true;
+                res.id = result.id;
+                res.price = result.price;
+                res.shares = result.shares;
+                res.shares2trade = result.shares2trade;
+                callback(res);
+            } else {
+                callback(res);
+            }
+        });
+    };
     /****插入方法****/
     /*
     方法名称：addInstructions
