@@ -60,7 +60,29 @@ function Instructions() {
                 callback(false);
                 return;
             }
+            Instructions.updateInstructionsStatus(function (result) {
+                console.log(result);
+            });
             callback(true);
+        });
+    };
+    Instructions.updateInstructionsStatus = function (callback) {
+        let modSql1 = "UPDATE asks SET status = 'complete' WHERE shares2trade = 0";
+        let modSql2 = "UPDATE bids SET status = 'complete' WHERE shares2trade = 0";
+        dbConnection.query(modSql1, function (err, result) {
+            if (err) {
+                console.log('[UPDATE ERROR] - ', err.message);
+                callback(false);
+                return;
+            }
+            dbConnection.query(modSql2, function (err, result) {
+                if (err) {
+                    console.log('[UPDATE ERROR] - ', err.message);
+                    callback(false);
+                    return;
+                }
+                callback(true);
+            });
         });
     };
 }
