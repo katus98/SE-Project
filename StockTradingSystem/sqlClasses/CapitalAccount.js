@@ -70,10 +70,31 @@ function CapitalAccount() {
             }
         });
     };
+    /*
+    方法名称：getTradePasswordByCapitalAccountId
+    实现功能：通过资金账户ID获取其密码
+    传入参数：capitalAccountId（整数或者数字字符串）、回调函数
+    回调参数：
+    编程者：
+    备注：
+    * */
+    this.getTradePasswordByCapitalAccountId = function (capitalAccountId, callback) {
+
+    };
     /****插入方法****/
     //todo: 这里自己写就好了，应该没有其他小组会调用
     /****更新方法****/
-    //todo: 这里自己写就好了，应该没有其他小组会调用
+    /*
+    方法名称：modifyTradePasswordByCapitalAccountId
+    实现功能：通过资金账户ID修改其密码
+    传入参数：capitalAccountId（整数或者数字字符串）、newPassword（字符串）回调函数
+    回调参数：
+    编程者：
+    备注：
+    * */
+    this.modifyTradePasswordByCapitalAccountId = function (capitalAccountId, newPassword, callback) {
+        
+    };
 }
 
 module.exports = CapitalAccount;
