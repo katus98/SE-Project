@@ -44,6 +44,17 @@ function Stock() {
             callback(result);
         });
     };
+    /*
+    方法名称：getStockInfoByStockId
+    实现功能：通过stockId获取股票详细信息
+    传入参数：stockId（字符串）、回调函数
+    回调参数：
+    编程者：
+    备注：
+    * */
+    this.getStockInfoByStockId = function (stockId, callback) {
+
+    };
     //单项查询
     /*
     方法名称：getStockNumberByPersonIdAndStockId
