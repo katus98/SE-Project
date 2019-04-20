@@ -93,7 +93,7 @@ function CapitalAccount() {
     备注：
     * */
     this.modifyTradePasswordByCapitalAccountId = function (capitalAccountId, newPassword, callback) {
-        
+
     };
 }
 
