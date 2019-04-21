@@ -10,14 +10,37 @@ let Stock = require('../sqlClasses/Stock');
 * */
 function Match() {
     /*
+    方法名称：convertTempInstructionsToInstructions
+    实现功能：将缓存的优先级最高的指令加入指令表
+    传入参数：回调函数
+    回调参数：bool: true, false
+    编程者：孙克染
+    备注：串行调用！
+    * */
+    this.convertTempInstructionsToInstructions = function (callback) {
+        let instructions = new Instructions();
+        instructions.getTheFirstTempInstructionInfo(function (result) {
+            if (result.length > 0) {
+                instructions.addInstructions(result[0].tradetype, result[0].uid, result[0].code, result[0].shares, result[0].price, function (result) {
+                    if (result === true) {
+                        console.log("加入指令并撮合完成！");
+                    } else {
+                        console.log("加入指令或撮合失败！");
+                    }
+                    callback(result);
+                });
+            }
+        });
+    };
+    /*
     方法名称：match
     实现功能：撮合新加入的交易指令
     传入参数：istID、tradeType、shares、price、code、personId、回调函数
     回调参数：bool: true, false
     编程者：孙克染、杨清杰、张梓欣、陈玮烨
-    备注：类成员函数，仅限于加入指令时调用！串行调用！
+    备注：仅限于加入指令时调用！串行调用！
     * */
-    Match.match = function (istID, tradeType, shares, price, code, personId, callback) {
+    this.match = function (istID, tradeType, shares, price, code, personId, callback) {
         let promise = new Promise(function (resolve, reject) {
             let resu = {result: false, continueOrNot: false, remark: "", remainShares: 0};
             let instruction = new Instructions();
