@@ -51,7 +51,7 @@ function Match() {
     编程者：孙克染、杨清杰、张梓欣、陈玮烨
     备注：仅限于加入指令时调用！串行调用！
     * */
-    this.match = function (istID, tradeType, shares, price, code, personId, callback) {
+    Match.match = function (istID, tradeType, shares, price, code, personId, callback) {
         let promise = new Promise(function (resolve, reject) {
             let resu = {result: false, continueOrNot: false, remark: "", remainShares: 0};
             let instruction = new Instructions();
@@ -168,7 +168,7 @@ function Match() {
             console.log(result.remark);
             if (result.result === true) {
                 if (result.continueOrNot === true) {
-                    this.match(istID, tradeType, result.remainShares, price, code, personId, callback);
+                    Match.match(istID, tradeType, result.remainShares, price, code, personId, callback);
                 } else {
                     console.log("撮合完成！");
                     callback(true);
