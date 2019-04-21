@@ -32,6 +32,24 @@ function Instructions() {
             callback(result);
         });
     };
+    /*
+    方法名称：getTheFirstTempInstructionInfo
+    实现功能：获取优先级最高的一条临时缓存交易指令
+    传入参数：回调函数
+    回调参数：json：直接承接result
+    编程者：孙克染
+    备注：调用时需要判断结果length>0；按时间从新到旧的顺序排列；D组外小组请勿调用
+    * */
+    this.getTheFirstTempInstructionInfo = function (callback) {
+        let getSql = "SELECT * FROM tempinstructions ORDER BY time DESC LIMIT 1";
+        dbConnection.query(getSql, function (err, result) {
+            if (err) {
+                console.log('[SELECT ERROR] - ', err.message);
+                return;
+            }
+            callback(result);
+        });
+    };
     //单项查询
     /*
     方法名称：getTheMostMatch
