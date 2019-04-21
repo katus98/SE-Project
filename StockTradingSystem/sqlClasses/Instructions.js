@@ -37,12 +37,12 @@ function Instructions() {
     方法名称：getTheMostMatch
     实现功能：获取最可能撮合的指令
     传入参数：tradeType（'sell', 'buy'）、stockId（字符串）、priceThreshold（浮点数）、回调函数
-    回调参数：res = {result: false, id: 0, shares2trade: 0, price: 0, shares: 0}
+    回调参数：res = {result: false, id: 0, personid: 0, shares2trade: 0, price: 0, shares: 0};
     编程者：孙克染
     * */
     this.getTheMostMatch = function (tradeType, stockId, priceThreshold, callback) {
-        let res = {result: false, id: 0, shares2trade: 0, price: 0, shares: 0};
-        let getSql = "SELECT id, shares2trade FROM ";
+        let res = {result: false, id: 0, personid: 0, shares2trade: 0, price: 0, shares: 0};
+        let getSql = "SELECT * FROM ";
         if (tradeType === "sell") {
             getSql += "asks WHERE code = ? AND status = 'partial' AND price <= ? ORDER BY price asc, time asc limit 1";
         } else {
@@ -56,6 +56,7 @@ function Instructions() {
                 return;
             }
             if (result.length > 0) {
+                res.personid = result.uid;
                 res.result = true;
                 res.id = result[0].id;
                 res.price = result[0].price;
