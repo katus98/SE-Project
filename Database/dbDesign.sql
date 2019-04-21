@@ -10,7 +10,7 @@ create table stock(
 	amount bigint,   -- 总发行量
 	permission boolean default true,   -- 本股票是否允许交易
 	notification varchar(500) default null,   -- 通知
-	percentagePriceChange numeric(8, 3) default 0.1,   -- 最大涨跌幅
+	percentagepricechange numeric(8, 3) default 0.1,   -- 最大涨跌幅
 	st boolean default false   -- 是否为ST股票
 );
 
