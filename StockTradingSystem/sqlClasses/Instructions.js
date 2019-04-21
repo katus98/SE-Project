@@ -11,10 +11,10 @@ function Instructions() {
     /*
     方法名称：getInstructionsInfoByPersonId
     实现功能：通过personid获取股票指令发布信息
-    传入参数：tradeType（'sell', 'buy'）、personId（）、回调函数
-    回调参数：直接承接result
+    传入参数：tradeType（'sell', 'buy'）、personId（整数）、回调函数
+    回调参数：json：直接承接result
     编程者：孙克染
-    备注：
+    备注：调用时需要判断结果length>0
     * */
     this.getInstructionsInfoByPersonId = function (tradeType, personId, callback) {
         let getSql = "SELECT * FROM ";
@@ -36,7 +36,7 @@ function Instructions() {
     /*
     方法名称：getTheMostMatch
     实现功能：获取最可能撮合的指令
-    传入参数：tradeType（'sell', 'buy'）、stockId、priceThreshold、callback、回调函数
+    传入参数：tradeType（'sell', 'buy'）、stockId（字符串）、priceThreshold（浮点数）、回调函数
     回调参数：res = {result: false, id: 0, shares2trade: 0, price: 0, shares: 0}
     编程者：孙克染
     * */
