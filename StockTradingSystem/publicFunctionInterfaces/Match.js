@@ -13,22 +13,33 @@ function Match() {
     方法名称：convertTempInstructionsToInstructions
     实现功能：将缓存的优先级最高的指令加入指令表
     传入参数：回调函数
-    回调参数：bool: true, false
+    回调参数：res = {result: false, remark: ""}
     编程者：孙克染
     备注：串行调用！
     * */
     this.convertTempInstructionsToInstructions = function (callback) {
+        let res = {result: false, remark: ""};
         let instructions = new Instructions();
         instructions.getTheFirstTempInstructionInfo(function (result) {
             if (result.length > 0) {
                 instructions.addInstructions(result[0].tradetype, result[0].uid, result[0].code, result[0].shares, result[0].price, function (result) {
-                    if (result === true) {
-                        console.log("加入指令并撮合完成！");
+                    if (result.addResult === true) {
+                        res.remark = "加入指令完成！";
                     } else {
-                        console.log("加入指令或撮合失败！");
+                        res.remark = "加入指令失败！";
                     }
-                    callback(result);
+                    if (result.matchResult === true) {
+                        res.remark += "撮合成功！";
+                    } else {
+                        res.remark += "撮合失败！";
+                    }
+                    res.result = result.addResult && result.matchResult;
+                    callback(res);
                 });
+            } else {
+                res.remark = "没有缓存指令！";
+                res.result = true;
+                callback(res);
             }
         });
     };
