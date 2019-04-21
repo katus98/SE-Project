@@ -70,20 +70,39 @@ function Instructions() {
     };
     /****插入方法****/
     /*
+    方法名称：addTempInstructions
+    实现功能：插入缓存交易指令
+    传入参数：tradeType（'sell', 'buy'）、personId（整数）、stockId（字符串）、shares（整数）、price（浮点数）、回调函数
+    回调参数：true（插入成功）, false（插入失败）
+    编程者：孙克染
+    * */
+    this.addTempInstructions = function (tradeType, personId, stockId, shares, price, callback) {
+        let addSql = "INSERT INTO tempinstructions(tradetype, uid, code, shares, price) VALUES(?,?,?,?,?)";
+        let addSqlParams = [tradeType, personId, stockId, shares, price];
+        dbConnection.query(addSql, addSqlParams, function (err, result) {
+            if (err) {
+                console.log('[INSERT ERROR] - ', err.message);
+                callback(false);
+                return;
+            }
+            callback(true);
+        });
+    };
+    /*
     方法名称：addInstructions
     实现功能：插入交易指令
-    传入参数：tradeType（'sell', 'buy'）、personid（整数）、stockid（字符串）、shares（整数）、pricePer（浮点数）、回调函数
+    传入参数：tradeType（'sell', 'buy'）、personId（整数）、stockId（字符串）、shares（整数）、pricePer（浮点数）、回调函数
     回调参数：true（插入成功）, false（插入失败）
     编程者：孙克染、陈玮烨
     * */
-    this.addInstructions = function (tradeType, personid, stockid, shares, pricePer, callback) {
+    this.addInstructions = function (tradeType, personId, stockId, shares, price, callback) {
         let addSql = "INSERT INTO ";
         if (tradeType === "sell") {
             addSql += 'asks(uid, code, shares, price, shares2trade) VALUES(?,?,?,?,?)';
         } else {
             addSql += 'bids(uid, code, shares, price, shares2trade) VALUES(?,?,?,?,?)';
         }
-        let addSqlParams = [personid, stockid, shares, pricePer, shares];
+        let addSqlParams = [personId, stockId, shares, price, shares];
         //// cwy修改：添加参数
         dbConnection.query(addSql, addSqlParams, function (err, result) {
             if (err) {
