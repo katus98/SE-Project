@@ -5,14 +5,25 @@ var router = express.Router();
 var dbConnection = require('../database/MySQLconnection');
 
 // 引入自定义模块接口
-var Accounts = require('../interfaces/accountsRelated');
-var Money = require('../interfaces/moneyRelated');
-var Stock = require('../interfaces/stockRelated');
-var Instructions = require('../interfaces/instructionsRelated');
+let SecuritiesAccount = require('../sqlClasses/SecuritiesAccount');
+let CapitalAccount = require('../sqlClasses/CapitalAccount');
+let Stock = require('../sqlClasses/Stock');
+let Instructions = require('../sqlClasses/Instructions');
+
+let User = require('../publicFunctionInterfaces/Users');
+let Match = require('../publicFunctionInterfaces/Match');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
     res.render('home');
+    let match = new Match();
+    setInterval(match.convertTempInstructionsToInstructions(function (result) {
+        if (result === true) {
+            console.log("加入成功！撮合成功！");
+        } else {
+            console.log("加入或者撮合失败！");
+        }
+    }), 5000);
 });
 
 router.get('/index', function (req, res, next) {
@@ -20,141 +31,90 @@ router.get('/index', function (req, res, next) {
 });
 
 router.post('/orderSubmit', function (req, res) {
-    // 步骤一 检验指令和账户的有效性然后插入有效的指令数据
-    var promise1 = new Promise(function (resolve, reject) {
-        let returnState = false;
-        let returnMessage = "";
-        console.log(req.body);
-        var accounts = new Accounts();
-        accounts.getCapitalAccountState(parseInt(req.body.userId), function (result) {
-            if (result !== 'normal') {
-                returnMessage = "资金账户异常或不存在!";
-                res.end(returnMessage);
-                resolve(returnState);
-            } else {
-                accounts.getAccountidByCapitalAccountid(parseInt(req.body.userId), function (result) {
-                    try {
-                        let accountid = parseInt(result);
-                        accounts.getAccountidState(accountid, function (result) {
-                            if (result !== 'normal') {
-                                returnMessage = "证券账户异常或不存在!";
-                                res.end(returnMessage);
-                                resolve(returnState);
-                            } else {
-                                var instructions = new Instructions();
-                                if (req.body.tradeType === "sell") {
-                                    accounts.getPersonidByAccountid(accountid, function (result) {
-                                        try {
-                                            let personid = parseInt(result);
-                                            var stock = new Stock();
-                                            stock.getStockNumberByPersonidAndStockid(personid, req.body.stockId, function (result) {
-                                                try {
-                                                    let stockNum = parseInt(result);
-                                                    if (stockNum < parseInt(req.body.stockNum)) {
-                                                        returnMessage = "证券账户对应股票持股数不足, 仅持有" + stockNum + "股!";
-                                                        res.end(returnMessage);
-                                                        resolve(returnState);
-                                                    } else {
-                                                        instructions.addInstructions("sell", personid, req.body.stockId, parseInt(req.body.stockNum), parseFloat(req.body.pricePer), function (result) {
-                                                            if (result === "Add Failed!") {
-                                                                returnMessage = "指令插入数据库时出现异常!";
-                                                            } else {
-                                                                returnState = true;
-                                                                returnMessage = "股票出售指令发布成功!";
-                                                            }
-                                                            res.end(returnMessage);
-                                                            resolve(returnState);
-                                                        });
-                                                    }
-                                                } catch (error) {
-                                                    console.log(error.message);
-                                                    returnMessage = "证券账户持股存在问题!";
-                                                    res.end(returnMessage);
-                                                    resolve(returnState);
-                                                }
-                                            });
-                                        } catch (error) {
-                                            console.log(error.message);
-                                            returnMessage = "证券账户存在问题!";
-                                            res.end(returnMessage);
-                                            resolve(returnState);
-                                        }
-                                    });
+    let promise1 = new Promise(function (resolve, reject) {
+        let res0 = {result: false, remark: ""};
+        let user = new User();
+        user.checkAllAccountValidity(parseInt(req.body.userId), function (result0) {
+            if (result0.result === true) {
+                let stock = new Stock();
+                stock.getStockPermissionByStockId(req.body.stockId, function (result) {
+                    if (result === "true") {
+                        let instructions = new Instructions();
+                        let capitalAccount = new CapitalAccount();
+                        if (req.body.tradeType === "sell") {
+                            stock.getStockNumberByPersonIdAndStockId(result0.personId, req.body.stockId, function (result) {
+                                if (result === 'notFound') {
+                                    res0.remark = "证券账户持股存在问题！";
+                                    resolve(res0);
                                 } else {
-                                    var money = new Money();
-                                    money.getAvailableMoneyByCapitalAccountid(parseInt(req.body.userId), function (result) {
-                                        try {
-                                            let haveMoney = parseFloat(result);
-                                            if (haveMoney < parseInt(req.body.stockNum)*parseFloat(req.body.pricePer)) {
-                                                returnMessage = "资金账户可用资金不足, 仅剩" + haveMoney + "元!";
-                                                res.end(returnMessage);
-                                                resolve(returnState);
+                                    let stockNum = parseInt(result);
+                                    if (stockNum < parseInt(req.body.stockNum)) {
+                                        res0.remark = "证券账户对应股票持股数不足, 仅持有" + stockNum + "股!";
+                                        resolve(res0);
+                                    } else {
+                                        instructions.addTempInstructions('sell', result0.personId, req.body.stockId, parseInt(req.body.stockNum), parseFloat(req.body.pricePer), function (result) {
+                                            if (result === false) {
+                                                res0.remark = "指令插入数据库时出现异常!";
                                             } else {
-                                                money.convertAvailableMoneyToFrozenMoney(parseInt(req.body.userId), parseInt(req.body.stockNum)*parseFloat(req.body.pricePer), function (result) {
-                                                    if (result === "Error!") {
-                                                        returnMessage = "转账时出现异常!";
-                                                        res.end(returnMessage);
-                                                        resolve(returnState);
-                                                    } else {
-                                                        instructions.addInstructions("sell", personid, req.body.stockId, parseInt(req.body.stockNum), parseFloat(req.body.pricePer), function (result) {
-                                                            if (result === "Add Failed!") {
-                                                                returnMessage = "指令插入数据库时出现异常!";
-                                                            } else {
-                                                                returnState = true;
-                                                                returnMessage = "股票购买指令发布成功!";
-                                                            }
-                                                            res.end(returnMessage);
-                                                            resolve(returnState);
-                                                        });
-                                                    }
-                                                });
+                                                res0.result = true;
+                                                res0.remark = "股票出售指令发布成功!";
                                             }
-                                        } catch (error) {
-                                            console.log(error.message);
-                                            returnMessage = "资金账户可用资金存在问题!";
-                                            res.end(returnMessage);
-                                            resolve(returnState);
-                                        }
-                                    });
+                                            resolve(res0);
+                                        });
+                                    }
                                 }
-                            }
-                        });
-                    } catch (error) {
-                        console.log(error.message);
-                        returnMessage = "资金账户不存在对应的证券账户!";
-                        res.end(returnMessage);
-                        resolve(returnState);
+                            });
+                        } else {
+                            capitalAccount.getAvailableMoneyByCapitalAccountId(parseInt(req.body.userId), function (result) {
+                                if (result === 'notFound') {
+                                    res0.remark = "资金账户可用资金存在问题！";
+                                    resolve(res0);
+                                } else {
+                                    let availableMoney = parseFloat(result);
+                                    let moneyThisTime = parseInt(req.body.stockNum)*parseFloat(req.body.pricePer);
+                                    if (availableMoney < moneyThisTime) {
+                                        res0.remark = "资金账户可用资金不足, 仅剩" + availableMoney + "元!";
+                                        resolve(res0);
+                                    } else {
+                                        capitalAccount.convertAvailableMoneyToFrozenMoney(parseInt(req.body.userId), moneyThisTime, function (result) {
+                                            if (result === true) {
+                                                instructions.addTempInstructions('buy', result0.personId, req.body.stockId, parseInt(req.body.stockNum), parseFloat(req.body.pricePer), function (result) {
+                                                    if (result === false) {
+                                                        res0.remark = "指令插入数据库时出现异常!";
+                                                    } else {
+                                                        res0.result = true;
+                                                        res0.remark = "股票购买指令发布成功!";
+                                                    }
+                                                    resolve(res0);
+                                                });
+                                            } else {
+                                                res0.remark = "转账失败！";
+                                                resolve(res0);
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    } else if (result === "false") {
+                        res0.remark = "该股票不允许交易！";
+                        resolve(res0);
+                    } else {
+                        res0.result = "股票不存在！";
+                        resolve(res0);
                     }
                 });
+            } else {
+                res0.remark = result0.remark;
+                resolve(res0);
             }
         });
     });
-    // 步骤二 查询新入指令对应股票的全部出售指令
-    var promise2 = new Promise(function (resolve, reject) {
-        var instructions = new Instructions();
-        instructions.getPartialInstructionsByStockid("sell", req.body.stockId, function (result) {
-            resolve(result);
-        });
-    });
-    // 步骤三 查询新入指令对应股票的全部购买指令
-    var promise3 = new Promise(function (resolve, reject) {
-        var instructions = new Instructions();
-        instructions.getPartialInstructionsByStockid("buy", req.body.stockId, function (result) {
-            resolve(result);
-        });
-    });
-    // 执行代码
-    promise1.then(function (reState) {
-        if (reState) {
-            promise2.then(function (result) {
-                let asks = result;
-                promise3.then(function (result) {
-                    let bids = result;
-                    console.log(asks);
-                    console.log(bids);
-                    //todo: 股票撮合代码填充处 建议使用promise强制执行顺序
-                });
-            });
+    promise1.then(function (res0) {
+        res.end(res0.remark);
+        if (res0.result === true) {
+            //todo: 撮合系统唤醒
+            console.log("指令加入缓存成功！");
         }
     });
 });
@@ -184,11 +144,11 @@ router.post('/queryBuy', function (req, res) {
 });
 
 router.post('/test', function (req, res) {
-    var accounts = new Accounts();
-    accounts.getAccountidByPersonid(parseInt(req.body.userId), function (result) {
-        let returnText = "" + result;
-        res.end(returnText);
-    });
+    // var accounts = new Accounts();
+    // accounts.getAccountidByPersonid(parseInt(req.body.userId), function (result) {
+    //     let returnText = "" + result;
+    //     res.end(returnText);
+    // });
 });
 
 module.exports = router;
