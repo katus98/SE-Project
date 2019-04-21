@@ -162,6 +162,8 @@ function Match() {
                     console.log("撮合完成！");
                     callback(true);
                 }
+            } else {
+                callback(false);
             }
         });
     };
