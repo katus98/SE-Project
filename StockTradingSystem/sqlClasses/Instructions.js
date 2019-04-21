@@ -8,6 +8,30 @@ let dbConnection = require('../database/MySQLconnection');
 function Instructions() {
     /****查询方法****/
     //Info查询
+    /*
+    方法名称：getInstructionsInfoByPersonId
+    实现功能：通过personid获取股票指令发布信息
+    传入参数：tradeType（'sell', 'buy'）、personId（）、回调函数
+    回调参数：直接承接result
+    编程者：孙克染
+    备注：
+    * */
+    this.getInstructionsInfoByPersonId = function (tradeType, personId, callback) {
+        let getSql = "SELECT * FROM ";
+        if (tradeType === "sell") {
+            getSql += "asks WHERE uid = ? ORDER BY time desc";
+        } else {
+            getSql += "bids WHERE uid = ? ORDER BY time desc";
+        }
+        let getSqlParams = [personId];
+        dbConnection.query(getSql, getSqlParams, function (err, result) {
+            if (err) {
+                console.log('[SELECT ERROR] - ', err.message);
+                return;
+            }
+            callback(result);
+        });
+    };
     //单项查询
     /*
     方法名称：getTheMostMatch
