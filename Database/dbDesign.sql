@@ -144,6 +144,18 @@ create table asks(
 	status enum('complete', 'expired', 'partial') default 'partial'   -- 状态 complete, expired, partial
 );
 
+-- 交易指令缓存表
+drop table if exists tempinstructions;
+create table tempinstructions(
+	id serial primary key,   -- 编号：唯一性的编号
+	time timestamp default current_timestamp,   -- 缓存时间
+	tradetype enum('sell', 'buy'),   -- 交易类型
+	uid bigint not null references idreference(personid),   -- 用户ID标识
+	code varchar(20) not null references stock(code),   -- 代交易的股票代码 例如'BABA','MSFT'
+	shares bigint not null,   -- 所有交易的股数
+	price numeric(25, 2) not null   -- 交易的单价（元/股）[0-999999.99]
+);
+
 -- 交易撮合表
 drop table if exists matchs;
 create table matchs(
