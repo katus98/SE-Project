@@ -134,8 +134,7 @@ function Instructions() {
             }
             const istID = result.insertId;    // 需要记录刚刚插入的指令的编号
             res.addResult = true;
-            let match = new Match();
-            match.match(istID, tradeType, shares, price, stockId, personId, function (result) {
+            Match.match(istID, tradeType, shares, price, stockId, personId, function (result) {
                 res.matchResult = result;
                 callback(res);
             });
