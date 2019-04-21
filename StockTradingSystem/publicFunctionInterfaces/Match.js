@@ -168,7 +168,7 @@ function Match() {
             console.log(result.remark);
             if (result.result === true) {
                 if (result.continueOrNot === true) {
-                    User.match(istID, tradeType, result.remainShares, price, code, personId, callback);
+                    this.match(istID, tradeType, result.remainShares, price, code, personId, callback);
                 } else {
                     console.log("撮合完成！");
                     callback(true);
