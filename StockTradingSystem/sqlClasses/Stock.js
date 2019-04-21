@@ -88,6 +88,28 @@ function Stock() {
             }
         });
     };
+    /*
+    方法名称：getStockPermissionByStockId
+    实现功能：通过stockId查询对应股票是否允许交易
+    传入参数：stockId（字符串）、回调函数
+    回调参数：字符串：'true''false''notFound'
+    编程者：孙克染
+    * */
+    this.getStockPermissionByStockId = function (stockId, callback) {
+        let getSql = "SELECT permission FROM stock WHERE code = ?";
+        let getSqlParams = [stockId];
+        dbConnection.query(getSql, getSqlParams, function (err, result) {
+            if (err) {
+                console.log('[SELECT ERROR] - ', err.message);
+                return;
+            }
+            if (result.length > 0) {
+                callback("" + result[0].permission);
+            } else {
+                callback('notFound');
+            }
+        });
+    };
     /****插入方法****/
     //todo: 这里自己写就好了，应该没有其他小组会调用
     /****更新方法****/
