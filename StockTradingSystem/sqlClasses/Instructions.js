@@ -57,10 +57,10 @@ function Instructions() {
             }
             if (result.length > 0) {
                 res.result = true;
-                res.id = result.id;
-                res.price = result.price;
-                res.shares = result.shares;
-                res.shares2trade = result.shares2trade;
+                res.id = result[0].id;
+                res.price = result[0].price;
+                res.shares = result[0].shares;
+                res.shares2trade = result[0].shares2trade;
                 callback(res);
             } else {
                 callback(res);
