@@ -16,7 +16,7 @@ function User() {
     编程者：孙克染（demo）
     * */
     this.checkAllAccountValidity = function (capitalAccountId, callback) {
-        let res = {result: false, remark: ""};
+        let res = {result: false, remark: "", personId: 0, capitalAccountId: capitalAccountId, securitiesAccountId: 0};
         let capitalAccount = new CapitalAccount();
         capitalAccount.getCapitalAccountStateByCapitalAccountId(capitalAccountId, function (result) {
             if (result === 'normal') {
@@ -25,12 +25,21 @@ function User() {
                         res.remark = "该资金账户尚未关联证券账户！";
                         callback(res);
                     } else {
+                        res.securitiesAccountId = parseInt(result);
                         let securitiesAccount = new SecuritiesAccount();
                         securitiesAccount.getSecuritiesAccountStateBySecuritiesAccountId(parseInt(result), function (result) {
                             if (result === 'normal') {
-                                res.result = true;
-                                res.remark = "验证成功！";
-                                callback(res);
+                                securitiesAccount.getPersonIdBySecuritiesAccountId(parseInt(result), function (result) {
+                                    if (result === 'notFound') {
+                                        res.remark = "证券账户存在问题！";
+                                        callback(res);
+                                    } else {
+                                        res.result = true;
+                                        res.remark = "验证成功！";
+                                        res.personId = parseInt(result);
+                                        callback(res);
+                                    }
+                                });
                             } else if (result === 'frozen') {
                                 res.remark = "相关联的证券账户已被冻结！";
                                 callback(res);
