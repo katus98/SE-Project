@@ -118,7 +118,7 @@ function Instructions() {
     /*
     方法名称：addDeals
     实现功能：插入撮合记录
-    传入参数：askId、bidId、shares（整数）、askPrice（浮点数）、bidPrice（浮点数）、matchPrice（浮点数）、stockId（字符串）、回调函数
+    传入参数：tradeType、instructionId, shares, sharesDealed, price, stockId,、回调函数
     回调参数：true（插入成功）, false（插入失败）
     编程者：孙克染
     * */
