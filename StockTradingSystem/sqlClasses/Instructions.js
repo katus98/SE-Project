@@ -1,6 +1,9 @@
 // 数据库连接
 let dbConnection = require('../database/MySQLconnection');
 
+// 引用的自定义模块类
+let Match = require('../publicFunctionInterfaces/Match');
+
 /*
 * Instructions类：包含对数据库表格bids、asks、matchs、dealsbid、dealsask的直接SQL操作
 * 维护小组：D组
@@ -114,6 +117,7 @@ function Instructions() {
     编程者：孙克染、陈玮烨
     * */
     this.addInstructions = function (tradeType, personId, stockId, shares, price, callback) {
+        let res = {addResult: false, matchResult: false};
         let addSql = "INSERT INTO ";
         if (tradeType === "sell") {
             addSql += 'asks(uid, code, shares, price, shares2trade) VALUES(?,?,?,?,?)';
@@ -125,13 +129,16 @@ function Instructions() {
         dbConnection.query(addSql, addSqlParams, function (err, result) {
             if (err) {
                 console.log('[INSERT ERROR] - ', err.message);
-                callback(false);
+                callback(res);
                 return;
             }
             const istID = result.insertId;    // 需要记录刚刚插入的指令的编号
-            //console.log('INSERT ID:', result);
-            callback(true);
-            //matchOnInsertion(istID, tradeType, shares, pricePer, code);
+            res.addResult = true;
+            let match = new Match();
+            match.match(istID, tradeType, shares, price, stockId, personId, function (result) {
+                res.matchResult = result;
+                callback(res);
+            });
         });
     };
     /*
