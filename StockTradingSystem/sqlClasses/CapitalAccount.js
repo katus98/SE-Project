@@ -49,6 +49,29 @@ function CapitalAccount() {
         });
     };
     /*
+    方法名称：getAvailableMoneyByCapitalAccountId
+    实现功能：通过资金账户ID获取可用资金
+    传入参数：capitalAccountId（整数）、回调函数
+    回调参数：字符串：可用资金数字字符串或者'notFound'
+    编程者：孙克染（demo）
+    备注：调用时需要先判断返回的结果是否是'notFound'
+    * */
+    this.getAvailableMoneyByCapitalAccountId = function (capitalAccountId, callback) {
+        let getSql = "SELECT availablemoney FROM capitalaccount WHERE capitalaccountid = ?";
+        let getSqlParams = [capitalAccountId];
+        dbConnection.query(getSql, getSqlParams, function (err, result) {
+            if (err) {
+                console.log('[SELECT ERROR] - ', err.message);
+                return;
+            }
+            if (result.length > 0) {
+                callback("" + result[0].availablemoney);
+            } else {
+                callback('notFound');
+            }
+        });
+    };
+    /*
     方法名称：getSecuritiesAccountIdByCapitalAccountId
     实现功能：通过资金账户ID获取关联的证券账户ID
     传入参数：capitalAccountId（整数或者数字字符串）、回调函数
