@@ -14,7 +14,7 @@ function Match() {
     实现功能：撮合新加入的交易指令
     传入参数：istID、tradeType、shares、price、code、personId、回调函数
     回调参数：bool: true, false
-    编程者：孙克染
+    编程者：孙克染、杨清杰、张梓欣、陈玮烨
     备注：类成员函数，仅限于加入指令时调用！串行调用！
     * */
     Match.match = function (istID, tradeType, shares, price, code, personId, callback) {
