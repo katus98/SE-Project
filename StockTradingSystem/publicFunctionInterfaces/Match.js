@@ -1,0 +1,147 @@
+// 引用的自定义模块类
+let Instructions = require('../sqlClasses/Instructions');
+let Stock = require('../sqlClasses/Stock');
+
+/*
+* Match类：包含方法：指令撮合
+* 维护小组：D组
+* 总负责人：孙克染
+* 备注：禁止D组外其他小组调用！
+* */
+function Match() {
+    /*
+    方法名称：match
+    实现功能：撮合新加入的交易指令
+    传入参数：istID、tradeType、shares、price、code、personId、回调函数
+    回调参数：bool: true, false
+    编程者：孙克染
+    备注：类成员函数，仅限于加入指令时调用！串行调用！
+    * */
+    Match.match = function (istID, tradeType, shares, price, code, personId, callback) {
+        let promise = new Promise(function (resolve, reject) {
+            let resu = {result: false, continueOrNot: false, remark: "", remainShares: 0};
+            let instruction = new Instructions();
+            let hasDoneShares = 0;
+            //由于传入的指令是买/卖，要将其转换成相反的来匹配getthemostmatch中的tradetype
+            let  tradeType1;
+            if (tradeType === 'sell') {
+                tradeType1 = 'buy';
+            } else {
+                tradeType1 = 'sell';
+            }
+            //涨跌停限制
+            let stock = new Stock();
+            instruction.getTheMostMatch(tradeType1, code, price, function (res) {
+                stock.getStockInfoByStockId(code,function (res2) {
+                    if (res.result !== false) {
+                        let bidId, askId;
+                        let bidPrice, askPrice;
+                        let matchPrice;
+
+                        //sellid永远是卖，buyid永远是买
+                        let sellPersonId, buyPersonId;
+
+                        //撮合价格
+                        matchPrice = (price + res.price) / 2;
+
+                        //已经完成的股票
+                        hasDoneShares = Math.min(res.shares2trade, shares);
+
+                        //股票交易上下线，涨跌停限制res2[0].percentagepricechange以内的可以成交
+                        let high = (res2[0].last_endprice) * (res2[0].percentagepricechange + 1);
+                        let low = res2[0].last_endprice * (1 - res2[0].percentagepricechange);
+
+                        //股票撮合价格要求在上下限内
+                        if (matchPrice > high) {
+                            matchPrice = high;
+                        } else if (matchPrice < low) {
+                            matchPrice = low;
+                        }
+
+                        if (tradeType === 'sell') {
+                            //传入指令是卖
+                            sellPersonId = personId;
+                            buyPersonId = res.personId;
+                            askId =  istID;
+                            bidId =  res.id;
+                            askPrice = price;
+                            bidPrice = res.price;
+
+                        } else {
+                            //传入指令是买
+                            sellPersonId = res.personId;
+                            buyPersonId = istID;
+                            askId = res.id;
+                            bidId = istID;
+                            askPrice = res.price;
+                            bidPrice = price;
+                        }
+                        //添加到match表中
+                        instruction.addMatchs(askId, bidId, hasDoneShares, askPrice, bidPrice, matchPrice, code, function (result) {
+                            if (result === true) {
+                                instruction.modifyShares2TradeByInstructionId(tradeType, istID, hasDoneShares, function (result) {
+                                    if (result === true) {
+                                        instruction.modifyShares2TradeByInstructionId(tradeType1, res.id, hasDoneShares, function (result) {
+                                            if (result === true) {
+                                                //已经完成的项目更新到用户表中
+                                                //卖家账户
+                                                stock.modifyStockHoldNumber(sellPersonId, code, -hasDoneShares, function (result) {
+                                                    if (result === true) {
+                                                        //买家账户
+                                                        stock.modifyStockHoldNumber(buyPersonId, code, hasDoneShares, function (result) {
+                                                            if (result === true) {
+                                                                resu.remark = "本次撮合成功！";
+                                                                resu.result = true;
+                                                                if (shares > hasDoneShares) {
+                                                                    resu.continueOrNot = true;
+                                                                    resu.remainShares = shares - hasDoneShares;
+                                                                }
+                                                                resolve(resu);
+                                                            } else {
+                                                                resu.remark = "Error: 买家持股表更新失败！";
+                                                                resolve(resu);
+                                                            }
+                                                        });
+                                                    } else {
+                                                        resu.remark = "Error: 卖家持股表更新失败！";
+                                                        resolve(resu);
+                                                    }
+                                                });
+                                            } else {
+                                                resu.remark = "Error: 指令表2更新失败！"+tradeType1;
+                                                resolve(resu);
+                                            }
+                                        });
+                                    } else {
+                                        resu.remark = "Error: 指令表1更新失败！"+tradeType;
+                                        resolve(resu);
+                                    }
+                                });
+                            } else {
+                                resu.remark = "Error: 撮合表更新失败！";
+                                resolve(resu);
+                            }
+                        });
+                    } else {
+                        resu.remark = "无可撮合！";
+                        resu.result = true;
+                        resolve(resu);
+                    }
+                });
+            });
+        });
+        promise.then(function (result) {
+            console.log(result.remark);
+            if (result.result === true) {
+                if (result.continueOrNot === true) {
+                    User.match(istID, tradeType, result.remainShares, price, code, personId, callback);
+                } else {
+                    console.log("撮合完成！");
+                    callback(true);
+                }
+            }
+        });
+    };
+}
+
+module.exports = Match;
