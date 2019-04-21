@@ -18,11 +18,7 @@ router.get('/', function(req, res, next) {
     res.render('home');
     let match = new Match();
     setInterval(match.convertTempInstructionsToInstructions(function (result) {
-        if (result === true) {
-            console.log("加入成功！撮合成功！");
-        } else {
-            console.log("加入或者撮合失败！");
-        }
+        console.log(result.remark);
     }), 5000);
 });
 
