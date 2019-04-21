@@ -14,7 +14,7 @@ function Instructions() {
     传入参数：tradeType（'sell', 'buy'）、personId（整数）、回调函数
     回调参数：json：直接承接result
     编程者：孙克染
-    备注：调用时需要判断结果length>0
+    备注：调用时需要判断结果length>0；按时间从新到旧的顺序排列
     * */
     this.getInstructionsInfoByPersonId = function (tradeType, personId, callback) {
         let getSql = "SELECT * FROM ";
