@@ -220,15 +220,16 @@ function Instructions() {
     备注：类成员函数，仅限于类内调用
     * */
     Instructions.completeInstructions = function (callback) {
-        let modSql1 = "UPDATE asks SET status = 'complete' WHERE shares2trade = 0";
-        let modSql2 = "UPDATE bids SET status = 'complete' WHERE shares2trade = 0";
-        dbConnection.query(modSql1, function (err, result) {
+        let modSql1 = "UPDATE asks SET status = ?, timearchived = current_timestamp WHERE shares2trade = 0";
+        let modSql2 = "UPDATE bids SET status = ?, timearchived = current_timestamp WHERE shares2trade = 0";
+        let modSqlParams = ['complete'];
+        dbConnection.query(modSql1, modSqlParams, function (err, result) {
             if (err) {
                 console.log('[UPDATE ERROR] - ', err.message);
                 callback(false);
                 return;
             }
-            dbConnection.query(modSql2, function (err, result) {
+            dbConnection.query(modSql2, modSqlParams, function (err, result) {
                 if (err) {
                     console.log('[UPDATE ERROR] - ', err.message);
                     callback(false);
