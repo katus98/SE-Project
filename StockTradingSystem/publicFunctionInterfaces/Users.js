@@ -96,6 +96,36 @@ function User() {
             }
         });
     };
+    /*
+    方法名称：getCapitalAccountIdByPersonId
+    实现功能：通过资金账户ID获取personId（持股id）
+    传入参数：capitalAccountId（整数或者数字字符串）、回调函数
+    回调参数：object（类json）：res = {result: bool, securitiesAccount: 0, capitalAccountId: 0, remark: ""};
+    编程者：孙克染
+    * */
+    this.getCapitalAccountIdByPersonId = function (personId, callback) {
+        let res = {result: false, securitiesAccount: 0, capitalAccountId: 0, remark: ""};
+        let capitalAccount = new CapitalAccount();
+        let securitiesAccount = new SecuritiesAccount();
+        securitiesAccount.getSecuritiesAccountIdByPersonId(personId, function (result) {
+            if (result === 'notFound') {
+                res.remark = "没有找到相关联的证券账户！";
+                callback(res);
+            } else {
+                res.securitiesAccount = parseInt(result);
+                capitalAccount.getCapitalIdBySecuritiesAccountId(res.securitiesAccount, function (result) {
+                    if (result === 'notFound') {
+                        res.remark = "没有找到相关联的资金账户！";
+                    } else {
+                        res.result = true;
+                        res.capitalAccountId = parseInt(result);
+                        res.remark = "获取成功！";
+                    }
+                    callback(res);
+                });
+            }
+        });
+    };
 }
 
 module.exports = User;
