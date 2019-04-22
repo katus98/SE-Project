@@ -113,18 +113,42 @@ function CapitalAccount() {
     实现功能：通过资金账户ID获取关联的证券账户ID
     传入参数：capitalAccountId（整数或者数字字符串）、回调函数
     回调参数：字符串：证券账户ID字符串或者'notFound'
-    编程者：孙克染（demo）
+    编程者：孙克染
     备注：调用时需要先判断返回的结果是否是'notFound'
     * */
     this.getSecuritiesAccountIdByCapitalAccountId = function (capitalAccountId, callback) {
-        let getSql = "SELECT relatedsecuritiesaccountid FROM capitalaccount WHERE capitalaccountid = " + capitalAccountId;
-        dbConnection.query(getSql, function (err, result) {
+        let getSql = "SELECT relatedsecuritiesaccountid FROM capitalaccount WHERE capitalaccountid = ";
+        let getSqlParams = [capitalAccountId];
+        dbConnection.query(getSql, getSqlParams, function (err, result) {
             if (err) {
                 console.log('[SELECT ERROR] - ', err.message);
                 return;
             }
             if (result.length > 0) {
                 callback("" + result[0].relatedsecuritiesaccountid);
+            } else {
+                callback('notFound');
+            }
+        });
+    };
+    /*
+    方法名称：getCapitalIdBySecuritiesAccountId
+    实现功能：通过证券账户ID获取关联的资金账户ID
+    传入参数：securitiesAccountId（整数）、回调函数
+    回调参数：字符串：资金账户ID字符串或者'notFound'
+    编程者：孙克染
+    备注：调用时需要先判断返回的结果是否是'notFound'
+    * */
+    this.getCapitalIdBySecuritiesAccountId = function (securitiesAccountId, callback) {
+        let getSql = "SELECT capitalaccountid FROM capitalaccount WHERE relatedsecuritiesaccountid = ? AND capitalaccountstate = ?";
+        let getSqlParams = [securitiesAccountId, 'normal'];
+        dbConnection.query(getSql, getSqlParams, function (err, result) {
+            if (err) {
+                console.log('[SELECT ERROR] - ', err.message);
+                return;
+            }
+            if (result.length > 0) {
+                callback("" + result[0].capitalaccountid);
             } else {
                 callback('notFound');
             }
