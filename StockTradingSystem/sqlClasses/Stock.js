@@ -121,8 +121,27 @@ function Stock() {
     编程者：黄欣雨、孙克染
     * */
     this.modifyStockHoldNumber = function (personId, stockId, deltaNum, callback) {
-        let modSql="UPDATE stockhold SET stocknum = stocknum + ?, updatetime = current_timestamp where personid = ? and stockid = ?";
+        let modSql="UPDATE stockhold SET stocknum = stocknum + ?, updatetime = current_timestamp WHERE personid = ? and stockid = ?";
         let modSqlParams = [deltaNum, personId, stockId];
+        dbConnection.query(modSql, modSqlParams, function (err, result) {
+            if (err) {
+                console.log('[UPDATE ERROR] - ', err.message);
+                callback(false);
+                return;
+            }
+            callback(true);
+        });
+    };
+    /*
+    方法名称：updateStockPrice
+    实现功能：更新股票实时价格
+    传入参数：stockId（字符串）、newPrice（浮点数，最新股价）、回调函数
+    回调参数：bool：true（修改成功）、false（修改失败）
+    编程者：黄欣雨、孙克染
+    * */
+    this.updateStockPrice = function (stockId, newPrice, callback) {
+        let modSql="UPDATE stock SET current_price = ? WHERE code = ?";
+        let modSqlParams = [newPrice, stockId];
         dbConnection.query(modSql, modSqlParams, function (err, result) {
             if (err) {
                 console.log('[UPDATE ERROR] - ', err.message);
