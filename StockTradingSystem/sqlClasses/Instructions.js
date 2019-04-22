@@ -22,9 +22,9 @@ function Instructions() {
     this.getInstructionsInfoByPersonId = function (tradeType, personId, callback) {
         let getSql = "SELECT * FROM ";
         if (tradeType === "sell") {
-            getSql += "asks WHERE uid = ? ORDER BY time desc";
+            getSql += "asks WHERE uid = ? ORDER BY time DESC";
         } else {
-            getSql += "bids WHERE uid = ? ORDER BY time desc";
+            getSql += "bids WHERE uid = ? ORDER BY time DESC";
         }
         let getSqlParams = [personId];
         dbConnection.query(getSql, getSqlParams, function (err, result) {
@@ -44,7 +44,7 @@ function Instructions() {
     备注：调用时需要判断结果length>0；按时间从新到旧的顺序排列；D组外小组请勿调用
     * */
     this.getTheFirstTempInstructionInfo = function (callback) {
-        let getSql = "SELECT * FROM tempinstructions ORDER BY time DESC LIMIT 1";
+        let getSql = "SELECT * FROM tempinstructions ORDER BY time ASC LIMIT 1";
         dbConnection.query(getSql, function (err, result) {
             if (err) {
                 console.log('[SELECT ERROR] - ', err.message);
@@ -65,9 +65,9 @@ function Instructions() {
         let res = {result: false, id: 0, personid: 0, shares2trade: 0, price: 0, shares: 0};
         let getSql = "SELECT * FROM ";
         if (tradeType === "sell") {
-            getSql += "asks WHERE code = ? AND status = 'partial' AND price <= ? ORDER BY price asc, time asc limit 1";
+            getSql += "asks WHERE code = ? AND status = 'partial' AND price <= ? ORDER BY price ASC, time ASC limit 1";
         } else {
-            getSql += "bids WHERE code = ? AND status = 'partial' AND price >= ? ORDER BY price desc, time asc limit 1";
+            getSql += "bids WHERE code = ? AND status = 'partial' AND price >= ? ORDER BY price DESC, time ASC limit 1";
         }
         let getSqlParams = [stockId, priceThreshold];
         dbConnection.query(getSql, getSqlParams, function (err, result) {
