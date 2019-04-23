@@ -44,14 +44,21 @@ router.post('/orderSubmit', function (req, res) {
                                         res0.remark = "证券账户对应股票持股数不足, 仅持有" + stockNum + "股!";
                                         resolve(res0);
                                     } else {
-                                        instructions.addTempInstructions('sell', result0.personId, req.body.stockId, parseInt(req.body.stockNum), parseFloat(req.body.pricePer), function (result) {
-                                            if (result === false) {
-                                                res0.remark = "指令插入数据库时出现异常!";
+                                        stock.convertStockToFrozenStock(result0.personId, req.body.stockId, parseInt(req.body.stockNum), function (result) {
+                                            if (result === true) {
+                                                instructions.addTempInstructions('sell', result0.personId, req.body.stockId, parseInt(req.body.stockNum), parseFloat(req.body.pricePer), function (result) {
+                                                    if (result === false) {
+                                                        res0.remark = "指令插入数据库时出现异常!";
+                                                    } else {
+                                                        res0.result = true;
+                                                        res0.remark = "股票出售指令发布成功!";
+                                                    }
+                                                    resolve(res0);
+                                                });
                                             } else {
-                                                res0.result = true;
-                                                res0.remark = "股票出售指令发布成功!";
+                                                res0.remark = "股票冻结失败!";
+                                                resolve(res0);
                                             }
-                                            resolve(res0);
                                         });
                                     }
                                 }
