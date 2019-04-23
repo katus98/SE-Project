@@ -192,7 +192,6 @@ function Match() {
                                                                                     if (result === true) {
                                                                                         // 转账操作
                                                                                         capitalAccount.pay(buyCapitalAccountId, sellCapitalAccountId, amount, function (result) {
-                                                                                            //todo: 资金退回
                                                                                             if (result === true) {
                                                                                                 // 更新用户持股表 - 卖家账户
                                                                                                 stock.modifyStockHoldNumber(sellPersonId, code, -hasDoneShares, function (result) {
