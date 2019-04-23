@@ -30,15 +30,15 @@ $(document).ready(function () {
             }
         });
     });
-    $("#queryAllCell").click(function () {
+    $("#queryAllSell").click(function () {
         $.ajax({
             type: "POST",
             dataType: "json",
-            url: "/home/queryCell",
+            url: "/home/querySell",
             data: {},
             success: function (result) {
                 console.log(result);
-                genTab(result, "tabCell");
+                genTab(result, "tabSell");
                 alert("查询成功!");
             },
             error: function () {
