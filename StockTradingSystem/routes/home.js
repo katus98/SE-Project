@@ -69,7 +69,7 @@ router.post('/orderSubmit', function (req, res) {
                                         resolve(res0);
                                     } else {
                                         // 买家资金流水记录
-                                        capitalAccount.ioAndInterest(buyCapitalAccountId, -amount, "股票购买支出", function (result) {
+                                        capitalAccount.ioAndInterest(parseInt(req.body.userId), -moneyThisTime, "股票购买支出", function (result) {
                                             if (result === true) {
                                                 capitalAccount.convertAvailableMoneyToFrozenMoney(parseInt(req.body.userId), moneyThisTime, function (result) {
                                                     if (result === true) {
@@ -134,6 +134,18 @@ router.post('/querySell', function (req, res) {
 
 router.post('/queryBuy', function (req, res) {
     let getSql = "SELECT * FROM bids";
+    dbConnection.query(getSql, function (err, result) {
+        if (err) {
+            console.log('[INSERT ERROR] - ', err.message);
+            return;
+        }
+        console.log('SELECT result:', result);
+        res.end(JSON.stringify(result));
+    });
+});
+
+router.post('/queryTemp', function (req, res) {
+    let getSql = "SELECT * FROM tempinstructions";
     dbConnection.query(getSql, function (err, result) {
         if (err) {
             console.log('[INSERT ERROR] - ', err.message);
