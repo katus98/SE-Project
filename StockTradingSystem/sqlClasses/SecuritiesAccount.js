@@ -41,20 +41,21 @@ function SecuritiesAccount() {
     编程者：孙克染（demo）
     * */
     this.getSecuritiesAccountStateBySecuritiesAccountId = function (securitiesAccountId, callback) {
-        let getSql = "SELECT capitalaccountstate FROM ";
+        let getSql = "SELECT state FROM ";
         if (parseInt(securitiesAccountId) < 1000000000) {
-            getSql += "personalaccount WHERE accountid = " + securitiesAccountId;
+            getSql += "personalaccount WHERE accountid = ?";
         } else {
-            getSql += "corporateaccount WHERE accountid = " + securitiesAccountId;
+            getSql += "corporateaccount WHERE accountid = ?";
         }
-        dbConnection.query(getSql, function (err, result) {
+        let getSqlParams = [securitiesAccountId];
+        dbConnection.query(getSql, getSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: SecuritiesAccount: getSecuritiesAccountStateBySecuritiesAccountId");
                 console.log('[SELECT ERROR] - ', err.message);
                 return;
             }
             if (result.length > 0) {
-                callback('' + result[0].capitalaccountstate);
+                callback('' + result[0].state);
             } else {
                 callback('notFound');
             }
