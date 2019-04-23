@@ -1,15 +1,33 @@
 function genTab (json, eleId) {
     document.getElementById(eleId).innerHTML = "";
-    var str1 = "";
+    let str1 = "";
     for (let i in json) {
         str1 += "<tr>";
         str1 += "<td>" + json[i].id + "</td>";
         str1 += "<td>" + json[i].time + "</td>";
         str1 += "<td>" + json[i].uid + "</td>";
+        str1 += "<td>" + json[i].code + "</td>";
         str1 += "<td>" + json[i].shares + "</td>";
         str1 += "<td>" + json[i].price + "</td>";
         str1 += "<td>" + json[i].shares2trade + "</td>";
         str1 += "<td>" + json[i].status + "</td>";
+        str1 += "</tr>";
+    }
+    document.getElementById(eleId).innerHTML = str1;
+}
+
+function genTab2 (json, eleId) {
+    document.getElementById(eleId).innerHTML = "";
+    let str1 = "";
+    for (let i in json) {
+        str1 += "<tr>";
+        str1 += "<td>" + json[i].id + "</td>";
+        str1 += "<td>" + json[i].time + "</td>";
+        str1 += "<td>" + json[i].uid + "</td>";
+        str1 += "<td>" + json[i].code + "</td>";
+        str1 += "<td>" + json[i].shares + "</td>";
+        str1 += "<td>" + json[i].price + "</td>";
+        str1 += "<td>" + json[i].tradetype + "</td>";
         str1 += "</tr>";
     }
     document.getElementById(eleId).innerHTML = str1;
@@ -55,6 +73,22 @@ $(document).ready(function () {
             success: function (result) {
                 console.log(result);
                 genTab(result, "tabBuy");
+                alert("查询成功!");
+            },
+            error: function () {
+                alert("由于系统原因查询失败!");
+            }
+        });
+    });
+    $("#queryAllTemp").click(function () {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/home/queryTemp",
+            data: {},
+            success: function (result) {
+                console.log(result);
+                genTab2(result, "tabTemp");
                 alert("查询成功!");
             },
             error: function () {
