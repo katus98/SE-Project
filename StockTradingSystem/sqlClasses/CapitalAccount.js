@@ -202,9 +202,9 @@ function CapitalAccount() {
     回调参数：bool：true（修改成功）、false（修改失败）
     编程者：孙克染
     * */
-    this.convertFrozenMoneyToAvailableMoney = function (capitalAccountId, useMoney, callback) {
+    this.convertFrozenMoneyToAvailableMoney = function (capitalAccountId, drawbackMoney, callback) {
         let modSql = "UPDATE capitalaccount SET availablemoney = availablemoney + ?, frozenmoney = frozenmoney - ? WHERE capitalaccountid = ?";
-        let modSqlParams = [useMoney, useMoney, capitalAccountId];
+        let modSqlParams = [drawbackMoney, drawbackMoney, capitalAccountId];
         dbConnection.query(modSql, modSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: CapitalAccount: convertFrozenMoneyToAvailableMoney");
