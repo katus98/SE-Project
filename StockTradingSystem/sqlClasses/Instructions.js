@@ -180,9 +180,8 @@ function Instructions() {
                 return;
             }
             Instructions.completeInstructions(function (result) {
-                console.log(result);
+                callback(result);
             });
-            callback(true);
         });
     };
     /*
