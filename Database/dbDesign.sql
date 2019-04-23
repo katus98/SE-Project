@@ -131,7 +131,7 @@ create table bids(
 	shares bigint not null,   -- 所有交易的股数
 	price numeric(25, 2) not null,   -- 交易的单价（元/股）[0-999999.99]
 	shares2trade bigint,   -- 该指令中未被交易的部分的股数
-	timearchived timestamp(6) default null,   -- 被存档的时间（加入该关系的时间）
+	timearchived timestamp(6) default current_timestamp(6),   -- 被存档的时间（加入该关系的时间）
 	status enum('complete', 'expired', 'partial') default 'partial'   -- 状态 complete, expired, partial
 );
 
@@ -144,7 +144,7 @@ create table asks(
 	shares bigint not null,   -- 所有交易的股数
 	price numeric(25, 2) not null,   -- 交易的单价（元/股）[0-999999.99]
 	shares2trade bigint,   -- 该指令中未被交易的部分的股数
-	timearchived timestamp(6) default null,   -- 被存档的时间（加入该关系的时间）
+	timearchived timestamp(6) default current_timestamp(6),   -- 被存档的时间（加入该关系的时间）
 	status enum('complete', 'expired', 'partial') default 'partial'   -- 状态 complete, expired, partial
 );
 
