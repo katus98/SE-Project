@@ -25,8 +25,10 @@ function Match() {
     this.convertTempInstructionsToInstructions = function (callback) {
         let res = {result: false, remark: ""};
         let instructions = new Instructions();
+        // 获取优先级最高的缓存交易指令信息
         instructions.getTheFirstTempInstructionInfo(function (result) {
             if (result.length > 0) {
+                // 调用类成员函数，实现将上述缓存指令插入到正式指令表中的操作，连带执行删除该条缓存和股票撮合功能
                 Match.addInstructions(result[0].tradetype, result[0].uid, result[0].code, result[0].shares, result[0].price, function (result) {
                     if (result.addResult === true) {
                         res.remark = "加入指令完成！";
@@ -65,6 +67,7 @@ function Match() {
         }
         let addSqlParams = [personId, stockId, shares, price, shares];
         //// cwy修改：添加参数
+        // 将优先级最高的缓存指令信息插入正式指令表
         dbConnection.query(addSql, addSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: Instructions: addInstructions");
@@ -74,9 +77,14 @@ function Match() {
             }
             const istID = result.insertId;    // 需要记录刚刚插入的指令的编号
             res.addResult = true;
-            Match.match(istID, tradeType, shares, price, stockId, personId, function (result) {
-                res.matchResult = result;
-                callback(res);
+            // 删除原先的最优先缓存指令
+            let instructions = new Instructions();
+            instructions.deleteTheFirstTempInstruction(function (result) {
+                // 调用类成员函数：实现指令撮合
+                Match.match(istID, tradeType, shares, price, stockId, personId, function (result) {
+                    res.matchResult = result;
+                    callback(res);
+                });
             });
         });
     };
@@ -90,46 +98,28 @@ function Match() {
     * */
     Match.match = function (istID, tradeType, shares, price, code, personId, callback) {
         let promise = new Promise(function (resolve, reject) {
+
+            // 本次撮合结果存储在resu结构变量中
             let resu = {result: false, continueOrNot: false, remark: "", remainShares: 0};
-            let instruction = new Instructions();
-            let hasDoneShares = 0;
-            //由于传入的指令是买/卖，要将其转换成相反的来匹配getthemostmatch中的tradetype
-            let  tradeType1;
-            if (tradeType === 'sell') {
-                tradeType1 = 'buy';
-            } else {
-                tradeType1 = 'sell';
-            }
-            //涨跌停限制
+
+            // 撮合过程中需要用的的自定义方法类
             let stock = new Stock();
             let capitalAccount = new CapitalAccount();
             let user = new User();
-            instruction.getTheMostMatch(tradeType1, code, price, function (res) {
+            let instruction = new Instructions();
+
+            // 获取最优先的匹配指令
+            instruction.getTheMostMatch(tradeType, code, price, function (res) {
+                // 获取本次撮合涉及股票的详细信息
                 stock.getStockInfoByStockId(code,function (res2) {
                     if (res.result !== false) {
-                        let bidId, askId;
-                        let bidPrice, askPrice;
-                        let matchPrice;
-
-                        //sellid永远是卖，buyid永远是买
-                        let sellPersonId, buyPersonId;
-
-                        //撮合价格
-                        matchPrice = (price + res.price) / 2;
-
-                        //已经完成的股票
-                        hasDoneShares = Math.min(res.shares2trade, shares);
-
-                        //股票交易上下线，涨跌停限制res2[0].percentagepricechange以内的可以成交
-                        let high = (res2[0].last_endprice) * (res2[0].percentagepricechange + 1);
-                        let low = res2[0].last_endprice * (1 - res2[0].percentagepricechange);
-
-                        //股票撮合价格要求在上下限内
-                        if (matchPrice > high) {
-                            matchPrice = high;
-                        } else if (matchPrice < low) {
-                            matchPrice = low;
-                        }
+                        // 变量群
+                        let bidId, askId;// 交易指令ID
+                        let bidPrice, askPrice;// 交易初始标价
+                        let matchPrice;// 初始撮合价格
+                        let sellPersonId, buyPersonId;// 指令发出的用户ID
+                        let hasDoneShares = Math.min(res.shares2trade, shares);// 本次撮合完成的交易股数
+                        let buyCapitalAccountId, sellCapitalAccountId;// 买卖双方资金账户ID
 
                         if (tradeType === 'sell') {
                             //传入指令是卖
@@ -139,7 +129,6 @@ function Match() {
                             bidId =  res.id;
                             askPrice = price;
                             bidPrice = res.price;
-
                         } else {
                             //传入指令是买
                             sellPersonId = res.personId;
@@ -149,7 +138,18 @@ function Match() {
                             askPrice = res.price;
                             bidPrice = price;
                         }
-                        let buyCapitalAccountId, sellCapitalAccountId;
+
+                        // 初始撮合价格为买卖双方出价平均值
+                        matchPrice = (askPrice + bidPrice) / 2;
+
+                        // 股票交易上下线，涨跌停限制res2[0].percentagepricechange以内的可以成交
+                        let high = (res2[0].last_endprice) * (res2[0].percentagepricechange + 1);
+                        let low = res2[0].last_endprice * (1 - res2[0].percentagepricechange);
+
+                        //股票撮合价格要求在上下限内
+                        matchPrice = matchPrice > high ? high : matchPrice;
+                        matchPrice = matchPrice < low ? low :matchPrice;
+
                         // 获取买家资金账户ID
                         user.getCapitalAccountIdByPersonId(buyPersonId, function (result) {
                             if (result.result === true) {
@@ -231,13 +231,13 @@ function Match() {
                                                                     }
                                                                 });
                                                             } else {
-                                                                resu.remark = "Error: 指令表2更新失败！"+tradeType1;
+                                                                resu.remark = "Error: 指令表asks更新失败！";
                                                                 console.log(resu.remark);
                                                                 resolve(resu);
                                                             }
                                                         });
                                                     } else {
-                                                        resu.remark = "Error: 指令表1更新失败！"+tradeType;
+                                                        resu.remark = "Error: 指令表bids更新失败！";
                                                         console.log(resu.remark);
                                                         resolve(resu);
                                                     }
