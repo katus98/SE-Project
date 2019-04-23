@@ -107,12 +107,12 @@ create table jobberworker(
 -- 资金账户收支记录表
 drop table if exists capitalaccountio;
 create table capitalaccountio(
+	id serial primary key,
 	capitalaccountid bigint references capitalaccount(capitalaccountid),   -- 资金账户ID（主键、外键）
 	iotime timestamp default current_timestamp,   -- 交易时间（主键）
 	ioamount numeric(25, 2) not null,   -- 交易金额
 	moneytype enum('RMB', 'USD', 'CAD', 'AUD', 'EUR', 'GBP', 'HKD', 'JPY') default 'RMB',   -- 交易币种
-	iodescription varchar(500) not null,   -- 交易明细
-	primary key (capitalaccountid, iotime)
+	iodescription varchar(500) not null   -- 交易明细
 );
 
 -- Group-D
@@ -125,26 +125,26 @@ drop table if exists bids;
 -- 股票买入指令表
 create table bids(
 	id serial primary key,   -- 编号：唯一性的编号 作为指向该指令的索引
-	time timestamp default current_timestamp,   -- 时间
+	time timestamp(6) default current_timestamp(6),   -- 时间
 	uid bigint not null references idreference(personid),   -- 用户ID标识
 	code varchar(20) not null references stock(code),   -- 代交易的股票代码 例如'BABA','MSFT'
 	shares bigint not null,   -- 所有交易的股数
 	price numeric(25, 2) not null,   -- 交易的单价（元/股）[0-999999.99]
 	shares2trade bigint,   -- 该指令中未被交易的部分的股数
-	timearchived timestamp default null,   -- 被存档的时间（加入该关系的时间）
+	timearchived timestamp(6) default null,   -- 被存档的时间（加入该关系的时间）
 	status enum('complete', 'expired', 'partial') default 'partial'   -- 状态 complete, expired, partial
 );
 
 -- 股票卖出指令表
 create table asks(
 	id serial primary key,   -- 编号：唯一性的编号 作为指向该指令的索引
-	time timestamp default current_timestamp,   -- 时间
+	time timestamp(6) default current_timestamp(6),   -- 时间
 	uid bigint not null references idreference(personid),   -- 用户ID标识
 	code varchar(20) not null references stock(code),   -- 代交易的股票代码 例如'BABA','MSFT'
 	shares bigint not null,   -- 所有交易的股数
 	price numeric(25, 2) not null,   -- 交易的单价（元/股）[0-999999.99]
 	shares2trade bigint,   -- 该指令中未被交易的部分的股数
-	timearchived timestamp default null,   -- 被存档的时间（加入该关系的时间）
+	timearchived timestamp(6) default null,   -- 被存档的时间（加入该关系的时间）
 	status enum('complete', 'expired', 'partial') default 'partial'   -- 状态 complete, expired, partial
 );
 
@@ -152,7 +152,7 @@ create table asks(
 drop table if exists tempinstructions;
 create table tempinstructions(
 	id serial primary key,   -- 编号：唯一性的编号
-	time timestamp default current_timestamp,   -- 缓存时间
+	time timestamp(6) default current_timestamp(6),   -- 缓存时间
 	tradetype enum('sell', 'buy'),   -- 交易类型
 	uid bigint not null references idreference(personid),   -- 用户ID标识
 	code varchar(20) not null references stock(code),   -- 代交易的股票代码 例如'BABA','MSFT'
@@ -169,7 +169,7 @@ create table matchs(
 	askprice numeric(25, 2),   -- 卖指令价格
 	bidprice numeric(25, 2),   -- 买指令价格
 	matchprice numeric(25, 2),   -- 撮合价格
-	matchtime timestamp default current_timestamp,   -- 撮合时间
+	matchtime timestamp(6) default current_timestamp(6),   -- 撮合时间
 	code varchar(20) not null references stock(code) on delete set null on update cascade  -- 待交易的股票代码 例如'BABA','MSFT'
 );
 
@@ -179,7 +179,7 @@ create table dealsbid(
 	shares bigint,   -- 指令规定的交易数
 	sharesdealed bigint,   -- 成交数
 	price numeric(25, 2),   -- 成交价格(单价)
-	time timestamp default current_timestamp,   -- 成交时间
+	time timestamp(6) default current_timestamp(6),   -- 成交时间
 	code varchar(20) not null references stock(code),   -- 代交易的股票代码 例如'BABA','MSFT'
 	foreign key (id) references bids(id) on delete cascade on update cascade
 );
@@ -190,7 +190,7 @@ create table dealsask(
 	shares bigint,   -- 指令规定的交易数
 	sharesdealed bigint,   -- 成交数
 	price numeric(25, 2),   -- 成交价格(单价)
-	time timestamp default current_timestamp,   -- 成交时间
+	time timestamp(6) default current_timestamp(6),   -- 成交时间
 	code varchar(20) not null references stock(code),   -- 代交易的股票代码 例如'BABA','MSFT'
 	foreign key (id) references asks(id) on delete cascade on update cascade
 );
