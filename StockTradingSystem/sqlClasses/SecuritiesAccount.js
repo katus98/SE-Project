@@ -25,6 +25,7 @@ function SecuritiesAccount() {
         }
         dbConnection.query(getSql, function (err, result) {
             if (err) {
+                console.log("ERROR: SecuritiesAccount: getSecuritiesAccountInfoBySecuritiesAccountId");
                 console.log('[SELECT ERROR] - ', err.message);
                 return;
             }
@@ -48,6 +49,7 @@ function SecuritiesAccount() {
         }
         dbConnection.query(getSql, function (err, result) {
             if (err) {
+                console.log("ERROR: SecuritiesAccount: getSecuritiesAccountStateBySecuritiesAccountId");
                 console.log('[SELECT ERROR] - ', err.message);
                 return;
             }
@@ -75,6 +77,7 @@ function SecuritiesAccount() {
         }
         dbConnection.query(getSql, function (err, result) {
             if (err) {
+                console.log("ERROR: SecuritiesAccount: getPersonIdBySecuritiesAccountId");
                 console.log('[SELECT ERROR] - ', err.message);
                 return;
             }
@@ -97,6 +100,7 @@ function SecuritiesAccount() {
         let getSql = "SELECT MAX(accountid) AS acc FROM idreference WHERE personid = " + personId;
         dbConnection.query(getSql, function (err, result) {
             if (err) {
+                console.log("ERROR: SecuritiesAccount: getSecuritiesAccountIdByPersonId");
                 console.log('[SELECT ERROR] - ', err.message);
                 return;
             }
