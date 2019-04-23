@@ -23,30 +23,41 @@ function Match() {
     备注：串行调用！
     * */
     this.convertTempInstructionsToInstructions = function (callback) {
-        let res = {result: false, remark: ""};
-        let instructions = new Instructions();
-        // 获取优先级最高的缓存交易指令信息
-        instructions.getTheFirstTempInstructionInfo(function (result) {
-            if (result.length > 0) {
-                // 调用类成员函数，实现将上述缓存指令插入到正式指令表中的操作，连带执行删除该条缓存和股票撮合功能
-                Match.addInstructions(result[0].tradetype, result[0].uid, result[0].code, result[0].shares, result[0].price, result[0].time, function (result) {
-                    if (result.addResult === true) {
-                        res.remark = "加入指令完成！";
-                    } else {
-                        res.remark = "加入指令失败！";
-                    }
-                    if (result.matchResult === true) {
-                        res.remark += "撮合成功！";
-                    } else {
-                        res.remark += "撮合失败！";
-                    }
-                    res.result = result.addResult && result.matchResult;
-                    callback(res);
-                });
+        let match = this;
+        let promise = new Promise(function (resolve, reject) {
+            let res = {result: false, remark: ""};
+            let instructions = new Instructions();
+            // 获取优先级最高的缓存交易指令信息
+            instructions.getTheFirstTempInstructionInfo(function (result) {
+                if (result.length > 0) {
+                    // 调用类成员函数，实现将上述缓存指令插入到正式指令表中的操作，连带执行删除该条缓存和股票撮合功能
+                    Match.addInstructions(result[0].tradetype, result[0].uid, result[0].code, result[0].shares, result[0].price, result[0].time, function (result) {
+                        if (result.addResult === true) {
+                            res.remark = "加入指令完成！";
+                        } else {
+                            res.remark = "加入指令失败！";
+                        }
+                        if (result.matchResult === true) {
+                            res.remark += "撮合成功！";
+                        } else {
+                            res.remark += "撮合失败！";
+                        }
+                        res.result = result.addResult && result.matchResult;
+                        resolve(res);
+                    });
+                } else {
+                    res.remark = "没有缓存指令！";
+                    res.result = true;
+                    resolve(res);
+                }
+            });
+        });
+        promise.then(function (result) {
+            if (result.result === true) {
+                console.log("Success: 本次撮合成功！即将进入下一次！");
+                match.convertTempInstructionsToInstructions(callback);
             } else {
-                res.remark = "没有缓存指令！";
-                res.result = true;
-                callback(res);
+                callback(result);
             }
         });
     };
