@@ -23,6 +23,7 @@ function CapitalAccount() {
         let getSql = "SELECT * FROM capitalaccount WHERE capitalaccountid = " + capitalAccountId;
         dbConnection.query(getSql, function (err, result) {
             if (err) {
+                console.log("ERROR: CapitalAccount: getCapitalAccountInfoByCapitalAccountId");
                 console.log('[SELECT ERROR] - ', err.message);
                 return;
             }
@@ -41,6 +42,7 @@ function CapitalAccount() {
         let getSql = "SELECT capitalaccountstate FROM capitalaccount WHERE capitalaccountid = " + capitalAccountId;
         dbConnection.query(getSql, function (err, result) {
             if (err) {
+                console.log("ERROR: CapitalAccount: getCapitalAccountStateByCapitalAccountId");
                 console.log('[SELECT ERROR] - ', err.message);
                 return;
             }
@@ -65,6 +67,7 @@ function CapitalAccount() {
         let getSqlParams = [capitalAccountId];
         dbConnection.query(getSql, getSqlParams, function (err, result) {
             if (err) {
+                console.log("ERROR: CapitalAccount: getCapitalByCapitalAccountId");
                 console.log('[SELECT ERROR] - ', err.message);
                 return;
             }
@@ -93,6 +96,7 @@ function CapitalAccount() {
         let getSqlParams = [personId, 'normal'];
         dbConnection.query(getSql, getSqlParams, function (err, result) {
             if (err) {
+                console.log("ERROR: CapitalAccount: getCapitalByPersonId");
                 console.log('[SELECT ERROR] - ', err.message);
                 return;
             }
@@ -121,6 +125,7 @@ function CapitalAccount() {
         let getSqlParams = [capitalAccountId];
         dbConnection.query(getSql, getSqlParams, function (err, result) {
             if (err) {
+                console.log("ERROR: CapitalAccount: getSecuritiesAccountIdByCapitalAccountId");
                 console.log('[SELECT ERROR] - ', err.message);
                 return;
             }
@@ -144,6 +149,7 @@ function CapitalAccount() {
         let getSqlParams = [securitiesAccountId, 'normal'];
         dbConnection.query(getSql, getSqlParams, function (err, result) {
             if (err) {
+                console.log("ERROR: CapitalAccount: getCapitalIdBySecuritiesAccountId");
                 console.log('[SELECT ERROR] - ', err.message);
                 return;
             }
@@ -180,6 +186,7 @@ function CapitalAccount() {
         let modSqlParams = [useMoney, useMoney, capitalAccountId];
         dbConnection.query(modSql, modSqlParams, function (err, result) {
             if (err) {
+                console.log("ERROR: CapitalAccount: convertAvailableMoneyToFrozenMoney");
                 console.log('[UPDATE ERROR] - ', err.message);
                 callback(false);
                 return;
@@ -214,6 +221,7 @@ function CapitalAccount() {
             let modSqlParams = [tempInterest, capitalAccountId, 'normal'];
             dbConnection.query(modSql, modSqlParams, function (err, result) {
                 if (err) {
+                    console.log("ERROR: CapitalAccount: ioAndInterest1");
                     console.log('[UPDATE ERROR] - ', err.message);
                     callback(false);
                     return;
@@ -223,6 +231,7 @@ function CapitalAccount() {
                 let addSqlParams = [capitalAccountId, amount, ioDescription];
                 dbConnection.query(addSql, addSqlParams, function (err, result) {
                     if (err) {
+                        console.log("ERROR: CapitalAccount: ioAndInterest2");
                         console.log('[INSERT ERROR] - ', err.message);
                         callback(false);
                         return;
@@ -244,6 +253,7 @@ function CapitalAccount() {
         let modSqlParams1 = [useMoney, fromCapitalAccountId];
         dbConnection.query(modSql1, modSqlParams1, function (err, result) {
             if (err) {
+                console.log("ERROR: CapitalAccount: pay1");
                 console.log('[UPDATE ERROR] - ', err.message);
                 callback(false);
                 return;
@@ -252,6 +262,7 @@ function CapitalAccount() {
             let modSqlParams2 = [useMoney, toCapitalAccountId];
             dbConnection.query(modSql2, modSqlParams2, function (err, result) {
                 if (err) {
+                    console.log("ERROR: CapitalAccount: pay2");
                     console.log('[UPDATE ERROR] - ', err.message);
                     callback(false);
                     return;
