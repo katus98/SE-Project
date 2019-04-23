@@ -124,13 +124,39 @@ function Stock() {
     传入参数：personId（整数）, stockId（字符串）、变更的股票数deltaNum（整数、允许正负、负数表示减少）、回调函数
     回调参数：bool：true（修改成功）、false（修改失败）
     编程者：黄欣雨、孙克染
+    备注：如果是股份减少，则操作冻结股数
     * */
     this.modifyStockHoldNumber = function (personId, stockId, deltaNum, callback) {
-        let modSql="UPDATE stockhold SET stocknum = stocknum + ?, updatetime = current_timestamp WHERE personid = ? and stockid = ?";
+        let modSql="UPDATE stockhold SET ";
         let modSqlParams = [deltaNum, personId, stockId];
+        if (deltaNum >= 0) {
+            modSql += "stocknum = stocknum + ?, updatetime = current_timestamp WHERE personid = ? and stockid = ?";
+        } else {
+            modSql += "frozenstocknum = frozenstocknum + ?, updatetime = current_timestamp WHERE personid = ? and stockid = ?";
+        }
         dbConnection.query(modSql, modSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: Stock: modifyStockHoldNumber");
+                console.log('[UPDATE ERROR] - ', err.message);
+                callback(false);
+                return;
+            }
+            callback(true);
+        });
+    };
+    /*
+    方法名称：recoverFrozenStockHold
+    实现功能：恢复全部的冻结股份
+    传入参数：回调函数
+    回调参数：bool：true（修改成功）、false（修改失败）
+    编程者：孙克染
+    * */
+    this.recoverFrozenStockHold = function (callback) {
+        let modSql="UPDATE stockhold SET stocknum = stocknum + frozenstocknum, frozenstocknum = ?";
+        let modSqlParams = [0];
+        dbConnection.query(modSql, modSqlParams, function (err, result) {
+            if (err) {
+                console.log("ERROR: Stock: recoverFrozenStockHold");
                 console.log('[UPDATE ERROR] - ', err.message);
                 callback(false);
                 return;
@@ -151,6 +177,26 @@ function Stock() {
         dbConnection.query(modSql, modSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: Stock: updateStockPrice");
+                console.log('[UPDATE ERROR] - ', err.message);
+                callback(false);
+                return;
+            }
+            callback(true);
+        });
+    };
+    /*
+    方法名称：convertStockToFrozenStock
+    实现功能：冻结股票数量
+    传入参数：personId（整数）、stockId（字符串）、stockNum（整数）、回调函数
+    回调参数：bool：true（修改成功）、false（修改失败）
+    编程者：孙克染
+    * */
+    this.convertStockToFrozenStock = function (personId, stockId, stockNum, callback) {
+        let modSql="UPDATE stockhold SET frozenstocknum = frozenstocknum + ?, stocknum = stocknum - ? WHERE personid = ? AND stockid = ?";
+        let modSqlParams = [stockNum, stockNum, personId, stockId];
+        dbConnection.query(modSql, modSqlParams, function (err, result) {
+            if (err) {
+                console.log("ERROR: Stock: convertStockToFrozenStock");
                 console.log('[UPDATE ERROR] - ', err.message);
                 callback(false);
                 return;
