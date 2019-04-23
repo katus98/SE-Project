@@ -29,7 +29,7 @@ function Match() {
         instructions.getTheFirstTempInstructionInfo(function (result) {
             if (result.length > 0) {
                 // 调用类成员函数，实现将上述缓存指令插入到正式指令表中的操作，连带执行删除该条缓存和股票撮合功能
-                Match.addInstructions(result[0].tradetype, result[0].uid, result[0].code, result[0].shares, result[0].price, function (result) {
+                Match.addInstructions(result[0].tradetype, result[0].uid, result[0].code, result[0].shares, result[0].price, result[0].time, function (result) {
                     if (result.addResult === true) {
                         res.remark = "加入指令完成！";
                     } else {
@@ -57,20 +57,20 @@ function Match() {
     回调参数：true（插入成功）, false（插入失败）
     编程者：孙克染、陈玮烨
     * */
-    Match.addInstructions = function (tradeType, personId, stockId, shares, price, callback) {
+    Match.addInstructions = function (tradeType, personId, stockId, shares, price, time, callback) {
         let res = {addResult: false, matchResult: false};
         let addSql = "INSERT INTO ";
         if (tradeType === "sell") {
-            addSql += 'asks(uid, code, shares, price, shares2trade) VALUES(?,?,?,?,?)';
+            addSql += 'asks(time, uid, code, shares, price, shares2trade) VALUES(?,?,?,?,?,?)';
         } else {
-            addSql += 'bids(uid, code, shares, price, shares2trade) VALUES(?,?,?,?,?)';
+            addSql += 'bids(time, uid, code, shares, price, shares2trade) VALUES(?,?,?,?,?,?)';
         }
-        let addSqlParams = [personId, stockId, shares, price, shares];
+        let addSqlParams = [time, personId, stockId, shares, price, shares];
         //// cwy修改：添加参数
         // 将优先级最高的缓存指令信息插入正式指令表
         dbConnection.query(addSql, addSqlParams, function (err, result) {
             if (err) {
-                console.log("ERROR: Instructions: addInstructions");
+                console.log("ERROR: Match: addInstructions");
                 console.log('[INSERT ERROR] - ', err.message);
                 callback(res);
                 return;
@@ -168,59 +168,73 @@ function Match() {
                                                         instruction.modifyShares2TradeByInstructionId('sell', askId, hasDoneShares, function (result) {
                                                             if (result === true) {
                                                                 let amount = matchPrice * hasDoneShares;
-                                                                if (hasDoneShares === 56) {
-                                                                    console.log("hahaha");
-                                                                }
-                                                                // 卖家资金流水记录
-                                                                capitalAccount.ioAndInterest(sellCapitalAccountId, amount, "股票出售收入", function (result) {
+                                                                let drawback = (bidPrice - matchPrice) * hasDoneShares;
+                                                                capitalAccount.ioAndInterest(buyCapitalAccountId, drawback, "额外出价退回", function (result) {
                                                                     if (result === true) {
-                                                                        // 转账操作
-                                                                        capitalAccount.pay(buyCapitalAccountId, sellCapitalAccountId, amount, function (result) {
-                                                                            //todo: 资金退回
+                                                                        capitalAccount.convertFrozenMoneyToAvailableMoney(buyCapitalAccountId, drawback, function (result) {
                                                                             if (result === true) {
-                                                                                // 更新用户持股表 - 卖家账户
-                                                                                stock.modifyStockHoldNumber(sellPersonId, code, -hasDoneShares, function (result) {
+                                                                                // 卖家资金流水记录
+                                                                                capitalAccount.ioAndInterest(sellCapitalAccountId, amount, "股票出售收入", function (result) {
                                                                                     if (result === true) {
-                                                                                        // 更新用户持股表 - 买家账户
-                                                                                        stock.modifyStockHoldNumber(buyPersonId, code, hasDoneShares, function (result) {
+                                                                                        // 转账操作
+                                                                                        capitalAccount.pay(buyCapitalAccountId, sellCapitalAccountId, amount, function (result) {
+                                                                                            //todo: 资金退回
                                                                                             if (result === true) {
-                                                                                                resu.result = true;
-                                                                                                if (shares > hasDoneShares) {
-                                                                                                    resu.continueOrNot = true;
-                                                                                                    resu.remainShares = shares - hasDoneShares;
-                                                                                                }
-                                                                                                // 更新股票实时价格
-                                                                                                stock.updateStockPrice(code, matchPrice, function (result) {
+                                                                                                // 更新用户持股表 - 卖家账户
+                                                                                                stock.modifyStockHoldNumber(sellPersonId, code, -hasDoneShares, function (result) {
                                                                                                     if (result === true) {
-                                                                                                        resu.remark = "本次撮合成功！";
-                                                                                                        console.log("撮合价格：" + matchPrice);
-                                                                                                        console.log("撮合股数：" + hasDoneShares);
+                                                                                                        // 更新用户持股表 - 买家账户
+                                                                                                        stock.modifyStockHoldNumber(buyPersonId, code, hasDoneShares, function (result) {
+                                                                                                            if (result === true) {
+                                                                                                                resu.result = true;
+                                                                                                                if (shares > hasDoneShares) {
+                                                                                                                    resu.continueOrNot = true;
+                                                                                                                    resu.remainShares = shares - hasDoneShares;
+                                                                                                                }
+                                                                                                                // 更新股票实时价格
+                                                                                                                stock.updateStockPrice(code, matchPrice, function (result) {
+                                                                                                                    if (result === true) {
+                                                                                                                        resu.remark = "本次撮合成功！";
+                                                                                                                        console.log("撮合价格：" + matchPrice);
+                                                                                                                        console.log("撮合股数：" + hasDoneShares);
+                                                                                                                    } else {
+                                                                                                                        resu.remark = "Error: 股票实时价格更新失败！";
+                                                                                                                        console.log(resu.remark);
+                                                                                                                    }
+                                                                                                                    resolve(resu);
+                                                                                                                });
+                                                                                                            } else {
+                                                                                                                resu.remark = "Error: 买家持股表更新失败！";
+                                                                                                                console.log(resu.remark);
+                                                                                                                resolve(resu);
+                                                                                                            }
+                                                                                                        });
                                                                                                     } else {
-                                                                                                        resu.remark = "Error: 股票实时价格更新失败！";
+                                                                                                        resu.remark = "Error: 卖家持股表更新失败！";
                                                                                                         console.log(resu.remark);
+                                                                                                        resolve(resu);
                                                                                                     }
-                                                                                                    resolve(resu);
                                                                                                 });
                                                                                             } else {
-                                                                                                resu.remark = "Error: 买家持股表更新失败！";
+                                                                                                resu.remark = "Error: 转账失败！";
                                                                                                 console.log(resu.remark);
-                                                                                                resolve(resu);
+                                                                                                callback(resu);
                                                                                             }
                                                                                         });
                                                                                     } else {
-                                                                                        resu.remark = "Error: 卖家持股表更新失败！";
+                                                                                        resu.remark = "Error: 卖家资金流水记录失败！";
                                                                                         console.log(resu.remark);
-                                                                                        resolve(resu);
+                                                                                        callback(resu);
                                                                                     }
                                                                                 });
                                                                             } else {
-                                                                                resu.remark = "Error: 转账失败！";
+                                                                                resu.remark = "Error: 退钱失败！";
                                                                                 console.log(resu.remark);
                                                                                 callback(resu);
                                                                             }
                                                                         });
                                                                     } else {
-                                                                        resu.remark = "Error: 卖家资金流水记录失败！";
+                                                                        resu.remark = "Error: 退钱流水记录失败！";
                                                                         console.log(resu.remark);
                                                                         callback(resu);
                                                                     }
