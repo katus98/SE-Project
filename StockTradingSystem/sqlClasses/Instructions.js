@@ -63,7 +63,8 @@ function Instructions() {
     this.getTheMostMatch = function (tradeType, stockId, priceThreshold, callback) {
         let res = {result: false, id: 0, personId: 0, shares2trade: 0, price: 0, shares: 0};
         let getSql = "SELECT * FROM ";
-        if (tradeType === "sell") {
+        // 注意此处传进来的时需要匹配的交易类型，查找的指令表应当与传入参数相反
+        if (tradeType === "buy") {
             getSql += "asks WHERE code = ? AND status = 'partial' AND price <= ? ORDER BY price ASC, time ASC limit 1";
         } else {
             getSql += "bids WHERE code = ? AND status = 'partial' AND price >= ? ORDER BY price DESC, time ASC limit 1";
@@ -212,6 +213,27 @@ function Instructions() {
                 }
                 callback(true);
             });
+        });
+    };
+    /****删除方法****/
+    /*
+    方法名称：deleteTheFirstTempInstruction
+    实现功能：删除第一位的缓存指令
+    传入参数：回调函数
+    回调参数：true（删除成功）, false（删除失败）
+    编程者：孙克染
+    备注：仅限于D组调用！
+    * */
+    this.deleteTheFirstTempInstruction = function (callback) {
+        let delSql = "DELETE FROM tempinstructions ORDER BY id ASC LIMIT 1";
+        dbConnection.query(delSql, function (err, result) {
+            if (err) {
+                console.log("ERROR: Instructions: deleteTheFirstTempInstruction");
+                console.log('[DELETE ERROR] - ', err.message);
+                callback(false);
+                return;
+            }
+            callback(true);
         });
     };
 }
