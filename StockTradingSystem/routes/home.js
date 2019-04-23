@@ -68,19 +68,28 @@ router.post('/orderSubmit', function (req, res) {
                                         res0.remark = "资金账户可用资金不足, 仅剩" + availableMoney + "元!";
                                         resolve(res0);
                                     } else {
-                                        capitalAccount.convertAvailableMoneyToFrozenMoney(parseInt(req.body.userId), moneyThisTime, function (result) {
+                                        // 买家资金流水记录
+                                        capitalAccount.ioAndInterest(buyCapitalAccountId, -amount, "股票购买支出", function (result) {
                                             if (result === true) {
-                                                instructions.addTempInstructions('buy', result0.personId, req.body.stockId, parseInt(req.body.stockNum), parseFloat(req.body.pricePer), function (result) {
-                                                    if (result === false) {
-                                                        res0.remark = "指令插入数据库时出现异常!";
+                                                capitalAccount.convertAvailableMoneyToFrozenMoney(parseInt(req.body.userId), moneyThisTime, function (result) {
+                                                    if (result === true) {
+                                                        instructions.addTempInstructions('buy', result0.personId, req.body.stockId, parseInt(req.body.stockNum), parseFloat(req.body.pricePer), function (result) {
+                                                            if (result === false) {
+                                                                res0.remark = "指令插入数据库时出现异常!";
+                                                            } else {
+                                                                res0.result = true;
+                                                                res0.remark = "股票购买指令发布成功!";
+                                                            }
+                                                            resolve(res0);
+                                                        });
                                                     } else {
-                                                        res0.result = true;
-                                                        res0.remark = "股票购买指令发布成功!";
+                                                        res0.remark = "转账失败！";
+                                                        resolve(res0);
                                                     }
-                                                    resolve(res0);
                                                 });
                                             } else {
-                                                res0.remark = "转账失败！";
+                                                res0.remark = "Error: 买家资金流水记录失败！";
+                                                console.log(res0.remark);
                                                 resolve(res0);
                                             }
                                         });
@@ -111,7 +120,7 @@ router.post('/orderSubmit', function (req, res) {
     });
 });
 
-router.post('/queryCell', function (req, res) {
+router.post('/querySell', function (req, res) {
     let getSql = "select * from asks";
     dbConnection.query(getSql, function (err, result) {
         if (err) {
