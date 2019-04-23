@@ -96,17 +96,31 @@ $(document).ready(function () {
             }
         });
     });
-    $("#test").click(function () {
+    $("#start").click(function () {
         $.ajax({
             type: "POST",
             dataType: "text",
-            url: "/home/test",
-            data: $("#tradeOrder").serialize(),
+            url: "/home/start",
+            data: {},
             success: function (result) {
                 alert(result);
             },
             error: function () {
-                alert("test failed!");
+                alert("Start failed!");
+            }
+        });
+    });
+    $("#stop").click(function () {
+        $.ajax({
+            type: "POST",
+            dataType: "text",
+            url: "/home/stop",
+            data: {},
+            success: function (result) {
+                alert(result);
+            },
+            error: function () {
+                alert("Stop failed!");
             }
         });
     });
