@@ -20,6 +20,7 @@ function Stock() {
         let getSql = "SELECT * FROM stock";
         dbConnection.query(getSql, function (err, result) {
             if (err) {
+                console.log("ERROR: Stock: getAllStockInfo");
                 console.log('[SELECT ERROR] - ', err.message);
                 return;
             }
@@ -39,6 +40,7 @@ function Stock() {
         let getSqlParams = [personId];
         dbConnection.query(getSql, getSqlParams, function (err, result) {
             if (err) {
+                console.log("ERROR: Stock: getStockHoldInfoByPersonId");
                 console.log('[SELECT ERROR] - ', err.message);
                 return;
             }
@@ -58,6 +60,7 @@ function Stock() {
         let getSqlParams = [stockId];
         dbConnection.query(getSql, getSqlParams, function (err, result) {
             if (err) {
+                console.log("ERROR: Stock: getStockInfoByStockId");
                 console.log('[SELECT ERROR] - ', err.message);
                 return;
             }
@@ -78,6 +81,7 @@ function Stock() {
         let getSqlParams = [personId, stockId];
         dbConnection.query(getSql, getSqlParams, function (err, result) {
             if (err) {
+                console.log("ERROR: Stock: getStockNumberByPersonIdAndStockId");
                 console.log('[SELECT ERROR] - ', err.message);
                 return;
             }
@@ -100,6 +104,7 @@ function Stock() {
         let getSqlParams = [stockId];
         dbConnection.query(getSql, getSqlParams, function (err, result) {
             if (err) {
+                console.log("ERROR: Stock: getStockPermissionByStockId");
                 console.log('[SELECT ERROR] - ', err.message);
                 return;
             }
@@ -125,6 +130,7 @@ function Stock() {
         let modSqlParams = [deltaNum, personId, stockId];
         dbConnection.query(modSql, modSqlParams, function (err, result) {
             if (err) {
+                console.log("ERROR: Stock: modifyStockHoldNumber");
                 console.log('[UPDATE ERROR] - ', err.message);
                 callback(false);
                 return;
@@ -144,6 +150,7 @@ function Stock() {
         let modSqlParams = [newPrice, stockId];
         dbConnection.query(modSql, modSqlParams, function (err, result) {
             if (err) {
+                console.log("ERROR: Stock: updateStockPrice");
                 console.log('[UPDATE ERROR] - ', err.message);
                 callback(false);
                 return;
