@@ -87,8 +87,8 @@ create table stockhold(
 drop table if exists capitalaccount;
 create table capitalaccount(
 	capitalaccountid bigint primary key,   -- 资金账户ID（主键）
-	tradepassWord varchar(100) not null,   -- 交易密码（用于交易客户端）
-	cashpassWord varchar(100) not null,   -- 存取款密码（用于存取款）
+	tradepassword varchar(100) not null,   -- 交易密码（用于交易客户端）
+	cashpassword varchar(100) not null,   -- 存取款密码（用于存取款）
 	identificationid varchar(18) not null,   -- 开户身份证号码
 	relatedsecuritiesaccountid bigint references idreference(accountid),   -- 相关联的证券账户ID（外键）
 	capitalaccountstate enum('normal', 'frozen', 'logout') default 'normal',   -- 资金账户状态（正常，冻结，注销）
@@ -116,8 +116,13 @@ create table capitalaccountio(
 );
 
 -- Group-D
--- 股票买入指令表
+drop table if exists matchs;
+drop table if exists dealsask;
+drop table if exists dealsbid;
+drop table if exists asks;
 drop table if exists bids;
+
+-- 股票买入指令表
 create table bids(
 	id serial primary key,   -- 编号：唯一性的编号 作为指向该指令的索引
 	time timestamp default current_timestamp,   -- 时间
@@ -131,7 +136,6 @@ create table bids(
 );
 
 -- 股票卖出指令表
-drop table if exists asks;
 create table asks(
 	id serial primary key,   -- 编号：唯一性的编号 作为指向该指令的索引
 	time timestamp default current_timestamp,   -- 时间
@@ -157,7 +161,6 @@ create table tempinstructions(
 );
 
 -- 交易撮合表
-drop table if exists matchs;
 create table matchs(
 	matchid serial primary key,   -- 撮合编号
 	askid bigint references asks(id),   -- 卖指令编号
@@ -171,7 +174,6 @@ create table matchs(
 );
 
 -- 买入成交表
-drop table if exists dealsbid;
 create table dealsbid(
 	id bigint unsigned primary key,   -- 买指令编号
 	shares bigint,   -- 指令规定的交易数
@@ -183,7 +185,6 @@ create table dealsbid(
 );
 
 -- 卖出成交表
-drop table if exists dealsask;
 create table dealsask(
 	id bigint unsigned primary key,   -- 卖指令编号
 	shares bigint,   -- 指令规定的交易数
