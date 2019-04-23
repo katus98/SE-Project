@@ -77,6 +77,7 @@ create table stockhold(
 	personid bigint not null references idreference(personid),   -- 用户ID（10位，首位为0标记为个人账户，首位为1标记为法人账户）
 	stockid varchar(20) not null references stock(code),   -- 股票ID
 	stocknum bigint,   -- 该股票所持有的总数量
+	frozenstocknum bigint default 0,   -- 冻结的股票数量
 	stockcost numeric(25, 2),   -- 该股票持有总成本
 	updatetime timestamp default current_timestamp,   -- 更新时间
 	primary key(personid, stockid)   -- 用户ID与股票ID共同构成主键
