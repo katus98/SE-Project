@@ -30,7 +30,7 @@ router.post('/orderSubmit', function (req, res) {
             if (result0.result === true) {
                 let stock = new Stock();
                 stock.getStockPermissionByStockId(req.body.stockId, function (result) {
-                    if (result === "true") {
+                    if (result === "1") {
                         let instructions = new Instructions();
                         let capitalAccount = new CapitalAccount();
                         if (req.body.tradeType === "sell") {
@@ -88,7 +88,7 @@ router.post('/orderSubmit', function (req, res) {
                                 }
                             });
                         }
-                    } else if (result === "false") {
+                    } else if (result === "0") {
                         res0.remark = "该股票不允许交易！";
                         resolve(res0);
                     } else {
