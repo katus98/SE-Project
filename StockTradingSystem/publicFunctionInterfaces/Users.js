@@ -113,7 +113,7 @@ function User() {
                 callback(res);
             } else {
                 res.securitiesAccount = parseInt(result);
-                capitalAccount.getCapitalIdBySecuritiesAccountId(res.securitiesAccount, function (result) {
+                capitalAccount.getCapitalIdBySecuritiesAccountId(parseInt(result), function (result) {
                     if (result === 'notFound') {
                         res.remark = "没有找到相关联的资金账户！";
                     } else {
