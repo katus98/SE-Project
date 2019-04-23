@@ -16,10 +16,6 @@ let Match = require('../publicFunctionInterfaces/Match');
 /* GET home page. */
 router.get('/', function(req, res, next) {
     res.render('home');
-    let match = new Match();
-    setInterval(match.convertTempInstructionsToInstructions(function (result) {
-        console.log(result.remark);
-    }), 5000);
 });
 
 router.get('/index', function (req, res, next) {
@@ -140,11 +136,10 @@ router.post('/queryBuy', function (req, res) {
 });
 
 router.post('/test', function (req, res) {
-    // var accounts = new Accounts();
-    // accounts.getAccountidByPersonid(parseInt(req.body.userId), function (result) {
-    //     let returnText = "" + result;
-    //     res.end(returnText);
-    // });
+    let match = new Match();
+    match.convertTempInstructionsToInstructions(function (result) {
+        res.end(result.remark);
+    });
 });
 
 module.exports = router;
