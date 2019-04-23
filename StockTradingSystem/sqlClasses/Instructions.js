@@ -29,6 +29,7 @@ function Instructions() {
         let getSqlParams = [personId];
         dbConnection.query(getSql, getSqlParams, function (err, result) {
             if (err) {
+                console.log("ERROR: Instructions: getInstructionsInfoByPersonId");
                 console.log('[SELECT ERROR] - ', err.message);
                 return;
             }
@@ -47,6 +48,7 @@ function Instructions() {
         let getSql = "SELECT * FROM tempinstructions ORDER BY time ASC LIMIT 1";
         dbConnection.query(getSql, function (err, result) {
             if (err) {
+                console.log("ERROR: Instructions: getTheFirstTempInstructionInfo");
                 console.log('[SELECT ERROR] - ', err.message);
                 return;
             }
@@ -72,6 +74,7 @@ function Instructions() {
         let getSqlParams = [stockId, priceThreshold];
         dbConnection.query(getSql, getSqlParams, function (err, result) {
             if (err) {
+                console.log("ERROR: Instructions: getTheMostMatch");
                 console.log('[SELECT ERROR] - ', err.message);
                 callback(res);
                 return;
@@ -102,6 +105,7 @@ function Instructions() {
         let addSqlParams = [tradeType, personId, stockId, shares, price];
         dbConnection.query(addSql, addSqlParams, function (err, result) {
             if (err) {
+                console.log("ERROR: Instructions: addTempInstructions");
                 console.log('[INSERT ERROR] - ', err.message);
                 callback(false);
                 return;
@@ -128,6 +132,7 @@ function Instructions() {
         //// cwy修改：添加参数
         dbConnection.query(addSql, addSqlParams, function (err, result) {
             if (err) {
+                console.log("ERROR: Instructions: addInstructions");
                 console.log('[INSERT ERROR] - ', err.message);
                 callback(res);
                 return;
@@ -152,6 +157,7 @@ function Instructions() {
         let addSqlParams = [askId, bidId, shares, askPrice, bidPrice, matchPrice, stockId];
         dbConnection.query(addSql, addSqlParams, function (err, result) {
             if (err) {
+                console.log("ERROR: Instructions: addMatchs");
                 console.log('[INSERT ERROR] - ', err.message);
                 callback(false);
                 return;
@@ -176,6 +182,7 @@ function Instructions() {
         let addSqlParams = [instructionId, shares, sharesDealed, price, stockId];
         dbConnection.query(addSql, addSqlParams, function (err, result) {
             if (err) {
+                console.log("ERROR: Instructions: addDeals");
                 console.log('[INSERT ERROR] - ', err.message);
                 callback(false);
                 return;
@@ -201,6 +208,7 @@ function Instructions() {
         }
         dbConnection.query(modSql, modSqlParams, function (err, result) {
             if (err) {
+                console.log("ERROR: Instructions: modifyShares2TradeByInstructionId");
                 console.log('[UPDATE ERROR] - ', err.message);
                 callback(false);
                 return;
@@ -225,12 +233,14 @@ function Instructions() {
         let modSqlParams = ['complete'];
         dbConnection.query(modSql1, modSqlParams, function (err, result) {
             if (err) {
+                console.log("ERROR: Instructions: completeInstructions1");
                 console.log('[UPDATE ERROR] - ', err.message);
                 callback(false);
                 return;
             }
             dbConnection.query(modSql2, modSqlParams, function (err, result) {
                 if (err) {
+                    console.log("ERROR: Instructions: completeInstructions2");
                     console.log('[UPDATE ERROR] - ', err.message);
                     callback(false);
                     return;
