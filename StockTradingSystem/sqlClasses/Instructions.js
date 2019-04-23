@@ -1,9 +1,6 @@
 // 数据库连接
 let dbConnection = require('../database/MySQLconnection');
 
-// 引用的自定义模块类
-let Match = require('../publicFunctionInterfaces/Match');
-
 /*
 * Instructions类：包含对数据库表格bids、asks、matchs、dealsbid、dealsask的直接SQL操作
 * 维护小组：D组
@@ -60,11 +57,11 @@ function Instructions() {
     方法名称：getTheMostMatch
     实现功能：获取最可能撮合的指令
     传入参数：tradeType（'sell', 'buy'）、stockId（字符串）、priceThreshold（浮点数）、回调函数
-    回调参数：res = {result: false, id: 0, personid: 0, shares2trade: 0, price: 0, shares: 0};
+    回调参数：res = {result: false, id: 0, personId: 0, shares2trade: 0, price: 0, shares: 0};
     编程者：孙克染
     * */
     this.getTheMostMatch = function (tradeType, stockId, priceThreshold, callback) {
-        let res = {result: false, id: 0, personid: 0, shares2trade: 0, price: 0, shares: 0};
+        let res = {result: false, id: 0, personId: 0, shares2trade: 0, price: 0, shares: 0};
         let getSql = "SELECT * FROM ";
         if (tradeType === "sell") {
             getSql += "asks WHERE code = ? AND status = 'partial' AND price <= ? ORDER BY price ASC, time ASC limit 1";
@@ -80,7 +77,7 @@ function Instructions() {
                 return;
             }
             if (result.length > 0) {
-                res.personid = result.uid;
+                res.personId = result[0].uid;
                 res.result = true;
                 res.id = result[0].id;
                 res.price = result[0].price;
@@ -111,38 +108,6 @@ function Instructions() {
                 return;
             }
             callback(true);
-        });
-    };
-    /*
-    方法名称：addInstructions
-    实现功能：插入交易指令
-    传入参数：tradeType（'sell', 'buy'）、personId（整数）、stockId（字符串）、shares（整数）、pricePer（浮点数）、回调函数
-    回调参数：true（插入成功）, false（插入失败）
-    编程者：孙克染、陈玮烨
-    * */
-    this.addInstructions = function (tradeType, personId, stockId, shares, price, callback) {
-        let res = {addResult: false, matchResult: false};
-        let addSql = "INSERT INTO ";
-        if (tradeType === "sell") {
-            addSql += 'asks(uid, code, shares, price, shares2trade) VALUES(?,?,?,?,?)';
-        } else {
-            addSql += 'bids(uid, code, shares, price, shares2trade) VALUES(?,?,?,?,?)';
-        }
-        let addSqlParams = [personId, stockId, shares, price, shares];
-        //// cwy修改：添加参数
-        dbConnection.query(addSql, addSqlParams, function (err, result) {
-            if (err) {
-                console.log("ERROR: Instructions: addInstructions");
-                console.log('[INSERT ERROR] - ', err.message);
-                callback(res);
-                return;
-            }
-            const istID = result.insertId;    // 需要记录刚刚插入的指令的编号
-            res.addResult = true;
-            Match.match(istID, tradeType, shares, price, stockId, personId, function (result) {
-                res.matchResult = result;
-                callback(res);
-            });
         });
     };
     /*
