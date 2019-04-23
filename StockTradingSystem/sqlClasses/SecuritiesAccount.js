@@ -72,11 +72,12 @@ function SecuritiesAccount() {
     this.getPersonIdBySecuritiesAccountId = function (securitiesAccountId, callback) {
         let getSql = "SELECT personid FROM ";
         if (parseInt(securitiesAccountId) < 1000000000) {
-            getSql += "personalaccount WHERE accountid = " + securitiesAccountId;
+            getSql += "personalaccount WHERE accountid = ?";
         } else {
-            getSql += "corporateaccount WHERE accountid = " + securitiesAccountId;
+            getSql += "corporateaccount WHERE accountid = ?";
         }
-        dbConnection.query(getSql, function (err, result) {
+        let getSqlParams = [securitiesAccountId];
+        dbConnection.query(getSql, getSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: SecuritiesAccount: getPersonIdBySecuritiesAccountId");
                 console.log('[SELECT ERROR] - ', err.message);
