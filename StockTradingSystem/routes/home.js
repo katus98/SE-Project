@@ -163,10 +163,20 @@ router.post('/queryTemp', function (req, res) {
     });
 });
 
-router.post('/test', function (req, res) {
+router.post('/start', function (req, res) {
     let match = new Match();
-    match.convertTempInstructionsToInstructions(function (result) {
-        res.end(result.remark);
+    match.startMatching(function (result) {
+        res.end("Start successfully!");
+        match.convertTempInstructionsToInstructions(function (result) {
+            //res.end(result.remark);
+        });
+    });
+});
+
+router.post('/stop', function (req, res) {
+    let match = new Match();
+    match.stopMatching(function (result) {
+        res.end("Stop successfully!");
     });
 });
 
