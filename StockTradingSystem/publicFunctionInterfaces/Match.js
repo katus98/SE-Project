@@ -7,6 +7,9 @@ let Stock = require('../sqlClasses/Stock');
 let CapitalAccount = require('../sqlClasses/CapitalAccount');
 let User = require('../publicFunctionInterfaces/Users');
 
+// 临时：控制开闭盘的全局变量
+let start = false;
+
 /*
 * Match类：包含方法：指令撮合
 * 维护小组：D组
@@ -53,7 +56,7 @@ function Match() {
             });
         });
         promise.then(function (result) {
-            if (result.result === true) {
+            if (result.result === true && start) {
                 console.log("Success: 本次撮合成功！即将进入下一次！");
                 match.convertTempInstructionsToInstructions(callback);
             } else {
@@ -205,86 +208,73 @@ function Match() {
                                                                                                                 // 更新股票实时价格
                                                                                                                 stock.updateStockPrice(code, matchPrice, function (result) {
                                                                                                                     if (result === true) {
-                                                                                                                        resu.remark = "本次撮合成功！";
+                                                                                                                        resu.remark = "本次撮合完成！";
                                                                                                                         console.log("撮合价格：" + matchPrice);
                                                                                                                         console.log("撮合股数：" + hasDoneShares);
                                                                                                                     } else {
                                                                                                                         resu.remark = "Error: 股票实时价格更新失败！";
-                                                                                                                        console.log(resu.remark);
                                                                                                                     }
                                                                                                                     resolve(resu);
                                                                                                                 });
                                                                                                             } else {
                                                                                                                 resu.remark = "Error: 买家持股表更新失败！";
-                                                                                                                console.log(resu.remark);
                                                                                                                 resolve(resu);
                                                                                                             }
                                                                                                         });
                                                                                                     } else {
                                                                                                         resu.remark = "Error: 卖家持股表更新失败！";
-                                                                                                        console.log(resu.remark);
                                                                                                         resolve(resu);
                                                                                                     }
                                                                                                 });
                                                                                             } else {
                                                                                                 resu.remark = "Error: 转账失败！";
-                                                                                                console.log(resu.remark);
                                                                                                 callback(resu);
                                                                                             }
                                                                                         });
                                                                                     } else {
                                                                                         resu.remark = "Error: 卖家资金流水记录失败！";
-                                                                                        console.log(resu.remark);
                                                                                         callback(resu);
                                                                                     }
                                                                                 });
                                                                             } else {
                                                                                 resu.remark = "Error: 退钱失败！";
-                                                                                console.log(resu.remark);
                                                                                 callback(resu);
                                                                             }
                                                                         });
                                                                     } else {
                                                                         resu.remark = "Error: 退钱流水记录失败！";
-                                                                        console.log(resu.remark);
                                                                         callback(resu);
                                                                     }
                                                                 });
                                                             } else {
                                                                 resu.remark = "Error: 指令表asks更新失败！";
-                                                                console.log(resu.remark);
                                                                 resolve(resu);
                                                             }
                                                         });
                                                     } else {
                                                         resu.remark = "Error: 指令表bids更新失败！";
-                                                        console.log(resu.remark);
                                                         resolve(resu);
                                                     }
                                                 });
                                             } else {
                                                 resu.remark = "Error: 撮合表更新失败！";
-                                                console.log(resu.remark);
                                                 resolve(resu);
                                             }
                                         });
                                     } else {
                                         // 卖家资金账户ID获取失败
                                         resu.remark = result.remark + "卖家";
-                                        console.log(resu.remark);
                                         callback(resu);
                                     }
                                 });
                             } else {
                                 // 买家资金账户ID获取失败
                                 resu.remark = result.remark + "买家";
-                                console.log(resu.remark);
                                 callback(resu);
                             }
                         });
                     } else {
                         resu.remark = "无可撮合！";
-                        console.log(resu.remark);
                         resu.result = true;
                         resolve(resu);
                     }
@@ -297,13 +287,27 @@ function Match() {
                 if (result.continueOrNot === true) {
                     Match.match(istID, tradeType, result.remainShares, price, code, personId, callback);
                 } else {
-                    console.log("撮合完成！");
+                    console.log("本条指令撮合完成！");
                     callback(true);
                 }
             } else {
                 callback(false);
             }
         });
+    };
+    /*
+    方法名称：startMatching与stopMatching
+    实现功能：开始撮合与停止撮合
+    传入参数：回调函数
+    编程者：孙克染
+    * */
+    this.startMatching = function (callback) {
+        start = true;
+        callback(true);
+    };
+    this.stopMatching = function (callback) {
+        start = false;
+        callback(true);
     };
 }
 
