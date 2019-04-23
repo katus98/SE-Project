@@ -1,3 +1,6 @@
+// 数据库连接
+let dbConnection = require('../database/MySQLconnection');
+
 // 引用的自定义模块类
 let Instructions = require('../sqlClasses/Instructions');
 let Stock = require('../sqlClasses/Stock');
@@ -24,7 +27,7 @@ function Match() {
         let instructions = new Instructions();
         instructions.getTheFirstTempInstructionInfo(function (result) {
             if (result.length > 0) {
-                instructions.addInstructions(result[0].tradetype, result[0].uid, result[0].code, result[0].shares, result[0].price, function (result) {
+                Match.addInstructions(result[0].tradetype, result[0].uid, result[0].code, result[0].shares, result[0].price, function (result) {
                     if (result.addResult === true) {
                         res.remark = "加入指令完成！";
                     } else {
@@ -43,6 +46,38 @@ function Match() {
                 res.result = true;
                 callback(res);
             }
+        });
+    };
+    /*
+    方法名称：addInstructions
+    实现功能：插入交易指令
+    传入参数：tradeType（'sell', 'buy'）、personId（整数）、stockId（字符串）、shares（整数）、pricePer（浮点数）、回调函数
+    回调参数：true（插入成功）, false（插入失败）
+    编程者：孙克染、陈玮烨
+    * */
+    Match.addInstructions = function (tradeType, personId, stockId, shares, price, callback) {
+        let res = {addResult: false, matchResult: false};
+        let addSql = "INSERT INTO ";
+        if (tradeType === "sell") {
+            addSql += 'asks(uid, code, shares, price, shares2trade) VALUES(?,?,?,?,?)';
+        } else {
+            addSql += 'bids(uid, code, shares, price, shares2trade) VALUES(?,?,?,?,?)';
+        }
+        let addSqlParams = [personId, stockId, shares, price, shares];
+        //// cwy修改：添加参数
+        dbConnection.query(addSql, addSqlParams, function (err, result) {
+            if (err) {
+                console.log("ERROR: Instructions: addInstructions");
+                console.log('[INSERT ERROR] - ', err.message);
+                callback(res);
+                return;
+            }
+            const istID = result.insertId;    // 需要记录刚刚插入的指令的编号
+            res.addResult = true;
+            Match.match(istID, tradeType, shares, price, stockId, personId, function (result) {
+                res.matchResult = result;
+                callback(res);
+            });
         });
     };
     /*
@@ -160,65 +195,76 @@ function Match() {
                                                                                                                 console.log("撮合价格：" + matchPrice);
                                                                                                                 console.log("撮合股数：" + hasDoneShares);
                                                                                                             } else {
-                                                                                                                resu.remark = "股票实时价格更新失败！";
+                                                                                                                resu.remark = "Error: 股票实时价格更新失败！";
+                                                                                                                console.log(resu.remark);
                                                                                                             }
-                                                                                                            callback(resu);
+                                                                                                            resolve(resu);
                                                                                                         });
-                                                                                                        resolve(resu);
                                                                                                     } else {
                                                                                                         resu.remark = "Error: 买家持股表更新失败！";
+                                                                                                        console.log(resu.remark);
                                                                                                         resolve(resu);
                                                                                                     }
                                                                                                 });
                                                                                             } else {
                                                                                                 resu.remark = "Error: 卖家持股表更新失败！";
+                                                                                                console.log(resu.remark);
                                                                                                 resolve(resu);
                                                                                             }
                                                                                         });
                                                                                     } else {
-                                                                                        resu.remark = "转账失败！";
+                                                                                        resu.remark = "Error: 转账失败！";
+                                                                                        console.log(resu.remark);
                                                                                         callback(resu);
                                                                                     }
                                                                                 });
                                                                             } else {
-                                                                                resu.remark = "卖家资金流水记录失败！";
+                                                                                resu.remark = "Error: 卖家资金流水记录失败！";
+                                                                                console.log(resu.remark);
                                                                                 callback(resu);
                                                                             }
                                                                         });
                                                                     } else {
-                                                                        resu.remark = "买家资金流水记录失败！";
+                                                                        resu.remark = "Error: 买家资金流水记录失败！";
+                                                                        console.log(resu.remark);
                                                                         callback(resu);
                                                                     }
                                                                 });
                                                             } else {
                                                                 resu.remark = "Error: 指令表2更新失败！"+tradeType1;
+                                                                console.log(resu.remark);
                                                                 resolve(resu);
                                                             }
                                                         });
                                                     } else {
                                                         resu.remark = "Error: 指令表1更新失败！"+tradeType;
+                                                        console.log(resu.remark);
                                                         resolve(resu);
                                                     }
                                                 });
                                             } else {
                                                 resu.remark = "Error: 撮合表更新失败！";
+                                                console.log(resu.remark);
                                                 resolve(resu);
                                             }
                                         });
                                     } else {
                                         // 卖家资金账户ID获取失败
-                                        resu.remark = result.remark;
+                                        resu.remark = result.remark + "卖家";
+                                        console.log(resu.remark);
                                         callback(resu);
                                     }
                                 });
                             } else {
                                 // 买家资金账户ID获取失败
-                                resu.remark = result.remark;
+                                resu.remark = result.remark + "买家";
+                                console.log(resu.remark);
                                 callback(resu);
                             }
                         });
                     } else {
                         resu.remark = "无可撮合！";
+                        console.log(resu.remark);
                         resu.result = true;
                         resolve(resu);
                     }
