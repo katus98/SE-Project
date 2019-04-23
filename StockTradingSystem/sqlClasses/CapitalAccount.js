@@ -292,6 +292,52 @@ function CapitalAccount() {
             });
         });
     };
+    /*
+    方法名称：recoverFrozenCapital
+    实现功能：恢复全部的冻结资金
+    传入参数：回调函数
+    回调参数：bool：true（修改成功）、false（修改失败）
+    编程者：孙克染
+    备注：调用此函数之前无需调用流水记录；自求多福吧！
+    * */
+    this.recoverFrozenCapital = function (callback) {
+        let getSql = "SELECT * FROM capitalaccount WHERE frozenmoney > ?";
+        let getSqlParams = [0];
+        dbConnection.query(getSql, getSqlParams, function (err, result) {
+            if (err) {
+                console.log("ERROR: CapitalAccount: recoverFrozenCapital1");
+                console.log('[SELECT ERROR] - ', err.message);
+                return;
+            }
+            let promise = new Promise(function (resolve, reject) {
+                let count = 0;
+                for (let i = 0; i < result.length; i++) {
+                    this.ioAndInterest(result[i].capitalaccountid, result[i].frozenmoney, "未完成交易资金回退", function (result) {
+                        if (result === false) {
+                            console.log(result[i].capitalaccountid + "资金回退流水记录失败！")
+                        }
+                        count += 1;
+                        if (count === result.length) {
+                            resolve(true);
+                        }
+                    });
+                }
+            });
+            promise.then(function (result) {
+                let modSql = "UPDATE capitalaccount SET availablemoney = availablemoney + frozenmoney, frozenmoney = ?";
+                let modSqlParams = [0];
+                dbConnection.query(modSql, modSqlParams, function (err, result) {
+                    if (err) {
+                        console.log("ERROR: Stock: recoverFrozenCapital");
+                        console.log('[UPDATE ERROR] - ', err.message);
+                        callback(false);
+                        return;
+                    }
+                    callback(true);
+                });
+            });
+        });
+    };
 }
 
 module.exports = CapitalAccount;
