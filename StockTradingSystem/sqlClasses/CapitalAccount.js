@@ -196,6 +196,26 @@ function CapitalAccount() {
         });
     };
     /*
+    方法名称：convertFrozenMoneyToAvailableMoney
+    实现功能：通过资金账户ID将特定数量的冻结资金转化为可用资金
+    传入参数：capitalAccountId（整数）、回调函数
+    回调参数：bool：true（修改成功）、false（修改失败）
+    编程者：孙克染
+    * */
+    this.convertFrozenMoneyToAvailableMoney = function (capitalAccountId, useMoney, callback) {
+        let modSql = "UPDATE capitalaccount SET availablemoney = availablemoney + ?, frozenmoney = frozenmoney - ? WHERE capitalaccountid = ?";
+        let modSqlParams = [useMoney, useMoney, capitalAccountId];
+        dbConnection.query(modSql, modSqlParams, function (err, result) {
+            if (err) {
+                console.log("ERROR: CapitalAccount: convertFrozenMoneyToAvailableMoney");
+                console.log('[UPDATE ERROR] - ', err.message);
+                callback(false);
+                return;
+            }
+            callback(true);
+        });
+    };
+    /*
     方法名称：modifyTradePasswordByCapitalAccountId
     实现功能：通过资金账户ID修改其密码
     传入参数：capitalAccountId（整数或者数字字符串）、newPassword（字符串）回调函数
