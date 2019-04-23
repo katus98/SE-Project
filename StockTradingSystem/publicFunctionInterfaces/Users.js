@@ -29,7 +29,7 @@ function User() {
                         let securitiesAccount = new SecuritiesAccount();
                         securitiesAccount.getSecuritiesAccountStateBySecuritiesAccountId(parseInt(result), function (result) {
                             if (result === 'normal') {
-                                securitiesAccount.getPersonIdBySecuritiesAccountId(parseInt(result), function (result) {
+                                securitiesAccount.getPersonIdBySecuritiesAccountId(res.securitiesAccountId, function (result) {
                                     if (result === 'notFound') {
                                         res.remark = "证券账户存在问题！";
                                         callback(res);
