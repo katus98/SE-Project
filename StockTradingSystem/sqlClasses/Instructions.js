@@ -252,7 +252,33 @@ function Instructions() {
             });
         });
     };
-
+    /*
+    方法名称：withdrawInstruction
+    实现功能：撤回指令
+    传入参数：tradeType（'sell', 'buy'）、instructionId（整数）、回调函数
+    回调参数：true（更新成功）, false（更新失败）
+    编程者：孙克染、陈玮烨
+    * */
+    this.withdrawInstruction = function (tradeType, instructionId, callback) {
+        let modSql = "UPDATE ";
+        let modSqlParams = [instructionId];
+        if (tradeType === "sell") {
+            modSql += "asks SET status = 'withdrawn', timearchived = current_timestamp() WHERE id = ?;";
+        } else {
+            modSql += "bids SET status = 'withdrawn', timearchived = current_timestamp() WHERE id = ?;";
+        }
+        dbConnection.query(modSql, modSqlParams, function (err, result) {
+            if (err) {
+                console.log("ERROR: Instructions: withdrawInstruction");
+                console.log('[UPDATE ERROR] - ', err.message);
+                callback(false);
+                return;
+            }
+            Instructions.completeInstructions(function (result) {
+                callback(result);
+            });
+        });
+    };
     /*
     方法名称：expireInstructions
     实现功能：指令国旗
