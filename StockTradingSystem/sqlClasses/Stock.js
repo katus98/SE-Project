@@ -184,7 +184,53 @@ function Stock() {
             callback(true);
         });
     };
-    /*
+
+    /**
+    方法名称：updateStockPriceAtClosing
+    实现功能：在收盘时更新股票表更新股票当日价格
+    传入参数：回调函数
+    回调函数：bool：true（修改成功）、false（修改失败）
+    编程者：陈玮烨、杨清杰、孙克染
+     */
+    this.updateStockPriceAtClosing = function (callback) {
+        let modSql="UPDATE stock SET today_startprice = current_price, last_endprice;";
+        dbConnection.query(modSql, function (err, result) {
+            if (err) {
+                console.log("ERROR: Stock: updateStockPrice");
+                console.log('[UPDATE ERROR] - ', err.message);
+                callback(false);
+                return;
+            }
+            callback(true);
+        });
+    };
+
+    /**
+    方法名称：updateStockHistoryAtClosing
+    实现功能：在收盘时更新股票历史表更新股票当日价格
+    传入参数：回调函数
+    回调函数：bool：true（修改成功）、false（修改失败）
+    编程者：陈玮烨、杨清杰、孙克染
+     */
+    this.updateStockHistoryAtClosing = function (callback) {
+        let modSql = "INSERT INTO stock_hostory " +
+            "(select code, highest, lowest, today_startprice, current_price, notification, current_date() " +
+            "from stock natural left outer join ( " +
+            "    select code, max(matchprice) as highest, min(matchprice) as lowest " +
+            "    from matchs " +
+            "    group by code) as aa);";
+        dbConnection.query(modSql, function (err, result) {
+            if (err) {
+                console.log("ERROR: Stock: updateStockPrice");
+                console.log('[UPDATE ERROR] - ', err.message);
+                callback(false);
+                return;
+            }
+            callback(true);
+        });
+    };
+
+    /**
     方法名称：convertStockToFrozenStock
     实现功能：冻结股票数量
     传入参数：personId（整数）、stockId（字符串）、stockNum（整数）、回调函数

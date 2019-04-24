@@ -235,6 +235,33 @@ function Instructions() {
             callback(true);
         });
     };
+
+    /****
+     * 指令过期
+     * @param callback
+     */
+    this.expireInstructions = function (callback){
+        let modSql1 = "UPDATE asks SET status = ?, timearchived = current_timestamp(6) WHERE status = 'partial';";
+        let modSql2 = "UPDATE bids SET status = ?, timearchived = current_timestamp(6) WHERE status = 'partial';";
+        let modSqlParams = ['expired'];
+        dbConnection.query(modSql1, modSqlParams, function (err, result) {
+            if (err) {
+                console.log("ERROR: Instructions: expireInstructions1");
+                console.log('[UPDATE ERROR] - ', err.message);
+                callback(false);
+                return;
+            }
+            dbConnection.query(modSql2, modSqlParams, function (err, result) {
+                if (err) {
+                    console.log("ERROR: Instructions: expireInstructions2");
+                    console.log('[UPDATE ERROR] - ', err.message);
+                    callback(false);
+                    return;
+                }
+                callback(true);
+            });
+        });
+    }
 }
 
 module.exports = Instructions;

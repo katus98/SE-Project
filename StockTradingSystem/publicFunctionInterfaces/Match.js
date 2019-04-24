@@ -9,6 +9,7 @@ let User = require('../publicFunctionInterfaces/Users');
 
 // 临时：控制开闭盘的全局变量
 let start = false;
+let flag = false;
 
 /*
 * Match类：包含方法：指令撮合
@@ -27,6 +28,7 @@ function Match() {
     * */
     this.convertTempInstructionsToInstructions = function (callback) {
         let match = this;
+
         let promise = new Promise(function (resolve, reject) {
             let res = {result: false, remark: ""};
             let instructions = new Instructions();
@@ -48,7 +50,9 @@ function Match() {
                         res.result = result.addResult && result.matchResult;
                         resolve(res);
                     });
+                    flag = true;
                 } else {
+                    flag = false;
                     res.remark = "没有缓存指令！";
                     res.result = true;
                     resolve(res);
@@ -56,7 +60,7 @@ function Match() {
             });
         });
         promise.then(function (result) {
-            if (result.result === true && start) {
+            if (result.result === true && (start || flag)) {
                 console.log("Success: 本次撮合成功！即将进入下一次！");
                 match.convertTempInstructionsToInstructions(callback);
             } else {
@@ -298,7 +302,7 @@ function Match() {
     方法名称：startMatching与stopMatching
     实现功能：开始撮合与停止撮合
     传入参数：回调函数
-    编程者：孙克染
+    编程者：孙克染 陈玮烨 杨清杰
     * */
     this.startMatching = function (callback) {
         start = true;
@@ -306,6 +310,22 @@ function Match() {
     };
     this.stopMatching = function (callback) {
         start = false;
+
+        let instruction = new Instructions();
+        instruction.expireInstructions(function (result) {
+            if (result == false)
+                alert("Internal Error.");
+
+            let stock = new Stock();
+            stock.updateStockHistoryAtClosing(function (result) {
+                if (result == false)
+                    alert("Internal Error.");
+                stock.updateStockPriceAtClosing(function (result) {
+                    callback(result);
+                })
+            })
+
+        });
         callback(true);
     };
 }
