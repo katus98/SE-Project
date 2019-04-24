@@ -54,13 +54,13 @@ function Instructions() {
     };
     //单项查询
     /*
-    方法名称：getTheMostMatch
-    实现功能：获取最可能撮合的指令
+    方法名称：getCorInstructionHiPriority
+    实现功能：获取对应的撮合优先级最高的指令
     传入参数：tradeType（'sell', 'buy'）、stockId（字符串）、priceThreshold（浮点数）、回调函数
     回调参数：res = {result: false, id: 0, personId: 0, shares2trade: 0, price: 0, shares: 0};
-    编程者：孙克染
+    编程者：孙克染、陈玮烨
     * */
-    this.getTheMostMatch = function (tradeType, stockId, priceThreshold, callback) {
+    this.getCorInstructionHiPriority = function (tradeType, stockId, priceThreshold, callback) {
         let res = {result: false, id: 0, personId: 0, shares2trade: 0, price: 0, shares: 0};
         let getSql = "SELECT * FROM ";
         // 注意此处传进来的时需要匹配的交易类型，查找的指令表应当与传入参数相反
@@ -72,7 +72,7 @@ function Instructions() {
         let getSqlParams = [stockId, priceThreshold];
         dbConnection.query(getSql, getSqlParams, function (err, result) {
             if (err) {
-                console.log("ERROR: Instructions: getTheMostMatch");
+                console.log("ERROR: Instructions: getCorInstructionHiPriority");
                 console.log('[SELECT ERROR] - ', err.message);
                 callback(res);
                 return;
@@ -95,20 +95,39 @@ function Instructions() {
     方法名称：addTempInstructions
     实现功能：插入缓存交易指令
     传入参数：tradeType（'sell', 'buy'）、personId（整数）、stockId（字符串）、shares（整数）、price（浮点数）、回调函数
-    回调参数：true（插入成功）, false（插入失败）
-    编程者：孙克染
+    回调参数：res={info: (Message), status: (Bool, true for success}
+    编程者：孙克染、陈玮烨
     * */
     this.addTempInstructions = function (tradeType, personId, stockId, shares, price, callback) {
+        let res = {info: "", status: false};
+        if (shares <= 0)
+        {
+            res.info = "Quantity of shares must not be zero or negative.";
+            res.status = false;
+            callback(res);
+            return;
+        }
+        if (price <= 0)
+        {
+            res.info = "Price must not be zero or negative.";
+            res.status = false;
+            callback(res);
+            return;
+        }
         let addSql = "INSERT INTO tempinstructions(tradetype, uid, code, shares, price) VALUES(?,?,?,?,?)";
         let addSqlParams = [tradeType, personId, stockId, shares, price];
         dbConnection.query(addSql, addSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: Instructions: addTempInstructions");
                 console.log('[INSERT ERROR] - ', err.message);
-                callback(false);
+                res.info = "Error inserting into the database";
+                res.status = false;
+                callback(res);
                 return;
             }
-            callback(true);
+            res.info = "Success.";
+            res.status = true;
+            callback(res);
         });
     };
     /*
@@ -214,32 +233,15 @@ function Instructions() {
             });
         });
     };
-    /****删除方法****/
+
     /*
-    方法名称：deleteTheFirstTempInstruction
-    实现功能：删除第一位的缓存指令
+    方法名称：expireInstructions
+    实现功能：指令国旗
     传入参数：回调函数
     回调参数：true（删除成功）, false（删除失败）
-    编程者：孙克染
+    编程者：陈玮烨、杨清杰、孙克染
     备注：仅限于D组调用！
     * */
-    this.deleteTheFirstTempInstruction = function (callback) {
-        let delSql = "DELETE FROM tempinstructions ORDER BY id ASC LIMIT 1";
-        dbConnection.query(delSql, function (err, result) {
-            if (err) {
-                console.log("ERROR: Instructions: deleteTheFirstTempInstruction");
-                console.log('[DELETE ERROR] - ', err.message);
-                callback(false);
-                return;
-            }
-            callback(true);
-        });
-    };
-
-    /****
-     * 指令过期
-     * @param callback
-     */
     this.expireInstructions = function (callback){
         let modSql1 = "UPDATE asks SET status = ?, timearchived = current_timestamp(6) WHERE status = 'partial';";
         let modSql2 = "UPDATE bids SET status = ?, timearchived = current_timestamp(6) WHERE status = 'partial';";
@@ -262,6 +264,27 @@ function Instructions() {
             });
         });
     }
+    /****删除方法****/
+    /*
+    方法名称：deleteTheFirstTempInstruction
+    实现功能：删除第一位的缓存指令
+    传入参数：回调函数
+    回调参数：true（删除成功）, false（删除失败）
+    编程者：孙克染
+    备注：仅限于D组调用！
+    * */
+    this.deleteTheFirstTempInstruction = function (callback) {
+        let delSql = "DELETE FROM tempinstructions ORDER BY id ASC LIMIT 1";
+        dbConnection.query(delSql, function (err, result) {
+            if (err) {
+                console.log("ERROR: Instructions: deleteTheFirstTempInstruction");
+                console.log('[DELETE ERROR] - ', err.message);
+                callback(false);
+                return;
+            }
+            callback(true);
+        });
+    };
 }
 
 module.exports = Instructions;

@@ -23,7 +23,7 @@ function Match() {
     实现功能：将缓存的优先级最高的指令加入指令表
     传入参数：回调函数
     回调参数：res = {result: false, remark: ""}
-    编程者：孙克染
+    编程者：孙克染、陈玮烨、杨清杰
     备注：串行调用！
     * */
     this.convertTempInstructionsToInstructions = function (callback) {
@@ -127,7 +127,7 @@ function Match() {
             let instruction = new Instructions();
 
             // 获取最优先的匹配指令
-            instruction.getTheMostMatch(tradeType, code, price, function (res) {
+            instruction.getCorInstructionHiPriority(tradeType, code, price, function (res) {
                 // 获取本次撮合涉及股票的详细信息
                 stock.getStockInfoByStockId(code,function (res2) {
                     if (res.result !== false) {
@@ -302,12 +302,15 @@ function Match() {
     方法名称：startMatching与stopMatching
     实现功能：开始撮合与停止撮合
     传入参数：回调函数
-    编程者：孙克染 陈玮烨 杨清杰
+    编程者：孙克染、陈玮烨、杨清杰
     * */
     this.startMatching = function (callback) {
         start = true;
         callback(true);
     };
+    // todo:
+    // Note: Repetitive stopping matching in a day would invoke a bug due to a constraint on the table stock_history
+    // which only allows 1 record per code per day.
     this.stopMatching = function (callback) {
         start = false;
 
