@@ -2,28 +2,49 @@
 
 作者：孙克染
 
-更新时间：2019-4-4
+更新时间：2019-4-25
+
+## 部署说明（草案）
+
+最后更新：孙克染 陈玮烨
+
+直接在MySQL数据库管理系统中运行`dbDesign.sql`和`dbTest-D.sql`即可。
+
+为方便大家调用数据库，并配合MySQLconnection.js的使用，在数据库定义DDL文本中，规定了数据库的位置，即database为"StockTradingSys".(此项更改需要经过大家同意)
+```sql
+-- 统一建立数据库
+drop database if exists StockTradingSys;
+create database StockTradingSys;
+-- 使用StockTradingSys命名空间
+use StockTradingSys;
+```
 
 ## 数据库表概况
 
-本数据库中总计含有15个表，分别是：
+本数据库中总计含有13个表，分别是：
 
-| 表名称              | 说明                  | 维护小组 |
-|:----------------:|:-------------------:|:----:|
-| stock            | 股票表                 | E    |
-| stock_history    | 股票历史表               | E    |
-| idreference      | 证券账户证券账户id与用户id的对照表 | A    |
-| personalaccount  | 自然人证券账户表            | A    |
-| corporateaccount | 法人证券账户表             | A    |
-| stockhold        | 证券人持股表              | A C  |
-| capitalaccount   | 资金账户表               | B    |
-| jobberworker     | 证券经纪商处工作人员账户表       | B    |
-| capitalaccountio | 资金账户收支记录表           | B    |
-| bids             | 股票买入指令表             | D    |
-| asks             | 股票卖出指令表             | D    |
-| matchs           | 交易撮合表               | D    |
-| dealsbid         | 买入成交表               | D    |
-| dealsask         | 卖出成交表               | D    |
+|      表名称      |                说明                | 维护小组 |
+| :--------------: | :--------------------------------: | :------: |
+|      stock       |               股票表               |    E     |
+|  stock_history   |             股票历史表             |    E     |
+|   idreference    | 证券账户证券账户id与用户id的对照表 |    A     |
+| personalaccount  |          自然人证券账户表          |    A     |
+| corporateaccount |           法人证券账户表           |    A     |
+|    stockhold     |            证券人持股表            |   A C    |
+|  capitalaccount  |             资金账户表             |    B     |
+|   jobberworker   |     证券经纪商处工作人员账户表     |    B     |
+| capitalaccountio |         资金账户收支记录表         |    B     |
+|       bids       |           股票买入指令表           |    D     |
+|       asks       |           股票卖出指令表           |    D     |
+|      matchs      |             交易撮合表             |    D     |
+| tempinstructions |           临时指令排队表           |    D     |
+
+另有两个基于matchs的视图，用于展示买卖交易的交易结果情况。
+
+| 视图名称 |     说明     | 维护小组 |
+| :------: | :----------: | :------: |
+| dealsBid | 买入成交记录 |    D     |
+| dealsAsk | 卖出成交记录 |    D     |
 
 ## 数据库分表说明
 
@@ -283,40 +304,30 @@ create table matchs(
 
 + 一旦发生了撮合，参与撮合的股份无法撤回
 
-### 买入成交表
+### 卖出成交视图
 
-dealsbid表，存储购买成交信息。
-
-```sql
-drop table if exists dealsbid;
-create table dealsbid(
-    id bigint unsigned primary key,   -- 买指令编号
-    shares bigint,   -- 指令规定的交易数
-    sharesdealed bigint,   -- 成交数
-    price numeric(25, 2),   -- 成交价格(单价)
-    time timestamp default current_timestamp,   -- 成交时间
-    code varchar(20) not null references stock(code),   -- 代交易的股票代码 例如'BABA','MSFT'
-    foreign key (id) references bids(id) on delete cascade on update cascade
-);
+```mysql
+-- 卖出成交视图
+create view dealsAsk as
+select askid, code,
+       sum(shares) as sharesDealed,
+       sum(shares * matchprice) as totalPrice,
+       sum(shares * matchprice)/sum(shares) as avgPrice,
+       max(matchtime) as time
+from matchs
+group by askid, code;
 ```
 
-+ 每有指令表状态变更，即更新此表
+### 买入成交视图
 
-### 卖出成交表
-
-dealsask表，存储卖出成交信息。
-
-```sql
-drop table if exists dealsask;
-create table dealsask(
-    id bigint unsigned primary key,   -- 卖指令编号
-    shares bigint,   -- 指令规定的交易数
-    sharesdealed bigint,   -- 成交数
-    price numeric(25, 2),   -- 成交价格(单价)
-    time timestamp default current_timestamp,   -- 成交时间
-    code varchar(20) not null references stock(code),   -- 代交易的股票代码 例如'BABA','MSFT'
-    foreign key (id) references asks(id) on delete cascade on update cascade
-);
+```mysql
+-- 买入成交视图
+create view dealsBid as
+select bidid, code,
+       sum(shares) as sharesDealed,
+       sum(shares * matchprice) as totalPrice,
+       sum(shares * matchprice)/sum(shares) as avgPrice,
+       max(matchtime) as time
+from matchs
+group by bidid, code;
 ```
-
-+ 每有指令表状态变更，即更新此表

@@ -1,3 +1,9 @@
+-- 统一建立数据库
+drop database if exists StockTradingSys;
+create database StockTradingSys;
+-- 使用StockTradingSys命名空间
+use StockTradingSys;
+
 -- Group-E
 -- 股票表
 drop table if exists stock;
@@ -174,24 +180,22 @@ create table matchs(
 	code varchar(20) not null references stock(code) on delete set null on update cascade  -- 待交易的股票代码 例如'BABA','MSFT'
 );
 
--- 买入成交表
-create table dealsbid(
-	id bigint unsigned primary key,   -- 买指令编号
-	shares bigint,   -- 指令规定的交易数
-	sharesdealed bigint,   -- 成交数
-	price numeric(25, 2),   -- 成交价格(单价)
-	time timestamp(6) default current_timestamp(6),   -- 成交时间
-	code varchar(20) not null references stock(code),   -- 代交易的股票代码 例如'BABA','MSFT'
-	foreign key (id) references bids(id) on delete cascade on update cascade
-);
+-- 卖出成交视图
+create view dealsAsk as
+select askid, code,
+       sum(shares) as sharesDealed,
+       sum(shares * matchprice) as totalPrice,
+       sum(shares * matchprice)/sum(shares) as avgPrice,
+       max(matchtime) as time
+from matchs
+group by askid, code;
 
--- 卖出成交表
-create table dealsask(
-	id bigint unsigned primary key,   -- 卖指令编号
-	shares bigint,   -- 指令规定的交易数
-	sharesdealed bigint,   -- 成交数
-	price numeric(25, 2),   -- 成交价格(单价)
-	time timestamp(6) default current_timestamp(6),   -- 成交时间
-	code varchar(20) not null references stock(code),   -- 代交易的股票代码 例如'BABA','MSFT'
-	foreign key (id) references asks(id) on delete cascade on update cascade
-);
+-- 买入成交视图
+create view dealsBid as
+select bidid, code,
+       sum(shares) as sharesDealed,
+       sum(shares * matchprice) as totalPrice,
+       sum(shares * matchprice)/sum(shares) as avgPrice,
+       max(matchtime) as time
+from matchs
+group by bidid, code;
