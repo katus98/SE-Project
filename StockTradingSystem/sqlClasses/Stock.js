@@ -193,10 +193,10 @@ function Stock() {
     编程者：陈玮烨、杨清杰、孙克染
      */
     this.updateStockPriceAtClosing = function (callback) {
-        let modSql="UPDATE stock SET today_startprice = current_price, last_endprice;";
+        let modSql="UPDATE stock SET today_startprice = current_price, last_endprice = current_price;";
         dbConnection.query(modSql, function (err, result) {
             if (err) {
-                console.log("ERROR: Stock: updateStockPrice");
+                console.log("ERROR: Stock: updateStockPriceAtClosing");
                 console.log('[UPDATE ERROR] - ', err.message);
                 callback(false);
                 return;
@@ -213,7 +213,7 @@ function Stock() {
     编程者：陈玮烨、杨清杰、孙克染
      */
     this.updateStockHistoryAtClosing = function (callback) {
-        let modSql = "INSERT INTO stock_hostory " +
+        let modSql = "INSERT INTO stock_history " +
             "(select code, highest, lowest, today_startprice, current_price, notification, current_date() " +
             "from stock natural left outer join ( " +
             "    select code, max(matchprice) as highest, min(matchprice) as lowest " +
@@ -221,7 +221,7 @@ function Stock() {
             "    group by code) as aa);";
         dbConnection.query(modSql, function (err, result) {
             if (err) {
-                console.log("ERROR: Stock: updateStockPrice");
+                console.log("ERROR: Stock: updateStockHistoryAtClosing");
                 console.log('[UPDATE ERROR] - ', err.message);
                 callback(false);
                 return;

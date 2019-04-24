@@ -313,20 +313,14 @@ function Match() {
 
         let instruction = new Instructions();
         instruction.expireInstructions(function (result) {
-            if (result == false)
-                alert("Internal Error.");
-
             let stock = new Stock();
             stock.updateStockHistoryAtClosing(function (result) {
-                if (result == false)
-                    alert("Internal Error.");
                 stock.updateStockPriceAtClosing(function (result) {
                     callback(result);
-                })
-            })
+                });
+            });
 
         });
-        callback(true);
     };
 }
 
