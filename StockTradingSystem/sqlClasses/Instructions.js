@@ -1,11 +1,12 @@
 // 数据库连接
 let dbConnection = require('../database/MySQLconnection');
-
+let Stock = require('../sqlClasses/Stock');
 /*
 * Instructions类：包含对数据库表格bids、asks、matchs、dealsbid、dealsask的直接SQL操作
 * 维护小组：D组
 * */
 function Instructions() {
+    this.stock = new Stock();
     /****查询方法****/
     //Info查询
     /*
@@ -96,38 +97,56 @@ function Instructions() {
     实现功能：插入缓存交易指令
     传入参数：tradeType（'sell', 'buy'）、personId（整数）、stockId（字符串）、shares（整数）、price（浮点数）、回调函数
     回调参数：res={info: (Message), status: (Bool, true for success}
-    编程者：孙克染、陈玮烨
+    编程者：陈玮烨、孙克染
     * */
     this.addTempInstructions = function (tradeType, personId, stockId, shares, price, callback) {
         let res = {info: "", status: false};
         if (shares <= 0)
         {
-            res.info = "Quantity of shares must not be zero or negative.";
+            res.info = " Quantity of shares must not be zero or negative.";
             res.status = false;
             callback(res);
             return;
         }
         if (price <= 0)
         {
-            res.info = "Price must not be zero or negative.";
+            res.info = " Price must not be zero or negative.";
             res.status = false;
             callback(res);
             return;
         }
-        let addSql = "INSERT INTO tempinstructions(tradetype, uid, code, shares, price) VALUES(?,?,?,?,?)";
-        let addSqlParams = [tradeType, personId, stockId, shares, price];
-        dbConnection.query(addSql, addSqlParams, function (err, result) {
-            if (err) {
-                console.log("ERROR: Instructions: addTempInstructions");
-                console.log('[INSERT ERROR] - ', err.message);
-                res.info = "Error inserting into the database";
+
+        this.stock.getPriceCeilFloor(stockId, function (result) {
+            if (result.status = false){
+                res.info = result.message;  // 没有指定代号的股票
                 res.status = false;
                 callback(res);
                 return;
             }
-            res.info = "Success.";
-            res.status = true;
-            callback(res);
+            const low = result.low;
+            const high = result.high;
+            if (price < low || price > high){
+                res.info = "The price specified is not acceptable. " + result.message;  // 没有指定代号的股票
+                res.status = false;
+                callback(res);
+                return;
+            }
+
+            let addSql = "INSERT INTO tempinstructions(tradetype, uid, code, shares, price) VALUES(?,?,?,?,?)";
+            let addSqlParams = [tradeType, personId, stockId, shares, price];
+            dbConnection.query(addSql, addSqlParams, function (err, result) {
+                if (err) {
+                    console.log("ERROR: Instructions: addTempInstructions");
+                    console.log('[INSERT ERROR] - ', err.message);
+                    res.info = "Error inserting into the database";
+                    res.status = false;
+                    callback(res);
+                    return;
+                }
+                res.info = "Success.";
+                res.status = true;
+                callback(res);
+            });
         });
     };
     /*

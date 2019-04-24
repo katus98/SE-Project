@@ -48,7 +48,7 @@ router.post('/orderSubmit', function (req, res) {
                                             if (result === true) {
                                                 instructions.addTempInstructions('sell', result0.personId, req.body.stockId, parseInt(req.body.stockNum), parseFloat(req.body.pricePer), function (result) {
                                                     if (result.status === false) {
-                                                        res0.remark = "指令插入数据库时出现异常!" + result.info;
+                                                        res0.remark = "指令存在问题：" + result.info;
                                                     } else {
                                                         res0.result = true;
                                                         res0.remark = "股票出售指令发布成功!";
@@ -82,7 +82,7 @@ router.post('/orderSubmit', function (req, res) {
                                                     if (result === true) {
                                                         instructions.addTempInstructions('buy', result0.personId, req.body.stockId, parseInt(req.body.stockNum), parseFloat(req.body.pricePer), function (result) {
                                                             if (result.status === false) {
-                                                                res0.remark = "指令插入数据库时出现异常!" + result.info;
+                                                                res0.remark = "指令存在问题：" + result.info;
                                                             } else {
                                                                 res0.result = true;
                                                                 res0.remark = "股票出售指令发布成功!";

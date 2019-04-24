@@ -3,7 +3,7 @@ let dbConnection = require('../database/MySQLconnection');
 
 /*
 * Stock类：包含对数据库表格stock、stock_history、stockhold的直接SQL操作
-* 维护小组：A、E组
+* 维护小组：A、D、E组
 * */
 function Stock() {
     /****查询方法****/
@@ -250,6 +250,34 @@ function Stock() {
             callback(true);
         });
     };
+    /**
+     方法名称：getPriceCeilFloor
+     实现功能：获取涨跌停价格限制
+     传入参数：stockId（字符串）、回调函数
+     回调参数：res = {status: false, code: stockID, high: 0, low: 0, message: ""};
+     编程者：陈玮烨
+     * */
+    this.getPriceCeilFloor = function (stockID, callback) {
+        let res = {status: false, code: stockID, high: 0, low: 0, message: ""};
+        this.getStockInfoByStockId(stockID, function (result) {
+            if (result.length == 0){
+                res.message = "No record of security with a code of " + stockID;
+                res.status = false;
+                callback(res);
+                return;
+            }
+            const todayBasePrice = result[0].last_endprice;
+            const percentConstraint = result[0].percentagepricechange;
+            const high = Math.floor(todayBasePrice * 100 * (1 + percentConstraint)) / 100;
+            const low = Math.floor(todayBasePrice * 100 * (1 - percentConstraint)) / 100;
+            res.status = true;
+            res.high = high;
+            res.low = low;
+            res.message = "The range of acceptable price of the security (code: " + stockID +
+                ") is [" + low + ", " + high + "] today.";
+            callback(res);
+        });
+    }
 }
 
 module.exports = Stock;
