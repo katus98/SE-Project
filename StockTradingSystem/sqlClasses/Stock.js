@@ -115,6 +115,68 @@ function Stock() {
             }
         });
     };
+    /**
+     方法名称：getPriceCeilFloor
+     实现功能：获取涨跌停价格限制
+     传入参数：stockId（字符串）、回调函数
+     回调参数：res = {status: false, code: stockID, high: 0, low: 0, message: ""};
+     编程者：陈玮烨
+     * */
+    this.getPriceCeilFloor = function (stockID, callback) {
+        let res = {status: false, code: stockID, high: 0, low: 0, message: ""};
+        this.getStockInfoByStockId(stockID, function (result) {
+            if (result.length === 0){
+                res.message = "No record of security with a code of " + stockID;
+                res.status = false;
+                callback(res);
+                return;
+            }
+            const todayBasePrice = result[0].last_endprice;
+            const percentConstraint = result[0].percentagepricechange;
+            const high = Math.floor(todayBasePrice * 100 * (1 + percentConstraint)) / 100;
+            const low = Math.floor(todayBasePrice * 100 * (1 - percentConstraint)) / 100;
+            res.status = true;
+            res.high = high;
+            res.low = low;
+            res.message = "The range of acceptable price of the security (code: " + stockID +
+                ") is [" + low + ", " + high + "] today.";
+            callback(res);
+        });
+    };
+
+    /**
+     方法名称：getActiveInstructionsByPersonID
+     实现功能：获取仍为活跃状态（未被存档、撤回或完成的）指令
+     传入参数：personid, tradetype, 回调函数
+     回调参数：res = {*};
+     编程者：杨清杰、陈玮烨
+     * */
+    this.getActiveInstructionsByPersonID = function (personid, tradeType, callback) {
+        if(tradeType === 'sell'){
+            let getSql = "SELECT * FROM bids WHERE uid = ? and status = ?";
+            let getSqlParams = [personid,'partial'];
+            dbConnection.query(getSql, getSqlParams, function (err, result) {
+                if (err) {
+                    console.log("ERROR: Stock: getActiveInstructionsByPersonID1");
+                    console.log('[SELECT ERROR] - ', err.message);
+                    return;
+                }
+                callback(result);
+            });
+        }
+        else{
+            let getSql = "SELECT * FROM asks WHERE uid = ? and status = ?";
+            let getSqlParams = [personid,'partial'];
+            dbConnection.query(getSql, getSqlParams, function (err, result) {
+                if (err) {
+                    console.log("ERROR: Stock: getActiveInstructionsByPersonID2");
+                    console.log('[SELECT ERROR] - ', err.message);
+                    return;
+                }
+                callback(result);
+            });
+        }
+    };
     /****插入方法****/
     //todo: 这里自己写就好了，应该没有其他小组会调用
     /****更新方法****/
@@ -123,17 +185,35 @@ function Stock() {
     实现功能：通过personId, stockId修改对应的持股数量
     传入参数：personId（整数）, stockId（字符串）、变更的股票数deltaNum（整数、允许正负、负数表示减少）、回调函数
     回调参数：bool：true（修改成功）、false（修改失败）
-    编程者：黄欣雨、孙克染
-    备注：如果是股份减少，则操作冻结股数
+    编程者：黄欣雨、孙克染、陈玮烨
+    备注：正为增加持股，负为减少持股
     * */
     this.modifyStockHoldNumber = function (personId, stockId, deltaNum, callback) {
         let modSql="UPDATE stockhold SET ";
         let modSqlParams = [deltaNum, personId, stockId];
-        if (deltaNum >= 0) {
-            modSql += "stocknum = stocknum + ?, updatetime = current_timestamp WHERE personid = ? and stockid = ?";
-        } else {
-            modSql += "frozenstocknum = frozenstocknum + ?, updatetime = current_timestamp WHERE personid = ? and stockid = ?";
-        }
+        modSql += "stocknum = stocknum + ?, updatetime = current_timestamp WHERE personid = ? and stockid = ?";
+        dbConnection.query(modSql, modSqlParams, function (err, result) {
+            if (err) {
+                console.log("ERROR: Stock: modifyStockHoldNumber");
+                console.log('[UPDATE ERROR] - ', err.message);
+                callback(false);
+                return;
+            }
+            callback(true);
+        });
+    };
+    /*
+    方法名称：modifyFrozenStockHoldNumber
+    实现功能：通过personId, stockId修改对应的冻结持股数量
+    传入参数：personId（整数）, stockId（字符串）、变更的股票数deltaNum（整数、允许正负、负数表示减少）、回调函数
+    回调参数：bool：true（修改成功）、false（修改失败）
+    编程者：黄欣雨、孙克染、陈玮烨
+    备注：正为增加冻结股份，负为减少冻结股份。
+    * */
+    this.modifyFrozenStockHoldNumber = function (personId, stockId, deltaNum, callback) {
+        let modSql="UPDATE stockhold SET ";
+        let modSqlParams = [deltaNum, personId, stockId];
+        modSql += "frozenstocknum = frozenstocknum + ?, updatetime = current_timestamp WHERE personid = ? and stockid = ?";
         dbConnection.query(modSql, modSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: Stock: modifyStockHoldNumber");
@@ -249,68 +329,6 @@ function Stock() {
             }
             callback(true);
         });
-    };
-    /**
-     方法名称：getPriceCeilFloor
-     实现功能：获取涨跌停价格限制
-     传入参数：stockId（字符串）、回调函数
-     回调参数：res = {status: false, code: stockID, high: 0, low: 0, message: ""};
-     编程者：陈玮烨
-     * */
-    this.getPriceCeilFloor = function (stockID, callback) {
-        let res = {status: false, code: stockID, high: 0, low: 0, message: ""};
-        this.getStockInfoByStockId(stockID, function (result) {
-            if (result.length === 0){
-                res.message = "No record of security with a code of " + stockID;
-                res.status = false;
-                callback(res);
-                return;
-            }
-            const todayBasePrice = result[0].last_endprice;
-            const percentConstraint = result[0].percentagepricechange;
-            const high = Math.floor(todayBasePrice * 100 * (1 + percentConstraint)) / 100;
-            const low = Math.floor(todayBasePrice * 100 * (1 - percentConstraint)) / 100;
-            res.status = true;
-            res.high = high;
-            res.low = low;
-            res.message = "The range of acceptable price of the security (code: " + stockID +
-                ") is [" + low + ", " + high + "] today.";
-            callback(res);
-        });
-    };
-
-    /**
-     方法名称：getActiveInstructionsByPersonID
-     实现功能：获取仍为活跃状态（未被存档、撤回或完成的）指令
-     传入参数：personid, tradetype, 回调函数
-     回调参数：res = {*};
-     编程者：杨清杰、陈玮烨
-     * */
-    this.getActiveInstructionsByPersonID = function (personid, tradeType, callback) {
-        if(tradeType === 'sell'){
-            let getSql = "SELECT * FROM bids WHERE uid = ? and status = ?";
-            let getSqlParams = [personid,'partial'];
-            dbConnection.query(getSql, getSqlParams, function (err, result) {
-                if (err) {
-                    console.log("ERROR: Stock: getActiveInstructionsByPersonID1");
-                    console.log('[SELECT ERROR] - ', err.message);
-                    return;
-                }
-                callback(result);
-            });
-        }
-        else{
-            let getSql = "SELECT * FROM asks WHERE uid = ? and status = ?";
-            let getSqlParams = [personid,'partial'];
-            dbConnection.query(getSql, getSqlParams, function (err, result) {
-                if (err) {
-                    console.log("ERROR: Stock: getActiveInstructionsByPersonID2");
-                    console.log('[SELECT ERROR] - ', err.message);
-                    return;
-                }
-                callback(result);
-            });
-        }
     };
 }
 

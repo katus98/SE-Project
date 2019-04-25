@@ -1,12 +1,14 @@
 // 数据库连接
 let dbConnection = require('../database/MySQLconnection');
 let Stock = require('../sqlClasses/Stock');
+let CapitalAccount = require('../sqlClasses/CapitalAccount')
 /*
 * Instructions类：包含对数据库表格bids、asks、matchs、dealsbid、dealsask的直接SQL操作
 * 维护小组：D组
 * */
 function Instructions() {
     this.stock = new Stock();
+    this.capitalAccount = new CapitalAccount();
     /****查询方法****/
     //Info查询
     /*
@@ -91,6 +93,48 @@ function Instructions() {
             }
         });
     };
+    /*
+    方法名称：getOrderInfoByID
+    实现功能：根据指令编号和类型获取指令信息
+    传入参数：orderType（'sell', 'buy'）、instructionID、回调函数
+    回调参数：res = {result: false, status: '', id: 0, time: undefined, uid: 0, code: '', shares2trade: 0, price: 0, shares: 0};
+    编程者：陈玮烨、孙克染、杨清杰
+    * */
+    this.getOrderInfoByID = function (instructionID, orderType, callback) {
+        let res = {result: false, status: '',
+            id: 0, time: undefined, uid: 0, code: '', shares2trade: 0, price: 0, shares: 0};
+        let getSQL = "select * from ? where id = ?;";
+        let getSQLParams = [];
+        if (orderType == "sell"){
+            getSQLParams.push("asks", instructionID);
+        }
+        else {
+            getSQLParams.push("bids", instructionID);
+        }
+        dbConnection.query(getSQL, getSQLParams, function(err, result) {
+            if (err) {
+                console.log("ERROR: Instructions: getCorInstructionHiPriority");
+                console.log('[SELECT ERROR] - ', err.message);
+                callback(res);
+                return;
+            }
+            if (result.length == 0){
+                callback(res);
+                return;
+            }
+            res.result = true;
+            res.status = result[0].status;
+            res.id = result[0].id;
+            res.time = result[0].time;
+            res.uid = result[0].uid;
+            res.code = result[0].code;
+            res.shares2trade = result[0].shares2trade;
+            res.price = result[0].price;
+            res.shares = result[0].shares;
+            callback(res);
+        });
+    };
+
     /****插入方法****/
     /*
     方法名称：addTempInstructions
@@ -231,8 +275,8 @@ function Instructions() {
     备注：类成员函数，仅限于类内调用
     * */
     Instructions.completeInstructions = function (callback) {
-        let modSql1 = "UPDATE asks SET status = ?, timearchived = current_timestamp(6) WHERE shares2trade = 0";
-        let modSql2 = "UPDATE bids SET status = ?, timearchived = current_timestamp(6) WHERE shares2trade = 0";
+        let modSql1 = "UPDATE asks SET status = ?, timearchived = current_timestamp(6) WHERE shares2trade = 0;";
+        let modSql2 = "UPDATE bids SET status = ?, timearchived = current_timestamp(6) WHERE shares2trade = 0;";
         let modSqlParams = ['complete'];
         dbConnection.query(modSql1, modSqlParams, function (err, result) {
             if (err) {
@@ -260,22 +304,50 @@ function Instructions() {
     编程者：孙克染、陈玮烨
     * */
     this.withdrawInstruction = function (tradeType, instructionId, callback) {
-        let modSql = "UPDATE ";
-        let modSqlParams = [instructionId];
-        if (tradeType === "sell") {
-            modSql += "asks SET status = 'withdrawn', timearchived = current_timestamp() WHERE id = ?;";
-        } else {
-            modSql += "bids SET status = 'withdrawn', timearchived = current_timestamp() WHERE id = ?;";
-        }
-        dbConnection.query(modSql, modSqlParams, function (err, result) {
-            if (err) {
-                console.log("ERROR: Instructions: withdrawInstruction");
-                console.log('[UPDATE ERROR] - ', err.message);
+        this.completeInstructions(function (result) {
+            if (result == false){
                 callback(false);
                 return;
             }
-            Instructions.completeInstructions(function (result) {
-                callback(result);
+            let modSql = "UPDATE ";
+            let modSqlParams = [instructionId];
+            if (tradeType === "sell") {
+                modSql += "asks SET status = 'withdrawn', timearchived = current_timestamp() WHERE id = ?;";
+            } else {
+                modSql += "bids SET status = 'withdrawn', timearchived = current_timestamp() WHERE id = ?;";
+            }
+            dbConnection.query(modSql, modSqlParams, function (err, result) {
+                if (err) {
+                    console.log("ERROR: Instructions: withdrawInstruction");
+                    console.log('[UPDATE ERROR] - ', err.message);
+                    callback(false);
+                    return;
+                }
+                this.getOrderInfoByID(instructionId, tradeType, function (res) {
+                    const shares2trade = res.shares2trade;
+                    const price = res.price;
+                    const uid = res.uid;
+                    const code = res.code;
+                    if (tradeType === "sell"){
+                        this.stock.modifyFrozenStockHoldNumber(uid, code, -shares2trade, function (result) {
+                            if (result == false){
+                                callback(false);
+                                return;
+                            }
+                            this.stock.modifyStockHoldNumber(uid, code, shares2trade, function (result) {
+                                callback(result);
+                                return;
+                            });
+                        });
+                    }
+                    else {  // 撤回买指令
+                        let returnedFund = shares2trade * price;
+                        this.capitalAccount.ioAndInterest(uid, returnedFund,
+                            "撤回指令 (bidid: " + instructionId + ") 资金解冻", function (result) {
+                            callback(result);
+                        });
+                    }
+                });
             });
         });
     };

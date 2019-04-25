@@ -85,7 +85,6 @@ function Match() {
             addSql += 'bids(time, uid, code, shares, price, shares2trade) VALUES(?,?,?,?,?,?)';
         }
         let addSqlParams = [time, personId, stockId, shares, price, shares];
-        //// cwy修改：添加参数
         // 将优先级最高的缓存指令信息插入正式指令表
         dbConnection.query(addSql, addSqlParams, function (err, result) {
             if (err) {
@@ -199,7 +198,7 @@ function Match() {
                                                                                         capitalAccount.pay(buyCapitalAccountId, sellCapitalAccountId, amount, function (result) {
                                                                                             if (result === true) {
                                                                                                 // 更新用户持股表 - 卖家账户
-                                                                                                stock.modifyStockHoldNumber(sellPersonId, code, -hasDoneShares, function (result) {
+                                                                                                stock.modifyFrozenStockHoldNumber(sellPersonId, code, -hasDoneShares, function (result) {
                                                                                                     if (result === true) {
                                                                                                         // 更新用户持股表 - 买家账户
                                                                                                         stock.modifyStockHoldNumber(buyPersonId, code, hasDoneShares, function (result) {
