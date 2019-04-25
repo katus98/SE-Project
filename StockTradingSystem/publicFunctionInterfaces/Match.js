@@ -18,6 +18,7 @@ let flag = false;
 * 备注：禁止D组外其他小组调用！
 * */
 function Match() {
+
     /*
     方法名称：convertTempInstructionsToInstructions
     实现功能：将缓存的优先级最高的指令加入指令表
@@ -314,15 +315,31 @@ function Match() {
     this.stopMatching = function (callback) {
         start = false;
 
+        let capitalAccount = new CapitalAccount();
+        let stocks= new Stock();
         let instruction = new Instructions();
         instruction.expireInstructions(function (result) {
             let stock = new Stock();
             stock.updateStockHistoryAtClosing(function (result) {
                 stock.updateStockPriceAtClosing(function (result) {
-                    callback(result);
+                    capitalAccount.recoverFrozenCapital(function (result) {
+                        if(result === false)
+                        {
+                            console.log("冻结资金回退失败");
+                            callback(false);
+                            return;
+                        }
+                        stocks.recoverFrozenStockHold(function (result) {
+                            if(result === false){
+                                console.log("冻结股票退回失败");
+                                callback(false);
+                                return;
+                            }
+                            callback(true);
+                        });
+                    });
                 });
             });
-
         });
     };
 }

@@ -281,7 +281,7 @@ function Instructions() {
     };
     /*
     方法名称：expireInstructions
-    实现功能：指令国旗
+    实现功能：指令过期
     传入参数：回调函数
     回调参数：true（删除成功）, false（删除失败）
     编程者：陈玮烨、杨清杰、孙克染

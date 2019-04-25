@@ -260,7 +260,7 @@ function Stock() {
     this.getPriceCeilFloor = function (stockID, callback) {
         let res = {status: false, code: stockID, high: 0, low: 0, message: ""};
         this.getStockInfoByStockId(stockID, function (result) {
-            if (result.length == 0){
+            if (result.length === 0){
                 res.message = "No record of security with a code of " + stockID;
                 res.status = false;
                 callback(res);
@@ -277,7 +277,41 @@ function Stock() {
                 ") is [" + low + ", " + high + "] today.";
             callback(res);
         });
-    }
+    };
+
+    /**
+     方法名称：getActiveInstructionsByPersonID
+     实现功能：获取仍为活跃状态（未被存档、撤回或完成的）指令
+     传入参数：personid, tradetype, 回调函数
+     回调参数：res = {*};
+     编程者：杨清杰、陈玮烨
+     * */
+    this.getActiveInstructionsByPersonID = function (personid, tradeType, callback) {
+        if(tradeType === 'sell'){
+            let getSql = "SELECT * FROM bids WHERE uid = ? and status = ?";
+            let getSqlParams = [personid,'partial'];
+            dbConnection.query(getSql, getSqlParams, function (err, result) {
+                if (err) {
+                    console.log("ERROR: Stock: getActiveInstructionsByPersonID1");
+                    console.log('[SELECT ERROR] - ', err.message);
+                    return;
+                }
+                callback(result);
+            });
+        }
+        else{
+            let getSql = "SELECT * FROM asks WHERE uid = ? and status = ?";
+            let getSqlParams = [personid,'partial'];
+            dbConnection.query(getSql, getSqlParams, function (err, result) {
+                if (err) {
+                    console.log("ERROR: Stock: getActiveInstructionsByPersonID2");
+                    console.log('[SELECT ERROR] - ', err.message);
+                    return;
+                }
+                callback(result);
+            });
+        }
+    };
 }
 
 module.exports = Stock;
