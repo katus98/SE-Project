@@ -328,14 +328,17 @@ function Match() {
                             callback(false);
                             return;
                         }
-                        stocks.recoverFrozenStockHold(function (result) {
-                            if(result === false){
-                                console.log("冻结股票退回失败");
-                                callback(false);
-                                return;
-                            }
-                            callback(true);
-                        });
+                        else
+                        {
+                            stocks.recoverFrozenStockHold(function (result) {
+                                if(result === false){
+                                    console.log("冻结股票退回失败");
+                                    callback(false);
+                                    return;
+                                }
+                                callback(true);
+                            });
+                        }
                     });
                 });
             });

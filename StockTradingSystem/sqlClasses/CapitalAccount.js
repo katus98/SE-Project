@@ -297,12 +297,13 @@ function CapitalAccount() {
     实现功能：恢复全部的冻结资金
     传入参数：回调函数
     回调参数：bool：true（修改成功）、false（修改失败）
-    编程者：孙克染
+    编程者：孙克染（Debugged with CWY）
     备注：调用此函数之前无需调用流水记录；自求多福吧！
     * */
     this.recoverFrozenCapital = function (callback) {
         let getSql = "SELECT * FROM capitalaccount WHERE frozenmoney > ?";
         let getSqlParams = [0];
+        let CapAcc = new CapitalAccount();
         dbConnection.query(getSql, getSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: CapitalAccount: recoverFrozenCapital1");
@@ -310,18 +311,24 @@ function CapitalAccount() {
                 return;
             }
             let promise = new Promise(function (resolve, reject) {
-                let count = 0;
-                for (let i = 0; i < result.length; i++) {
-                    this.ioAndInterest(result[i].capitalaccountid, result[i].frozenmoney, "未完成交易资金回退", function (result) {
-                        if (result === false) {
-                            console.log(result[i].capitalaccountid + "资金回退流水记录失败！")
-                        }
-                        count += 1;
-                        if (count === result.length) {
-                            resolve(true);
-                        }
-                    });
-                }
+                let i = 0, len = result.length;
+                let manipulateIO = function () {
+                    if (i < len)
+                    {
+                        CapAcc.ioAndInterest(result[i].capitalaccountid, result[i].frozenmoney, "未完成交易资金回退", function (result) {
+                            if (result === false) {
+                                console.log(result[i].capitalaccountid + "资金回退流水记录失败！");
+                            }
+                            i++;
+                            manipulateIO()
+                        });
+                    }
+                    else
+                    {
+                        resolve(true);
+                    }
+                };
+                manipulateIO();
             });
             promise.then(function (result) {
                 let modSql = "UPDATE capitalaccount SET availablemoney = availablemoney + frozenmoney, frozenmoney = ?";
