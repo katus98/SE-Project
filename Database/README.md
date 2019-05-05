@@ -235,7 +235,7 @@ create table capitalaccountio(
 
 ### 股票买入指令表
 
-bids表，存储股票购买指令，每有用户发起购买指令即插入此表。
+bids表，存储股票购买指令，每当有用户发起购买指令即插入此表。
 
 ```sql
 drop table if exists bids;
@@ -260,7 +260,7 @@ create table bids(
 
 ### 股票卖出指令表
 
-asks表，存储股票卖出指令，每有用户发起出售指令即插入此表。
+asks表，存储股票卖出指令，每当有用户发起出售指令即插入此表。
 
 ```sql
 drop table if exists asks;
