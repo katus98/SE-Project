@@ -215,7 +215,7 @@ function Instructions() {
     };
     /*
     方法名称：addDeals
-    实现功能：插入撮合记录
+    实现功能：插入成交记录
     传入参数：tradeType、instructionId, shares, sharesDealed, price, stockId,、回调函数
     回调参数：true（插入成功）, false（插入失败）
     编程者：孙克染
@@ -240,7 +240,7 @@ function Instructions() {
     };
     /****更新方法****/
     /*
-    方法名称：modifyShares2Trade
+    方法名称：modifyShares2TradeByInstructionId
     实现功能：更新撮合的指令信息
     传入参数：tradeType（'sell', 'buy'）、instructionId（整数）、deltaShares（整数）、回调函数
     回调参数：true（更新成功）, false（更新失败）
@@ -380,7 +380,7 @@ function Instructions() {
                 callback(true);
             });
         });
-    }
+    };
     /****删除方法****/
     /*
     方法名称：deleteTheFirstTempInstruction
