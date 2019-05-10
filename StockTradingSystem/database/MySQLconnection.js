@@ -4,7 +4,7 @@ var connection = mysql.createConnection({
     user: 'root',//填写数据库用户名，默认root
     password: 'skrv587',//填写数据库密码
     port: '3306',//服务端口，MySQL默认3306
-    database: 'setest'//填写数据库名称
+    database: 'StockTradingSys'//填写数据库名称
 });
 //connection.connect();
 
