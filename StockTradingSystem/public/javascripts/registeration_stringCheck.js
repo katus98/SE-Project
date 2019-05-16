@@ -37,39 +37,29 @@ function checkFill(bid, nid) {
 }
 
 function validate() {
-    return (checkLoginPassword() && checkLoginSame() && checkMoneyPassword() && checkMoneySame());
+    return (checkFill('#f_name', '#notation0') && checkIdCardNumber() && checkLoginPassword() && checkLoginSame() && checkMoneyPassword() && checkMoneySame() && checkFill('#f_phone', '#notation4'));
 }
 
 $(document).ready(function () {
     $("#registerBtn").click(function () {
-        var name = $("#f_name").val();
-        var username = $("#f_username").val();
-        var email = $("#f_email").val();
-        var password = $("#f_password").val();
-        console.log(name,username,email,password);
         if(validate()) {
             $.ajax({
-                url: '/registeration/register',
+                url: '/register/register',
                 type: 'POST',
-                data: {
-                    name: name,
-                    username: username,
-                    email: email,
-                    password: password
-                },
+                data: $("#registerForm").serialize(),
                 success: function (data) {
                     if (data.success) {
                         urlRedirect = true;
-                        console.log("注册成功");
-                        alert("Register successfully!\nYou will return login page in 3 seconds.");
+                        console.log("Success!");
+                        alert("开户成功!");
                         if (urlRedirect) {
                             setTimeout(function () {
-                                $(window).attr('location', 'http://localhost:3000/login');
+                                $(window).attr('location', 'http://localhost:3000/register/success');
                             }, 3000);
                         }
                     } else {
-                        console.log("出现错误");
-                        alert("Error!Something Wrong!");
+                        console.log("Error!");
+                        alert("错误! 服务器开小差了!");
                     }
                 }
             });
@@ -79,12 +69,12 @@ $(document).ready(function () {
 
 //校验输入不能为空
 function isEmpty(s, notation) {
-    var patrn = /\S/;
+    let patrn = /\S/;
     if(!patrn.exec(s)){
-        notation.css("display","block");
+        notation.css("display", "block");
         return false;
     }else {
-        notation.css("display","none");
+        notation.css("display", "none");
         return true;
     }
 }
@@ -92,12 +82,12 @@ function isEmpty(s, notation) {
 //校验用户登录名
 //只能输入5-20个字母开头、可带数字、"_"、"."的字串
 function isRegisterUserName(s, notation) {
-    var patrn = /^[a-zA-Z]{1}([a-zA-Z0-9]|[._]){4,19}$/;
+    let patrn = /^[a-zA-Z]{1}([a-zA-Z0-9]|[._]){4,19}$/;
     if(!patrn.exec(s)){
-        notation.css("display","block");
+        notation.css("display", "block");
         return false;
     }else {
-        notation.css("display","none");
+        notation.css("display", "none");
         return true;
     }
 }
@@ -105,25 +95,25 @@ function isRegisterUserName(s, notation) {
 //校验密码
 //只能输入6-20个字母、数字、下划线
 function isPassword(s, notation) {
-    var patrn = /^(\w){6,20}$/;
+    let patrn = /^(\w){6,20}$/;
     if(!patrn.exec(s)){
-        notation.css("display","block");
+        notation.css("display", "block");
         return false;
     }else {
-        notation.css("display","none");
+        notation.css("display", "none");
         return true;
     }
 }
 
 //校验email
 function isEmail(s, notation) {
-    var patrn = /^\w+@[a-z0-9]+\.[a-z]+$/;
+    let patrn = /^\w+@[a-z0-9]+\.[a-z]+$/;
     // var patrn2 = /\s/;
-    if(patrn.exec(s) || s==""){
-        notation.css("display","none");
+    if(patrn.exec(s) || s === ""){
+        notation.css("display", "none");
         return true;
     }else {
-        notation.css("display","block");
+        notation.css("display", "block");
         return false;
     }
 }
@@ -132,13 +122,19 @@ function isEmail(s, notation) {
 //id3 notation id
 //校验两次输入的密码是否相同
 function checkPasswordSame(str1, str2, notation) {
-    if(str1 != str2){
-        notation.css("display","block");
-        // $("#changeBtn").attr("disabled",true);
+    if(str1 !== str2){
+        notation.css("display", "block");
         return false;
     }else {
-        notation.css("display","none");
-        // $("#changeBtn").attr("disabled",false);
+        notation.css("display", "none");
         return true;
     }
+}
+
+
+//检验身份证号码格式是否正确
+function checkIdCardNumber() {
+    let idCardNum = $('#i_number').val();
+    //todo
+    return false;
 }
