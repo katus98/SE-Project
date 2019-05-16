@@ -121,7 +121,6 @@ router.post('/orderSubmit', function (req, res) {
     promise1.then(function (res0) {
         res.end(res0.remark);
         if (res0.result === true) {
-            //todo: 撮合系统唤醒
             console.log("指令加入缓存成功！");
         }
     });
