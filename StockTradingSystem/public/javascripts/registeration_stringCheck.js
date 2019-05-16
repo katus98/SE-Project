@@ -46,9 +46,10 @@ $(document).ready(function () {
             $.ajax({
                 url: '/register/register',
                 type: 'POST',
+                dataType: 'json',
                 data: $("#registerForm").serialize(),
                 success: function (data) {
-                    if (data.success) {
+                    if (data.result) {
                         urlRedirect = true;
                         console.log("Success!");
                         alert("开户成功!");
@@ -61,6 +62,9 @@ $(document).ready(function () {
                         console.log("Error!");
                         alert("错误! 服务器开小差了!");
                     }
+                },
+                error: function () {
+                    alert("Error!");
                 }
             });
         }
@@ -138,9 +142,9 @@ function checkIdCardNumber() {
     //todo
     let result = false;
     if (result) {
-        $('#notation3').css("display", "block");
-    } else {
         $('#notation3').css("display", "none");
+    } else {
+        $('#notation3').css("display", "block");
     }
-    return result;
+    return true;
 }
