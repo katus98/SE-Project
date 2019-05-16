@@ -73,7 +73,7 @@ function isEmpty(s, notation) {
     if(!patrn.exec(s)){
         notation.css("display", "block");
         return false;
-    }else {
+    } else {
         notation.css("display", "none");
         return true;
     }
@@ -86,7 +86,7 @@ function isRegisterUserName(s, notation) {
     if(!patrn.exec(s)){
         notation.css("display", "block");
         return false;
-    }else {
+    } else {
         notation.css("display", "none");
         return true;
     }
@@ -99,7 +99,7 @@ function isPassword(s, notation) {
     if(!patrn.exec(s)){
         notation.css("display", "block");
         return false;
-    }else {
+    } else {
         notation.css("display", "none");
         return true;
     }
@@ -112,7 +112,7 @@ function isEmail(s, notation) {
     if(patrn.exec(s) || s === ""){
         notation.css("display", "none");
         return true;
-    }else {
+    } else {
         notation.css("display", "block");
         return false;
     }
@@ -125,7 +125,7 @@ function checkPasswordSame(str1, str2, notation) {
     if(str1 !== str2){
         notation.css("display", "block");
         return false;
-    }else {
+    } else {
         notation.css("display", "none");
         return true;
     }
@@ -136,5 +136,11 @@ function checkPasswordSame(str1, str2, notation) {
 function checkIdCardNumber() {
     let idCardNum = $('#i_number').val();
     //todo
-    return false;
+    let result = false;
+    if (result) {
+        $('#notation3').css("display", "block");
+    } else {
+        $('#notation3').css("display", "none");
+    }
+    return result;
 }
