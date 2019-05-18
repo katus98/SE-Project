@@ -1,5 +1,5 @@
 // 数据库连接
-let dbConnection = require('../database/MySQLconnection');
+let dbQuery = require('../database/MySQLquery');
 
 /*
 * SecuritiesAccount类：包含对数据库表格idreference、personalaccount、corporateaccount的直接SQL操作
@@ -19,11 +19,12 @@ function SecuritiesAccount() {
     this.getSecuritiesAccountInfoBySecuritiesAccountId = function (securitiesAccountId, callback) {
         let getSql = "SELECT * FROM ";
         if (parseInt(securitiesAccountId) < 1000000000) {
-            getSql += "personalaccount WHERE accountid = " + securitiesAccountId;
+            getSql += "personalaccount WHERE accountid = ?";
         } else {
-            getSql += "corporateaccount WHERE accountid = " + securitiesAccountId;
+            getSql += "corporateaccount WHERE accountid = ?";
         }
-        dbConnection.query(getSql, function (err, result) {
+        let getSqlParams = [securitiesAccountId];
+        dbQuery(getSql, getSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: SecuritiesAccount: getSecuritiesAccountInfoBySecuritiesAccountId");
                 console.log('[SELECT ERROR] - ', err.message);
@@ -48,7 +49,7 @@ function SecuritiesAccount() {
             getSql += "corporateaccount WHERE accountid = ?";
         }
         let getSqlParams = [securitiesAccountId];
-        dbConnection.query(getSql, getSqlParams, function (err, result) {
+        dbQuery(getSql, getSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: SecuritiesAccount: getSecuritiesAccountStateBySecuritiesAccountId");
                 console.log('[SELECT ERROR] - ', err.message);
@@ -77,7 +78,7 @@ function SecuritiesAccount() {
             getSql += "corporateaccount WHERE accountid = ?";
         }
         let getSqlParams = [securitiesAccountId];
-        dbConnection.query(getSql, getSqlParams, function (err, result) {
+        dbQuery(getSql, getSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: SecuritiesAccount: getPersonIdBySecuritiesAccountId");
                 console.log('[SELECT ERROR] - ', err.message);
@@ -99,8 +100,9 @@ function SecuritiesAccount() {
     备注：调用时需要先判断返回的结果是否是'notFound'
     * */
     this.getSecuritiesAccountIdByPersonId = function (personId, callback) {
-        let getSql = "SELECT MAX(accountid) AS acc FROM idreference WHERE personid = " + personId;
-        dbConnection.query(getSql, function (err, result) {
+        let getSql = "SELECT MAX(accountid) AS acc FROM idreference WHERE personid = ?";
+        let getSqlParams = [personId];
+        dbQuery(getSql, getSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: SecuritiesAccount: getSecuritiesAccountIdByPersonId");
                 console.log('[SELECT ERROR] - ', err.message);

@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 // 数据库连接
-var dbConnection = require('../database/MySQLconnection');
+let dbQuery = require('../database/MySQLquery');
 
 // 引入自定义模块接口
 let SecuritiesAccount = require('../sqlClasses/SecuritiesAccount');
@@ -128,7 +128,7 @@ router.post('/orderSubmit', function (req, res) {
 
 router.post('/querySell', function (req, res) {
     let getSql = "select * from asks";
-    dbConnection.query(getSql, function (err, result) {
+    dbQuery(getSql, [], function (err, result) {
         if (err) {
             console.log('[INSERT ERROR] - ', err.message);
             return;
@@ -140,7 +140,7 @@ router.post('/querySell', function (req, res) {
 
 router.post('/queryBuy', function (req, res) {
     let getSql = "SELECT * FROM bids";
-    dbConnection.query(getSql, function (err, result) {
+    dbQuery(getSql, [], function (err, result) {
         if (err) {
             console.log('[INSERT ERROR] - ', err.message);
             return;
@@ -152,7 +152,7 @@ router.post('/queryBuy', function (req, res) {
 
 router.post('/queryTemp', function (req, res) {
     let getSql = "SELECT * FROM tempinstructions";
-    dbConnection.query(getSql, function (err, result) {
+    dbQuery(getSql, [], function (err, result) {
         if (err) {
             console.log('[INSERT ERROR] - ', err.message);
             return;

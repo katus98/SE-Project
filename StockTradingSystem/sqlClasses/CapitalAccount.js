@@ -1,5 +1,5 @@
 // 数据库连接
-let dbConnection = require('../database/MySQLconnection');
+let dbQuery = require('../database/MySQLquery');
 
 // B自定义模块类
 let CalculateInterest = require('../publicFunctionInterfaces/calculateInterest');
@@ -20,8 +20,9 @@ function CapitalAccount() {
     备注：调用时需要先判断返回的结果length>0
     * */
     this.getCapitalAccountInfoByCapitalAccountId = function (capitalAccountId, callback) {
-        let getSql = "SELECT * FROM capitalaccount WHERE capitalaccountid = " + capitalAccountId;
-        dbConnection.query(getSql, function (err, result) {
+        let getSql = "SELECT * FROM capitalaccount WHERE capitalaccountid = ?";
+        let getSqlParams = [capitalAccountId];
+        dbQuery(getSql, getSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: CapitalAccount: getCapitalAccountInfoByCapitalAccountId");
                 console.log('[SELECT ERROR] - ', err.message);
@@ -41,7 +42,7 @@ function CapitalAccount() {
     this.getCapitalAccountStateByCapitalAccountId = function (capitalAccountId, callback) {
         let getSql = "SELECT capitalaccountstate FROM capitalaccount WHERE capitalaccountid = ?";
         let getSqlParams = [capitalAccountId];
-        dbConnection.query(getSql, getSqlParams, function (err, result) {
+        dbQuery(getSql, getSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: CapitalAccount: getCapitalAccountStateByCapitalAccountId");
                 console.log('[SELECT ERROR] - ', err.message);
@@ -66,7 +67,7 @@ function CapitalAccount() {
         let res = {result: false, availableMoney: 0.0, frozenMoney: 0.0, remark: ""};
         let getSql = "SELECT * FROM capitalaccount WHERE capitalaccountid = ?";
         let getSqlParams = [capitalAccountId];
-        dbConnection.query(getSql, getSqlParams, function (err, result) {
+        dbQuery(getSql, getSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: CapitalAccount: getCapitalByCapitalAccountId");
                 console.log('[SELECT ERROR] - ', err.message);
@@ -95,7 +96,7 @@ function CapitalAccount() {
         let getSql = "SELECT * FROM idreference, capitalaccount WHERE capitalaccount.relatedsecuritiesaccountid = idreference.accountid";
         getSql += " AND idreference.personid = ? AND capitalaccount.capitalaccountstate = ?";
         let getSqlParams = [personId, 'normal'];
-        dbConnection.query(getSql, getSqlParams, function (err, result) {
+        dbQuery(getSql, getSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: CapitalAccount: getCapitalByPersonId");
                 console.log('[SELECT ERROR] - ', err.message);
@@ -124,7 +125,7 @@ function CapitalAccount() {
     this.getSecuritiesAccountIdByCapitalAccountId = function (capitalAccountId, callback) {
         let getSql = "SELECT relatedsecuritiesaccountid FROM capitalaccount WHERE capitalaccountid = ?";
         let getSqlParams = [parseInt(capitalAccountId)];
-        dbConnection.query(getSql, getSqlParams, function (err, result) {
+        dbQuery(getSql, getSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: CapitalAccount: getSecuritiesAccountIdByCapitalAccountId");
                 console.log('[SELECT ERROR] - ', err.message);
@@ -148,7 +149,7 @@ function CapitalAccount() {
     this.getCapitalIdBySecuritiesAccountId = function (securitiesAccountId, callback) {
         let getSql = "SELECT capitalaccountid FROM capitalaccount WHERE relatedsecuritiesaccountid = ? AND capitalaccountstate = ?";
         let getSqlParams = [securitiesAccountId, 'normal'];
-        dbConnection.query(getSql, getSqlParams, function (err, result) {
+        dbQuery(getSql, getSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: CapitalAccount: getCapitalIdBySecuritiesAccountId");
                 console.log('[SELECT ERROR] - ', err.message);
@@ -185,7 +186,7 @@ function CapitalAccount() {
     this.convertAvailableMoneyToFrozenMoney = function (capitalAccountId, useMoney, callback) {
         let modSql = "UPDATE capitalaccount SET availablemoney = availablemoney - ?, frozenmoney = frozenmoney + ? WHERE capitalaccountid = ?";
         let modSqlParams = [useMoney, useMoney, capitalAccountId];
-        dbConnection.query(modSql, modSqlParams, function (err, result) {
+        dbQuery(modSql, modSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: CapitalAccount: convertAvailableMoneyToFrozenMoney");
                 console.log('[UPDATE ERROR] - ', err.message);
@@ -205,7 +206,7 @@ function CapitalAccount() {
     this.convertFrozenMoneyToAvailableMoney = function (capitalAccountId, drawbackMoney, callback) {
         let modSql = "UPDATE capitalaccount SET availablemoney = availablemoney + ?, frozenmoney = frozenmoney - ? WHERE capitalaccountid = ?";
         let modSqlParams = [drawbackMoney, drawbackMoney, capitalAccountId];
-        dbConnection.query(modSql, modSqlParams, function (err, result) {
+        dbQuery(modSql, modSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: CapitalAccount: convertFrozenMoneyToAvailableMoney");
                 console.log('[UPDATE ERROR] - ', err.message);
@@ -240,7 +241,7 @@ function CapitalAccount() {
             //更新利息余额
             let modSql = "Update capitalaccount set interestremained = interestremained + ? where capitalaccount.capitalaccountid = ? and capitalaccount.capitalaccountstate = ?";
             let modSqlParams = [tempInterest, capitalAccountId, 'normal'];
-            dbConnection.query(modSql, modSqlParams, function (err, result) {
+            dbQuery(modSql, modSqlParams, function (err, result) {
                 if (err) {
                     console.log("ERROR: CapitalAccount: ioAndInterest1");
                     console.log('[UPDATE ERROR] - ', err.message);
@@ -250,7 +251,7 @@ function CapitalAccount() {
                 //在资金账户收支记录io表中写入信息
                 let addSql = "Insert into capitalaccountio(capitalaccountid, ioamount, iodescription) VALUES(?,?,?)";
                 let addSqlParams = [capitalAccountId, amount, ioDescription];
-                dbConnection.query(addSql, addSqlParams, function (err, result) {
+                dbQuery(addSql, addSqlParams, function (err, result) {
                     if (err) {
                         console.log("ERROR: CapitalAccount: ioAndInterest2");
                         console.log('[INSERT ERROR] - ', err.message);
@@ -272,7 +273,7 @@ function CapitalAccount() {
     this.pay = function (fromCapitalAccountId, toCapitalAccountId, useMoney, callback) {
         let modSql1 = "UPDATE capitalaccount SET frozenmoney = frozenmoney - ? WHERE capitalaccountid = ?";
         let modSqlParams1 = [useMoney, fromCapitalAccountId];
-        dbConnection.query(modSql1, modSqlParams1, function (err, result) {
+        dbQuery(modSql1, modSqlParams1, function (err, result) {
             if (err) {
                 console.log("ERROR: CapitalAccount: pay1");
                 console.log('[UPDATE ERROR] - ', err.message);
@@ -281,7 +282,7 @@ function CapitalAccount() {
             }
             let modSql2 = "UPDATE capitalaccount SET availablemoney = availablemoney + ? WHERE capitalaccountid = ?";
             let modSqlParams2 = [useMoney, toCapitalAccountId];
-            dbConnection.query(modSql2, modSqlParams2, function (err, result) {
+            dbQuery(modSql2, modSqlParams2, function (err, result) {
                 if (err) {
                     console.log("ERROR: CapitalAccount: pay2");
                     console.log('[UPDATE ERROR] - ', err.message);
@@ -304,7 +305,7 @@ function CapitalAccount() {
         let getSql = "SELECT * FROM capitalaccount WHERE frozenmoney > ?";
         let getSqlParams = [0];
         let CapAcc = new CapitalAccount();
-        dbConnection.query(getSql, getSqlParams, function (err, result) {
+        dbQuery(getSql, getSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: CapitalAccount: recoverFrozenCapital1");
                 console.log('[SELECT ERROR] - ', err.message);
@@ -333,7 +334,7 @@ function CapitalAccount() {
             promise.then(function (result) {
                 let modSql = "UPDATE capitalaccount SET availablemoney = availablemoney + frozenmoney, frozenmoney = ?";
                 let modSqlParams = [0];
-                dbConnection.query(modSql, modSqlParams, function (err, result) {
+                dbQuery(modSql, modSqlParams, function (err, result) {
                     if (err) {
                         console.log("ERROR: Stock: recoverFrozenCapital");
                         console.log('[UPDATE ERROR] - ', err.message);

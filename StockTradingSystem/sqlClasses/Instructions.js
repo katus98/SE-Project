@@ -1,7 +1,9 @@
 // 数据库连接
-let dbConnection = require('../database/MySQLconnection');
+let dbQuery = require('../database/MySQLquery');
+
+// 引用的其他功能类
 let Stock = require('../sqlClasses/Stock');
-let CapitalAccount = require('../sqlClasses/CapitalAccount')
+let CapitalAccount = require('../sqlClasses/CapitalAccount');
 /*
 * Instructions类：包含对数据库表格bids、asks、matchs、dealsbid、dealsask的直接SQL操作
 * 维护小组：D组
@@ -27,7 +29,7 @@ function Instructions() {
             getSql += "bids WHERE uid = ? ORDER BY time DESC";
         }
         let getSqlParams = [personId];
-        dbConnection.query(getSql, getSqlParams, function (err, result) {
+        dbQuery(getSql, getSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: Instructions: getInstructionsInfoByPersonId");
                 console.log('[SELECT ERROR] - ', err.message);
@@ -46,7 +48,7 @@ function Instructions() {
     * */
     this.getTheFirstTempInstructionInfo = function (callback) {
         let getSql = "SELECT * FROM tempinstructions ORDER BY time ASC LIMIT 1";
-        dbConnection.query(getSql, function (err, result) {
+        dbQuery(getSql, [], function (err, result) {
             if (err) {
                 console.log("ERROR: Instructions: getTheFirstTempInstructionInfo");
                 console.log('[SELECT ERROR] - ', err.message);
@@ -73,7 +75,7 @@ function Instructions() {
             getSql += "bids WHERE code = ? AND status = 'partial' AND price >= ? ORDER BY price DESC, time ASC limit 1";
         }
         let getSqlParams = [stockId, priceThreshold];
-        dbConnection.query(getSql, getSqlParams, function (err, result) {
+        dbQuery(getSql, getSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: Instructions: getCorInstructionHiPriority");
                 console.log('[SELECT ERROR] - ', err.message);
@@ -105,20 +107,20 @@ function Instructions() {
             id: 0, time: undefined, uid: 0, code: '', shares2trade: 0, price: 0, shares: 0};
         let getSQL = "select * from ? where id = ?;";
         let getSQLParams = [];
-        if (orderType == "sell"){
+        if (orderType === "sell"){
             getSQLParams.push("asks", instructionID);
         }
         else {
             getSQLParams.push("bids", instructionID);
         }
-        dbConnection.query(getSQL, getSQLParams, function(err, result) {
+        dbQuery(getSQL, getSQLParams, function(err, result) {
             if (err) {
-                console.log("ERROR: Instructions: getCorInstructionHiPriority");
+                console.log("ERROR: Instructions: getOrderInfoByID");
                 console.log('[SELECT ERROR] - ', err.message);
                 callback(res);
                 return;
             }
-            if (result.length == 0){
+            if (result.length === 0){
                 callback(res);
                 return;
             }
@@ -161,7 +163,7 @@ function Instructions() {
         }
 
         this.stock.getPriceCeilFloor(stockId, function (result) {
-            if (result.status = false){
+            if (result.status === false){
                 res.info = result.message;  // 没有指定代号的股票
                 res.status = false;
                 callback(res);
@@ -178,7 +180,7 @@ function Instructions() {
 
             let addSql = "INSERT INTO tempinstructions(tradetype, uid, code, shares, price) VALUES(?,?,?,?,?)";
             let addSqlParams = [tradeType, personId, stockId, shares, price];
-            dbConnection.query(addSql, addSqlParams, function (err, result) {
+            dbQuery(addSql, addSqlParams, function (err, result) {
                 if (err) {
                     console.log("ERROR: Instructions: addTempInstructions");
                     console.log('[INSERT ERROR] - ', err.message);
@@ -203,7 +205,7 @@ function Instructions() {
     this.addMatchs = function (askId, bidId, shares, askPrice, bidPrice, matchPrice, stockId, callback) {
         let addSql = "INSERT INTO matchs(askid, bidid, shares, askprice, bidprice, matchprice, code) VALUES(?,?,?,?,?,?,?)";
         let addSqlParams = [askId, bidId, shares, askPrice, bidPrice, matchPrice, stockId];
-        dbConnection.query(addSql, addSqlParams, function (err, result) {
+        dbQuery(addSql, addSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: Instructions: addMatchs");
                 console.log('[INSERT ERROR] - ', err.message);
@@ -228,7 +230,7 @@ function Instructions() {
             addSql += 'dealsbid(id, shares, sharesdealed, price, code) VALUES(?,?,?,?,?)';
         }
         let addSqlParams = [instructionId, shares, sharesDealed, price, stockId];
-        dbConnection.query(addSql, addSqlParams, function (err, result) {
+        dbQuery(addSql, addSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: Instructions: addDeals");
                 console.log('[INSERT ERROR] - ', err.message);
@@ -254,7 +256,7 @@ function Instructions() {
         } else {
             modSql += 'bids SET shares2trade = shares2trade - ? WHERE id = ?';
         }
-        dbConnection.query(modSql, modSqlParams, function (err, result) {
+        dbQuery(modSql, modSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: Instructions: modifyShares2TradeByInstructionId");
                 console.log('[UPDATE ERROR] - ', err.message);
@@ -278,14 +280,14 @@ function Instructions() {
         let modSql1 = "UPDATE asks SET status = ?, timearchived = current_timestamp(6) WHERE shares2trade = 0;";
         let modSql2 = "UPDATE bids SET status = ?, timearchived = current_timestamp(6) WHERE shares2trade = 0;";
         let modSqlParams = ['complete'];
-        dbConnection.query(modSql1, modSqlParams, function (err, result) {
+        dbQuery(modSql1, modSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: Instructions: completeInstructions1");
                 console.log('[UPDATE ERROR] - ', err.message);
                 callback(false);
                 return;
             }
-            dbConnection.query(modSql2, modSqlParams, function (err, result) {
+            dbQuery(modSql2, modSqlParams, function (err, result) {
                 if (err) {
                     console.log("ERROR: Instructions: completeInstructions2");
                     console.log('[UPDATE ERROR] - ', err.message);
@@ -304,8 +306,9 @@ function Instructions() {
     编程者：孙克染、陈玮烨
     * */
     this.withdrawInstruction = function (tradeType, instructionId, callback) {
+        let instruct = this;
         this.completeInstructions(function (result) {
-            if (result == false){
+            if (result === false){
                 callback(false);
                 return;
             }
@@ -316,25 +319,25 @@ function Instructions() {
             } else {
                 modSql += "bids SET status = 'withdrawn', timearchived = current_timestamp() WHERE id = ?;";
             }
-            dbConnection.query(modSql, modSqlParams, function (err, result) {
+            dbQuery(modSql, modSqlParams, function (err, result) {
                 if (err) {
                     console.log("ERROR: Instructions: withdrawInstruction");
                     console.log('[UPDATE ERROR] - ', err.message);
                     callback(false);
                     return;
                 }
-                this.getOrderInfoByID(instructionId, tradeType, function (res) {
+                instruct.getOrderInfoByID(instructionId, tradeType, function (res) {
                     const shares2trade = res.shares2trade;
                     const price = res.price;
                     const uid = res.uid;
                     const code = res.code;
                     if (tradeType === "sell"){
-                        this.stock.modifyFrozenStockHoldNumber(uid, code, -shares2trade, function (result) {
-                            if (result == false){
+                        instruct.stock.modifyFrozenStockHoldNumber(uid, code, -shares2trade, function (result) {
+                            if (result === false){
                                 callback(false);
                                 return;
                             }
-                            this.stock.modifyStockHoldNumber(uid, code, shares2trade, function (result) {
+                            instruct.stock.modifyStockHoldNumber(uid, code, shares2trade, function (result) {
                                 callback(result);
                                 return;
                             });
@@ -342,9 +345,17 @@ function Instructions() {
                     }
                     else {  // 撤回买指令
                         let returnedFund = shares2trade * price;
-                        this.capitalAccount.ioAndInterest(uid, returnedFund,
-                            "撤回指令 (bidid: " + instructionId + ") 资金解冻", function (result) {
-                            callback(result);
+                        instruct.user.getCapitalAccountIdByPersonId(uid, function (result) {
+                            if (result.result === true) {
+                                let capitalAccountId = result.capitalAccountId;
+                                instruct.capitalAccount.ioAndInterest(capitalAccountId, returnedFund, "撤回指令 (bidid: " + instructionId + ") 资金解冻", function (result) {
+                                    instruct.capitalAccount.convertFrozenMoneyToAvailableMoney(capitalAccountId, returnedFund, function (result) {
+                                        callback(true);
+                                    });
+                                });
+                            } else {
+                                callback(false);
+                            }
                         });
                     }
                 });
@@ -363,14 +374,14 @@ function Instructions() {
         let modSql1 = "UPDATE asks SET status = ?, timearchived = current_timestamp(6) WHERE status = 'partial';";
         let modSql2 = "UPDATE bids SET status = ?, timearchived = current_timestamp(6) WHERE status = 'partial';";
         let modSqlParams = ['expired'];
-        dbConnection.query(modSql1, modSqlParams, function (err, result) {
+        dbQuery(modSql1, modSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: Instructions: expireInstructions1");
                 console.log('[UPDATE ERROR] - ', err.message);
                 callback(false);
                 return;
             }
-            dbConnection.query(modSql2, modSqlParams, function (err, result) {
+            dbQuery(modSql2, modSqlParams, function (err, result) {
                 if (err) {
                     console.log("ERROR: Instructions: expireInstructions2");
                     console.log('[UPDATE ERROR] - ', err.message);
@@ -392,7 +403,7 @@ function Instructions() {
     * */
     this.deleteTheFirstTempInstruction = function (callback) {
         let delSql = "DELETE FROM tempinstructions ORDER BY id ASC LIMIT 1";
-        dbConnection.query(delSql, function (err, result) {
+        dbQuery(delSql, [], function (err, result) {
             if (err) {
                 console.log("ERROR: Instructions: deleteTheFirstTempInstruction");
                 console.log('[DELETE ERROR] - ', err.message);

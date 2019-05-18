@@ -1,5 +1,5 @@
 // 数据库连接
-let dbConnection = require('../database/MySQLconnection');
+let dbQuery = require('../database/MySQLquery');
 
 /*
 * Stock类：包含对数据库表格stock、stock_history、stockhold的直接SQL操作
@@ -18,7 +18,7 @@ function Stock() {
     * */
     this.getAllStockInfo = function (callback) {
         let getSql = "SELECT * FROM stock";
-        dbConnection.query(getSql, function (err, result) {
+        dbQuery(getSql, [], function (err, result) {
             if (err) {
                 console.log("ERROR: Stock: getAllStockInfo");
                 console.log('[SELECT ERROR] - ', err.message);
@@ -38,7 +38,7 @@ function Stock() {
     this.getStockHoldInfoByPersonId = function (personId, callback) {
         let getSql = "SELECT * FROM stockhold WHERE stocknum > 0 AND personid = ?";
         let getSqlParams = [personId];
-        dbConnection.query(getSql, getSqlParams, function (err, result) {
+        dbQuery(getSql, getSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: Stock: getStockHoldInfoByPersonId");
                 console.log('[SELECT ERROR] - ', err.message);
@@ -58,7 +58,7 @@ function Stock() {
     this.getStockInfoByStockId = function (stockId, callback) {
         let getSql = "SELECT * FROM stock WHERE code = ?";
         let getSqlParams = [stockId];
-        dbConnection.query(getSql, getSqlParams, function (err, result) {
+        dbQuery(getSql, getSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: Stock: getStockInfoByStockId");
                 console.log('[SELECT ERROR] - ', err.message);
@@ -79,7 +79,7 @@ function Stock() {
     this.getStockNumberByPersonIdAndStockId = function (personId, stockId, callback) {
         let getSql = "SELECT stocknum FROM stockhold WHERE personid = ? AND stockid = ?";
         let getSqlParams = [personId, stockId];
-        dbConnection.query(getSql, getSqlParams, function (err, result) {
+        dbQuery(getSql, getSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: Stock: getStockNumberByPersonIdAndStockId");
                 console.log('[SELECT ERROR] - ', err.message);
@@ -102,7 +102,7 @@ function Stock() {
     this.getStockPermissionByStockId = function (stockId, callback) {
         let getSql = "SELECT permission FROM stock WHERE code = ?";
         let getSqlParams = [stockId];
-        dbConnection.query(getSql, getSqlParams, function (err, result) {
+        dbQuery(getSql, getSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: Stock: getStockPermissionByStockId");
                 console.log('[SELECT ERROR] - ', err.message);
@@ -155,7 +155,7 @@ function Stock() {
         if(tradeType === 'sell'){
             let getSql = "SELECT * FROM bids WHERE uid = ? and status = ?";
             let getSqlParams = [personid,'partial'];
-            dbConnection.query(getSql, getSqlParams, function (err, result) {
+            dbQuery(getSql, getSqlParams, function (err, result) {
                 if (err) {
                     console.log("ERROR: Stock: getActiveInstructionsByPersonID1");
                     console.log('[SELECT ERROR] - ', err.message);
@@ -167,7 +167,7 @@ function Stock() {
         else{
             let getSql = "SELECT * FROM asks WHERE uid = ? and status = ?";
             let getSqlParams = [personid,'partial'];
-            dbConnection.query(getSql, getSqlParams, function (err, result) {
+            dbQuery(getSql, getSqlParams, function (err, result) {
                 if (err) {
                     console.log("ERROR: Stock: getActiveInstructionsByPersonID2");
                     console.log('[SELECT ERROR] - ', err.message);
@@ -192,7 +192,7 @@ function Stock() {
         let modSql="UPDATE stockhold SET ";
         let modSqlParams = [deltaNum, personId, stockId];
         modSql += "stocknum = stocknum + ?, updatetime = current_timestamp WHERE personid = ? and stockid = ?";
-        dbConnection.query(modSql, modSqlParams, function (err, result) {
+        dbQuery(modSql, modSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: Stock: modifyStockHoldNumber");
                 console.log('[UPDATE ERROR] - ', err.message);
@@ -214,9 +214,9 @@ function Stock() {
         let modSql="UPDATE stockhold SET ";
         let modSqlParams = [deltaNum, personId, stockId];
         modSql += "frozenstocknum = frozenstocknum + ?, updatetime = current_timestamp WHERE personid = ? and stockid = ?";
-        dbConnection.query(modSql, modSqlParams, function (err, result) {
+        dbQuery(modSql, modSqlParams, function (err, result) {
             if (err) {
-                console.log("ERROR: Stock: modifyStockHoldNumber");
+                console.log("ERROR: Stock: modifyFrozenStockHoldNumber");
                 console.log('[UPDATE ERROR] - ', err.message);
                 callback(false);
                 return;
@@ -234,7 +234,7 @@ function Stock() {
     this.recoverFrozenStockHold = function (callback) {
         let modSql="UPDATE stockhold SET stocknum = stocknum + frozenstocknum, frozenstocknum = ?";
         let modSqlParams = [0];
-        dbConnection.query(modSql, modSqlParams, function (err, result) {
+        dbQuery(modSql, modSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: Stock: recoverFrozenStockHold");
                 console.log('[UPDATE ERROR] - ', err.message);
@@ -254,7 +254,7 @@ function Stock() {
     this.updateStockPrice = function (stockId, newPrice, callback) {
         let modSql="UPDATE stock SET current_price = ? WHERE code = ?";
         let modSqlParams = [newPrice, stockId];
-        dbConnection.query(modSql, modSqlParams, function (err, result) {
+        dbQuery(modSql, modSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: Stock: updateStockPrice");
                 console.log('[UPDATE ERROR] - ', err.message);
@@ -274,7 +274,7 @@ function Stock() {
      */
     this.updateStockPriceAtClosing = function (callback) {
         let modSql="UPDATE stock SET today_startprice = current_price, last_endprice = current_price;";
-        dbConnection.query(modSql, function (err, result) {
+        dbQuery(modSql, [], function (err, result) {
             if (err) {
                 console.log("ERROR: Stock: updateStockPriceAtClosing");
                 console.log('[UPDATE ERROR] - ', err.message);
@@ -299,7 +299,7 @@ function Stock() {
             "    select code, max(matchprice) as highest, min(matchprice) as lowest " +
             "    from matchs " +
             "    group by code) as aa);";
-        dbConnection.query(modSql, function (err, result) {
+        dbQuery(modSql, [], function (err, result) {
             if (err) {
                 console.log("ERROR: Stock: updateStockHistoryAtClosing");
                 console.log('[UPDATE ERROR] - ', err.message);
@@ -320,7 +320,7 @@ function Stock() {
     this.convertStockToFrozenStock = function (personId, stockId, stockNum, callback) {
         let modSql="UPDATE stockhold SET frozenstocknum = frozenstocknum + ?, stocknum = stocknum - ? WHERE personid = ? AND stockid = ?";
         let modSqlParams = [stockNum, stockNum, personId, stockId];
-        dbConnection.query(modSql, modSqlParams, function (err, result) {
+        dbQuery(modSql, modSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: Stock: convertStockToFrozenStock");
                 console.log('[UPDATE ERROR] - ', err.message);

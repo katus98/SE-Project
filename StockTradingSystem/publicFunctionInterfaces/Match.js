@@ -1,5 +1,5 @@
 // 数据库连接
-let dbConnection = require('../database/MySQLconnection');
+let dbQuery = require('../database/MySQLquery');
 
 // 引用的自定义模块类
 let Instructions = require('../sqlClasses/Instructions');
@@ -86,7 +86,7 @@ function Match() {
         }
         let addSqlParams = [time, personId, stockId, shares, price, shares];
         // 将优先级最高的缓存指令信息插入正式指令表
-        dbConnection.query(addSql, addSqlParams, function (err, result) {
+        dbQuery(addSql, addSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: Match: addInstructions");
                 console.log('[INSERT ERROR] - ', err.message);
