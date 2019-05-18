@@ -50,12 +50,13 @@ insert into
 	("000029", "中国天楹", 5.47, 5.61, 1000000000, true, null, 0.46, false),
 	("000030", "中集集团", 13.8, 13.69, 1000000000, true, null, 0.1, false);
 
-update stock set today_startprice = last_endprice, highest = current_price, lowest = current_price;
+update stock set today_startprice = last_endprice;
 
 -- Group-A
 insert into 
 	idreference(accountid, personid) 
 	values
+	(0, 0), 
 	(1, 1), 
 	(2, 2), 
 	(3, 3), 
@@ -71,6 +72,7 @@ insert into
 insert into 
 	personalaccount(accountid, registertime, name, gender, identityid, homeaddress, work, educationback, workaddress, phonenumber, agentid, state, personid) 
 	values
+	(0, "2019-1-1 00:00:00", "孙克染", "male", "210211200001016666", "浙江省杭州市浙江大学青溪1舍", "学生", "本科", "无", "18000004860", null, "normal", 0),
 	(1, "2019-2-25 15:23:33", "张三", "male", "33000119770422003X", "浙江省杭州市港湾家园1幢202", "待业", "高中", "无", "17697390598", null, "normal", 1),
 	(2, "2019-2-26 09:15:20", "李四", "female", "330001198711040223", "浙江省杭州市信义坊3幢402", "家庭主妇", "本科", "无", "13809382267", null, "frozen", 2),
 	(3, "2019-2-27 17:06:55", "王五", "female", "33000119770422003X", "浙江省宁波市鄞州区永达西路", "工厂工人", "高中", "开发区金地工厂", "18965703689", null, "logout", 3),
@@ -99,6 +101,7 @@ update stockhold set stocknum = 59124, stockcost = 240015 where personid <> 3 an
 insert into 
 	capitalaccount(capitalaccountid, tradepassword, cashpassword, identificationid, relatedsecuritiesaccountid, capitalaccountstate, availablemoney, frozenmoney, interestremained)
 	values
+	(2019007, 'skrvip', '989898', '210211200001016666', 0, 'normal', 98000000000.00, 0.00, 0.00),
 	(2019101, '115165', '495165', '412726198412232666', 1, 'normal', 4124.38, 0.00, 3.45),
 	(2019102, '198273', '976164', '481892196608162588', 2, 'normal', 56127.96, 0.00, 8.96),
 	(2019103, '847922', '254929', '456387199006252698', null, 'frozen', 0.00, 9551.16, 2.39),

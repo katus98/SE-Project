@@ -11,8 +11,6 @@ create table stock(
 	code varchar(20) primary key,   -- 股票ID
 	name_stock varchar(100),   -- 股票名称
 	current_price numeric(25, 2),   -- 实时价格
-	highest numeric(25, 2),   -- 今日最高价格
-	lowest numeric(25, 2),   -- 今日最低价格
 	last_endprice numeric(25, 2),   -- 昨日收盘价
 	today_startprice numeric(25, 2),   -- 今日开盘价
 	amount bigint,   -- 总发行量
