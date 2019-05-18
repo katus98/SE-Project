@@ -11,12 +11,14 @@ create table stock(
 	code varchar(20) primary key,   -- 股票ID
 	name_stock varchar(100),   -- 股票名称
 	current_price numeric(25, 2),   -- 实时价格
+	highest numeric(25, 2),   -- 今日最高价格
+	lowest numeric(25, 2),   -- 今日最低价格
 	last_endprice numeric(25, 2),   -- 昨日收盘价
 	today_startprice numeric(25, 2),   -- 今日开盘价
 	amount bigint,   -- 总发行量
 	permission boolean default true,   -- 本股票是否允许交易
 	notification varchar(500) default null,   -- 通知
-	percentagepricechange numeric(8, 3) default 0.1,   -- 最大涨跌幅
+	percentagepricechange numeric(10, 3) default 100000,   -- 最大涨跌幅
 	st boolean default false   -- 是否为ST股票
 );
 
