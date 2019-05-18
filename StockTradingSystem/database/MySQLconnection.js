@@ -1,24 +1,45 @@
 var mysql  = require('mysql');
-var connection = mysql.createConnection({
-    host: 'localhost',//非本机请填写IP地址胡或者域名
-    user: 'root',//填写数据库用户名，默认root
-    password: 'skrv587',//填写数据库密码
-    port: '3306',//服务端口，MySQL默认3306
-    database: 'StockTradingSys'//填写数据库名称
-});
-//connection.connect();
+var mysql_config = {
+    host: 'localhost',   //非本机请填写IP地址胡或者域名
+    user: 'root',   //填写数据库用户名，默认root
+    password: 'skrv587',   //填写数据库密码
+    port: '3306',   //服务端口，MySQL默认3306
+    database: 'StockTradingSys'   //填写数据库名称, 统一StockTradingSys
+};
+var pool = mysql.createPool(mysql_config);
 
-// var userGetSql = 'select * from stock';
-// connection.query(userGetSql, function (err, result) {
-//     if (err) {
-//         console.log('[SELECT ERROR] - ', err.message);
-//         return;
-//     }
-//     console.log('----------SELECT----------');
-//     console.log(result);
-//     console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$');
-// });
+// function handleDisconnection() {
+//     var connection = mysql.createConnection(mysql_config);
+//     connection.connect(function (err) {
+//         if (err) {
+//             setTimeout('handleDisconnection()', 2000);
+//         }
+//     });
+//
+//     connection.on('error', function (err) {
+//         logger.error('db error', err);
+//         if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+//             logger.error('db error 执行重连' + err.message);
+//             handleDisconnection();
+//         } else {
+//             throw err;
+//         }
+//     });
+//     exports.connection = connection;
+// }
+// exports.handleDisconnection = handleDisconnection;
 
-module.exports = connection;
+var MySQLquery = function (Sql, SqlParams, callback) {
+    pool.getConnection(function (error, connect) {
+        if (error) {
+            callback(error, null, null);
+        } else {
+            connect.query(Sql, SqlParams, function (err, results, fields) {
+                callback(err, results, fields);
+            });
+            connect.release();
+        }
+    });
+};
 
-//connection.end();
+module.exports = MySQLquery;
