@@ -124,4 +124,32 @@ $(document).ready(function () {
             }
         });
     });
+    $("#startSystem").click(function () {
+        $.ajax({
+            type: "POST",
+            dataType: "text",
+            url: "/home/startSystem",
+            data: {},
+            success: function (result) {
+                alert(result);
+            },
+            error: function () {
+                alert("Start System Error!");
+            }
+        });
+    });
+    $("#stopSystem").click(function () {
+        $.ajax({
+            type: "POST",
+            dataType: "text",
+            url: "/home/stopSystem",
+            data: {},
+            success: function (result) {
+                alert(result);
+            },
+            error: function () {
+                alert("Stop System Error!");
+            }
+        });
+    });
 });

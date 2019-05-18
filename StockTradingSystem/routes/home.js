@@ -1,5 +1,7 @@
 var express = require('express');
+var schedule = require('node-schedule');
 var router = express.Router();
+var job1, job2;
 
 // 数据库连接
 let dbQuery = require('../database/MySQLquery');
@@ -133,7 +135,6 @@ router.post('/querySell', function (req, res) {
             console.log('[INSERT ERROR] - ', err.message);
             return;
         }
-        console.log('SELECT result:', result);
         res.end(JSON.stringify(result));
     });
 });
@@ -145,7 +146,6 @@ router.post('/queryBuy', function (req, res) {
             console.log('[INSERT ERROR] - ', err.message);
             return;
         }
-        console.log('SELECT result:', result);
         res.end(JSON.stringify(result));
     });
 });
@@ -157,7 +157,6 @@ router.post('/queryTemp', function (req, res) {
             console.log('[INSERT ERROR] - ', err.message);
             return;
         }
-        console.log('SELECT result:', result);
         res.end(JSON.stringify(result));
     });
 });
@@ -177,6 +176,41 @@ router.post('/stop', function (req, res) {
     match.stopMatching(function (result) {
         res.end("Stop successfully!");
     });
+});
+
+router.post('/startSystem', function (req, res) {
+    let rule1 = new schedule.RecurrenceRule();
+    rule1.dayOfWeek = [new schedule.Range(1, 5)];
+    rule1.hour = 8;
+    rule1.minute = 0;
+    rule1.second = 0;
+    job1 = schedule.scheduleJob(rule1, function () {
+        let match = new Match();
+        match.startMatching(function (result) {
+            console.log("今日开盘!");
+            match.convertTempInstructionsToInstructions(function (result) {
+                //res.end(result.remark);
+            });
+        });
+    });
+    let rule2 = new schedule.RecurrenceRule();
+    rule2.dayOfWeek = [new schedule.Range(1, 5)];
+    rule2.hour = 16;
+    rule2.minute = 0;
+    rule2.second = 0;
+    job2 = schedule.scheduleJob(rule2, function () {
+        let match = new Match();
+        match.stopMatching(function (result) {
+            console.log("今日收盘!");
+        });
+    });
+    res.end("Start system successfully!");
+});
+
+router.post('/stopSystem', function (req, res) {
+    job1.cancel();
+    job2.cancel();
+    res.end("Stop system successfully!");
 });
 
 module.exports = router;

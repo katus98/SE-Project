@@ -62,7 +62,9 @@ function Match() {
         });
         promise.then(function (result) {
             if (result.result === true && (start || flag)) {
-                console.log("Success: 本次撮合成功！即将进入下一次！");
+                if (flag) {
+                    console.log("Success: 本次撮合成功！即将进入下一次！");
+                }
                 match.convertTempInstructionsToInstructions(callback);
             } else {
                 callback(result);
