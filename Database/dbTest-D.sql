@@ -93,8 +93,8 @@ insert into
 insert into
 	stockhold(personid, stockid, stocknum, stockcost) 
 	select distinct personid, code, 0 as stocknum, 0.00 as stockcost from idreference cross join stock;
-update stockhold set stocknum = 10000, stockcost = 120000 where personid <> 3 and stockid = "000001";
-update stockhold set stocknum = 59124, stockcost = 240015 where personid <> 3 and stockid = "000004";
+update stockhold set stocknum = 10000, stockcost = 12 where personid <> 3 and stockid = "000001";
+update stockhold set stocknum = 52124, stockcost = 3.7 where personid <> 3 and stockid = "000004";
 -- 请根据需要进一步补充
 
 -- Group-B
@@ -102,11 +102,11 @@ insert into
 	capitalaccount(capitalaccountid, tradepassword, cashpassword, identificationid, relatedsecuritiesaccountid, capitalaccountstate, availablemoney, frozenmoney, interestremained)
 	values
 	(2019007, 'skrvip', '989898', '210211200001016666', 0, 'normal', 98000000000.00, 0.00, 0.00),
-	(2019101, '115165', '495165', '412726198412232666', 1, 'normal', 4124.38, 0.00, 3.45),
+	(2019101, '115165', '495165', '412726198412232666', 1, 'normal', 4124.38, 50000.00, 3.45),
 	(2019102, '198273', '976164', '481892196608162588', 2, 'normal', 56127.96, 0.00, 8.96),
 	(2019103, '847922', '254929', '456387199006252698', null, 'frozen', 0.00, 9551.16, 2.39),
 	(2019104, '516951', '717921', '464892198509152896', 3, 'logout', 0.00, 0.00, 0.00),
-	(2019105, '115165', '495385', '412726199705168866', 4, 'normal', 4124.38, 0.00, 3.45),
+	(2019105, '115165', '495385', '412726199705168866', 4, 'normal', 4124.38, 50000.00, 3.45),
 	(2019106, '196273', '972194', '419252196608162588', 1000000005, 'normal', 56127.96, 0.00, 8.96),
 	(2019107, '896922', '289229', '491527199006252698', null, 'frozen', 0.00, 9551.16, 2.39),
 	(2019108, '516921', '714921', '429891198509152896', null, 'logout', 0.00, 0.00, 0.00),

@@ -76,9 +76,9 @@ router.post('/orderSubmit', function (req, res) {
                                         resolve(res0);
                                     } else {
                                         // 买家资金流水记录
-                                        capitalAccount.ioAndInterest(parseInt(req.body.userId), -moneyThisTime, "股票购买支出", function (result) {
+                                        capitalAccount.ioAndInterest(parseInt(req.body.userId), -moneyThisTime*1.005, "股票购买支出", function (result) {
                                             if (result === true) {
-                                                capitalAccount.convertAvailableMoneyToFrozenMoney(parseInt(req.body.userId), moneyThisTime, function (result) {
+                                                capitalAccount.convertAvailableMoneyToFrozenMoney(parseInt(req.body.userId), moneyThisTime*1.005, function (result) {
                                                     if (result === true) {
                                                         instructions.addTempInstructions('buy', result0.personId, req.body.stockId, parseInt(req.body.stockNum), parseFloat(req.body.pricePer), function (result) {
                                                             if (result.status === false) {

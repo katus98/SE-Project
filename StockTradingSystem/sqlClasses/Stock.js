@@ -188,10 +188,10 @@ function Stock() {
     编程者：黄欣雨、孙克染、陈玮烨
     备注：正为增加持股，负为减少持股
     * */
-    this.modifyStockHoldNumber = function (personId, stockId, deltaNum, callback) {
-        let modSql="UPDATE stockhold SET ";
-        let modSqlParams = [deltaNum, personId, stockId];
-        modSql += "stocknum = stocknum + ?, updatetime = current_timestamp WHERE personid = ? and stockid = ?";
+    this.modifyStockHoldNumber = function (personId, stockId, deltaNum, matchPrice, callback) {
+        let modSql = "UPDATE stockhold SET ";
+        let modSqlParams = [matchPrice, deltaNum, deltaNum, deltaNum, personId, stockId];
+        modSql += "stockcost = (stockcost*stocknum + ?*?)/(stocknum + ?), stocknum = stocknum + ?, updatetime = current_timestamp WHERE personid = ? and stockid = ?";
         dbQuery(modSql, modSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: Stock: modifyStockHoldNumber");

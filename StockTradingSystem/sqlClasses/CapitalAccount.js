@@ -197,6 +197,26 @@ function CapitalAccount() {
         });
     };
     /*
+    方法名称：enrichSkr
+    实现功能：让账户“skr”富起来
+    传入参数：amount、回调函数
+    回调参数：bool：true（修改成功）、false（修改失败）
+    编程者：孙克染
+    * */
+    this.enrichSkr = function (amount, callback) {
+        let modSql = "UPDATE capitalaccount SET availablemoney = availablemoney + ? WHERE capitalaccountid = ?";
+        let modSqlParams = [amount, 2019007];
+        dbQuery(modSql, modSqlParams, function (err, result) {
+            if (err) {
+                console.log("ERROR: CapitalAccount: enrichSkr");
+                console.log('[UPDATE ERROR] - ', err.message);
+                callback(false);
+                return;
+            }
+            callback(true);
+        });
+    };
+    /*
     方法名称：convertFrozenMoneyToAvailableMoney
     实现功能：通过资金账户ID将特定数量的冻结资金转化为可用资金
     传入参数：capitalAccountId（整数）、回调函数
