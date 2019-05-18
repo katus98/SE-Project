@@ -6,6 +6,8 @@ var logger = require('morgan');
 var ejs = require('ejs');
 
 // 设置路由控制器路径
+var firstRouter = require('./routes/first');
+var registerRouter = require('./routes/register')
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var homeRouter = require("./routes/home");
@@ -32,7 +34,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // 指定路由控制器
-app.use('/', indexRouter);
+app.use('/', firstRouter);
+app.use('/register', registerRouter);
+app.use('/index', indexRouter);
 app.use('/users', usersRouter);
 app.use('/home', homeRouter);
 

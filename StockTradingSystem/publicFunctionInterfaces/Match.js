@@ -9,6 +9,7 @@ let User = require('../publicFunctionInterfaces/Users');
 
 // 临时：控制开闭盘的全局变量
 let start = false;
+let flag = false;
 
 /*
 * Match类：包含方法：指令撮合
@@ -17,16 +18,18 @@ let start = false;
 * 备注：禁止D组外其他小组调用！
 * */
 function Match() {
+
     /*
     方法名称：convertTempInstructionsToInstructions
     实现功能：将缓存的优先级最高的指令加入指令表
     传入参数：回调函数
     回调参数：res = {result: false, remark: ""}
-    编程者：孙克染
+    编程者：孙克染、陈玮烨、杨清杰
     备注：串行调用！
     * */
     this.convertTempInstructionsToInstructions = function (callback) {
         let match = this;
+
         let promise = new Promise(function (resolve, reject) {
             let res = {result: false, remark: ""};
             let instructions = new Instructions();
@@ -48,7 +51,9 @@ function Match() {
                         res.result = result.addResult && result.matchResult;
                         resolve(res);
                     });
+                    flag = true;
                 } else {
+                    flag = false;
                     res.remark = "没有缓存指令！";
                     res.result = true;
                     resolve(res);
@@ -56,7 +61,7 @@ function Match() {
             });
         });
         promise.then(function (result) {
-            if (result.result === true && start) {
+            if (result.result === true && (start || flag)) {
                 console.log("Success: 本次撮合成功！即将进入下一次！");
                 match.convertTempInstructionsToInstructions(callback);
             } else {
@@ -80,7 +85,6 @@ function Match() {
             addSql += 'bids(time, uid, code, shares, price, shares2trade) VALUES(?,?,?,?,?,?)';
         }
         let addSqlParams = [time, personId, stockId, shares, price, shares];
-        //// cwy修改：添加参数
         // 将优先级最高的缓存指令信息插入正式指令表
         dbConnection.query(addSql, addSqlParams, function (err, result) {
             if (err) {
@@ -123,7 +127,7 @@ function Match() {
             let instruction = new Instructions();
 
             // 获取最优先的匹配指令
-            instruction.getTheMostMatch(tradeType, code, price, function (res) {
+            instruction.getCorInstructionHiPriority(tradeType, code, price, function (res) {
                 // 获取本次撮合涉及股票的详细信息
                 stock.getStockInfoByStockId(code,function (res2) {
                     if (res.result !== false) {
@@ -194,7 +198,7 @@ function Match() {
                                                                                         capitalAccount.pay(buyCapitalAccountId, sellCapitalAccountId, amount, function (result) {
                                                                                             if (result === true) {
                                                                                                 // 更新用户持股表 - 卖家账户
-                                                                                                stock.modifyStockHoldNumber(sellPersonId, code, -hasDoneShares, function (result) {
+                                                                                                stock.modifyFrozenStockHoldNumber(sellPersonId, code, -hasDoneShares, function (result) {
                                                                                                     if (result === true) {
                                                                                                         // 更新用户持股表 - 买家账户
                                                                                                         stock.modifyStockHoldNumber(buyPersonId, code, hasDoneShares, function (result) {
@@ -298,15 +302,47 @@ function Match() {
     方法名称：startMatching与stopMatching
     实现功能：开始撮合与停止撮合
     传入参数：回调函数
-    编程者：孙克染
+    编程者：孙克染、陈玮烨、杨清杰
     * */
     this.startMatching = function (callback) {
         start = true;
         callback(true);
     };
+    // todo:
+    // Note: Repetitive stopping matching in a day would invoke a bug due to a constraint on the table stock_history
+    // which only allows 1 record per code per day.
     this.stopMatching = function (callback) {
         start = false;
-        callback(true);
+
+        let capitalAccount = new CapitalAccount();
+        let stocks= new Stock();
+        let instruction = new Instructions();
+        instruction.expireInstructions(function (result) {
+            let stock = new Stock();
+            stock.updateStockHistoryAtClosing(function (result) {
+                stock.updateStockPriceAtClosing(function (result) {
+                    capitalAccount.recoverFrozenCapital(function (result) {
+                        if(result === false)
+                        {
+                            console.log("冻结资金回退失败");
+                            callback(false);
+                            return;
+                        }
+                        else
+                        {
+                            stocks.recoverFrozenStockHold(function (result) {
+                                if(result === false){
+                                    console.log("冻结股票退回失败");
+                                    callback(false);
+                                    return;
+                                }
+                                callback(true);
+                            });
+                        }
+                    });
+                });
+            });
+        });
     };
 }
 
