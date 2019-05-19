@@ -30,7 +30,6 @@ router.post('/register', function (req, res, next) {
                 result0.remark = '您已经具有证券账户，不能够重新开户';
                 res.end(JSON.stringify(result0));
             } else {
-                console.log("cc");
                 openSecuritiesAccount.initstockhold(result.p, function(result3){
                     result0.securitiesAccountId = result.a;
                     result0.personId = result.p;
