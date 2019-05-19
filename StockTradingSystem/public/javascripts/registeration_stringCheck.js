@@ -45,10 +45,9 @@ $(document).ready(function () {
                 dataType: 'json',
                 data: $("#registerForm").serialize(),
                 success: function (data) {
+                    alert(data.remark);
                     if (data.result) {
                         console.log("Open Accounts Successfully!");
-                        alert("开户成功，2秒后跳转!");
-                        localStorage.clear();
                         let gotoURL = '/register/success?';
                         gotoURL += 'securitiesAccountId=' + PrefixInteger(data.securitiesAccountId, 11) + '&';
                         gotoURL += 'capitalAccountId=' + data.capitalAccountId + '&';
@@ -59,8 +58,7 @@ $(document).ready(function () {
                             $(window).attr('location', gotoURL);
                         }, 2000);
                     } else {
-                        console.log("Error!");
-                        alert("错误! 服务器开小差了!");
+                        console.log("Open Accounts Filed!");
                     }
                 },
                 error: function () {

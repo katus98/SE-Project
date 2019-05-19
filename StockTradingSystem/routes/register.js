@@ -18,15 +18,14 @@ router.get('/success', function (req, res, next) {
 });
 
 router.post('/register', function (req, res, next) {
-    let result0 = {result: true, securitiesAccountId: '00000000001', capitalAccountId: 2019101, personId: '0000000001', name: '', type: '自然人'};
+    let result0 = {result: false, securitiesAccountId: '', capitalAccountId: 2019101, personId: '', name: '', type: '自然人', remark: ''};
     let openSecuritiesAccount = new OpenSecuritiesAccount();
     openSecuritiesAccount.currentpaccount(function (result) {
         openSecuritiesAccount.insertpaccount(result, req, function (result2) {
-            console.log(result2);
             if (result2 === -1) {
-                res.end("您的账户已经冻结，可以补办，但不能够重复开户。");
+                result0.remark = '您的证券账户已经冻结，可以补办，但不能够重复开户；如有补办需求，请到线下证券交易事务所进行。';
             } else if (result2 === -2) {
-                res.end("您已经开户，不能够重新开户");
+                result0.remark = '您已经具有证券账户，不能够重新开户';
             } else {
                 console.log("cc");
                 openSecuritiesAccount.initstockhold(result.p, function(result3){
@@ -36,9 +35,10 @@ router.post('/register', function (req, res, next) {
                     result0.name = req.body.name;
                     //todo
                     result0.result = true;
-                    res.end(JSON.stringify(result0));
+                    result0.remark = '开户成功，2秒后页面跳转!';
                 });
             }
+            res.end(JSON.stringify(result0));
         });
     });
     //res.end(JSON.stringify(result0));
