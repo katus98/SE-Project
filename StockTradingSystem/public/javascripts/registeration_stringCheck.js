@@ -1,7 +1,3 @@
-//---------------------------------------------------
-// Based on JQuery
-//---------------------------------------------------
-
 var urlRedirect = false;
 
 function checkLoginPassword() {
@@ -50,14 +46,18 @@ $(document).ready(function () {
                 data: $("#registerForm").serialize(),
                 success: function (data) {
                     if (data.result) {
-                        urlRedirect = true;
-                        console.log("Success!");
-                        alert("开户成功!");
-                        if (urlRedirect) {
-                            setTimeout(function () {
-                                $(window).attr('location', 'http://localhost:3000/register/success');
-                            }, 3000);
-                        }
+                        console.log("Open Accounts Successfully!");
+                        alert("开户成功，2秒后跳转!");
+                        localStorage.clear();
+                        let gotoURL = '/register/success?';
+                        gotoURL += 'securitiesAccountId=' + PrefixInteger(data.securitiesAccountId, 11) + '&';
+                        gotoURL += 'capitalAccountId=' + data.capitalAccountId + '&';
+                        gotoURL += 'personId=' + PrefixInteger(data.personId, 10) + '&';
+                        gotoURL += 'name=' + data.name + '&';
+                        gotoURL += 'type=' + data.type;
+                        setTimeout(function () {
+                            $(window).attr('location', gotoURL);
+                        }, 2000);
                     } else {
                         console.log("Error!");
                         alert("错误! 服务器开小差了!");
@@ -139,12 +139,96 @@ function checkPasswordSame(str1, str2, notation) {
 //检验身份证号码格式是否正确
 function checkIdCardNumber() {
     let idCardNum = $('#i_number').val();
-    //todo
-    let result = false;
-    if (result) {
+    return checkIdCardNumberValidity(idCardNum);
+}
+function checkIdCardNumberValidity(id){
+    let mes = "";
+    let result = true;
+    if(id.length !== 18) {
+        result = false;
+        mes += " 长度不对";
+    }
+    let a = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2];
+    let sum = 0;
+    let ans = 11;
+    for (let i = 0; i < 17; i++) {
+        if (id[i] >= 0 && id[i] <= 9) sum = (sum + a[i] * id[i]) % 11;
+        else {
+            result = false;
+            mes += ` 第${++i}位不是数字`;
+        }
+    }
+    //检查校验码
+    if (sum < 2) ans=1-sum;
+    else if(sum > 2) ans=12-sum;
+    if(id[17] == ans || (id[17] == 'x' || id[17] == 'X') && ans == 11) {}
+    else {
+        result = false;
+        mes += " 校验码错误";
+    }
+    //检查是否为成年人
+    let tyear = id.substring(6,10);
+    let cdate = new Date();
+    let cyear = cdate.getFullYear();
+    let age = cyear-parseInt(tyear);
+    if (age >= 18 && age <= 120) {}
+    else {
+        result = false;
+        mes += " 年龄不合格";
+    }
+    //检查日期是否有效
+    let tmonth = id.substring(10, 12);
+    let tday = id.substring(12, 14);
+    let dtyear = parseInt(tyear);
+    let dtmonth = parseInt(tmonth);
+    let dtday = parseInt(tday);
+    if (dtmonth < 1 || dtmonth > 12) {
+        result = false;
+        mes = " 月份无效";
+    } else {
+        if (dtmonth === 2) {
+            if ((dtyear%4 === 0 && dtyear%100 !== 0) || (dtyear%400 === 0)) {//闰年
+                if (dtday < 1 || dtday > 29) {
+                    result = false;
+                    mes += " 日期无效";
+                }
+            } else {
+                if (dtday<1 || dtday>28) {
+                    result = false;
+                    mes += " 日期无效";
+                }
+            }
+        } else if (dtmonth === 1 || dtmonth === 3 || dtmonth === 5 || dtmonth === 7 || dtmonth === 8 || dtmonth === 10 || dtmonth === 12) {
+            if (dtday < 1 || dtday > 31) {
+                result = false;
+                mes += " 日期无效";
+            }
+        } else {
+            if(dtday < 1 || dtday > 30) {
+                result = false;
+                mes += " 日期无效";
+            }
+        }
+    }
+    //检查编码地址是否有效
+    let disc = parseInt(id.substring(0, 2));
+    if ((disc>=11 && disc<=15) || (disc>=21 && disc<=23) || (disc>=31 && disc<=37) || (disc>=41 && disc<=46) || (disc>=50 && disc<=54) || (disc>=61 && disc<=65) || (disc===71) || (disc>=81 && disc<=82) || (disc===91)) {}
+    else {
+        result = false;
+        mes += " 地址编码无效";
+    }
+    return outIdCardNumber(result, mes);
+}
+function outIdCardNumber(r, m){
+    $('#notation3').empty();
+    if (r) {
         $('#notation3').css("display", "none");
     } else {
-        $('#notation3').css("display", "block");
+        $('#notation3').append("身份证号码一项存在问题：" + m).css("display", "block");
     }
-    return true;
+    return r;
+}
+
+function PrefixInteger(num, length) {
+    return (Array(length).join('0') + num).slice(-length);
 }
