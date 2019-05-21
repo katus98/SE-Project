@@ -7,7 +7,7 @@ var ejs = require('ejs');
 
 // 设置路由控制器路径
 var firstRouter = require('./routes/first');
-var registerRouter = require('./routes/register')
+var registerRouter = require('./routes/register');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var homeRouter = require("./routes/home");
