@@ -199,3 +199,13 @@ select bidid, code,
        max(matchtime) as time
 from matchs
 group by bidid, code;
+
+--股票关注表
+DROP TABLE IF EXISTS intereststock;
+CREATE TABLE intereststock(
+	capitalaccountid bigint REFERENCES capitalaccount(capitalaccountid),
+	stockid varchar(20) REFERENCES stock(code),
+	interestprice numeric(25,2) not null,
+	intereststate tinyint(1) not null,
+	PRIMARY KEY(capitalaccountid, stockid)
+);
