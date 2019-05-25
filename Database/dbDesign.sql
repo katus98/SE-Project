@@ -27,7 +27,7 @@ create table stock_history(
 	highest numeric(25, 2),   -- 当日最高价格
 	lowest numeric(25, 2),   -- 当日最低价格
 	startprice numeric(25, 2),   -- 当日开盘价格
-	endPrice numeric(25, 2),   -- 当日收盘价格
+	endprice numeric(25, 2),   -- 当日收盘价格
 	notification varchar(500) default null,   -- 当日通知
 	time date,   -- 日期
 	primary key(code, time)
@@ -122,6 +122,17 @@ create table capitalaccountio(
 	iodescription varchar(500) not null   -- 交易明细
 );
 
+-- Group-C
+-- 股票关注表
+drop table if exists intereststock;
+create table intereststock(
+	capitalaccountid bigint references capitalaccount(capitalaccountid),
+	stockid varchar(20) references stock(code),
+	interestprice numeric(25, 2) not null,
+	intereststate tinyint(1) not null,
+	primary key(capitalaccountid, stockid)
+);
+
 -- Group-D
 drop table if exists matchs;
 drop table if exists dealsask;
@@ -199,13 +210,3 @@ select bidid, code,
        max(matchtime) as time
 from matchs
 group by bidid, code;
-
---股票关注表
-DROP TABLE IF EXISTS intereststock;
-CREATE TABLE intereststock(
-	capitalaccountid bigint REFERENCES capitalaccount(capitalaccountid),
-	stockid varchar(20) REFERENCES stock(code),
-	interestprice numeric(25,2) not null,
-	intereststate tinyint(1) not null,
-	PRIMARY KEY(capitalaccountid, stockid)
-);

@@ -2,15 +2,16 @@
 
 作者：孙克染
 
-更新时间：2019-4-25
+更新时间：2019-5-25
 
 ## 部署说明（草案）
 
 最后更新：孙克染 陈玮烨
 
-直接在MySQL数据库管理系统中运行`dbDesign.sql`和`dbTest-D.sql`即可。
+直接在MySQL数据库管理系统中运行`dbDesign.sql`和`dbData.sql`即可。
 
-为方便大家调用数据库，并配合MySQLconnection.js的使用，在数据库定义DDL文本中，规定了数据库的位置，即database为"StockTradingSys".(此项更改需要经过大家同意)
+为方便大家调用数据库，并配合MySQLquery.js的使用，在数据库定义DDL文本中，规定了数据库的位置，即database为"StockTradingSys".
+
 ```sql
 -- 统一建立数据库
 drop database if exists StockTradingSys;
@@ -23,28 +24,29 @@ use StockTradingSys;
 
 本数据库中总计含有13个表，分别是：
 
-|      表名称      |                说明                | 维护小组 |
-| :--------------: | :--------------------------------: | :------: |
-|      stock       |               股票表               |    E     |
-|  stock_history   |             股票历史表             |    E     |
-|   idreference    | 证券账户证券账户id与用户id的对照表 |    A     |
-| personalaccount  |          自然人证券账户表          |    A     |
-| corporateaccount |           法人证券账户表           |    A     |
-|    stockhold     |            证券人持股表            |   A C    |
-|  capitalaccount  |             资金账户表             |    B     |
-|   jobberworker   |     证券经纪商处工作人员账户表     |    B     |
-| capitalaccountio |         资金账户收支记录表         |    B     |
-|       bids       |           股票买入指令表           |    D     |
-|       asks       |           股票卖出指令表           |    D     |
-|      matchs      |             交易撮合表             |    D     |
-| tempinstructions |           临时指令排队表           |    D     |
+| 表名称              | 说明                  | 维护小组  |
+|:----------------:|:-------------------:|:-----:|
+| stock            | 股票表                 | E     |
+| stock_history    | 股票历史表               | E     |
+| idreference      | 证券账户证券账户id与用户id的对照表 | A     |
+| personalaccount  | 自然人证券账户表            | A     |
+| corporateaccount | 法人证券账户表             | A     |
+| stockhold        | 证券人持股表              | A C D |
+| capitalaccount   | 资金账户表               | B     |
+| jobberworker     | 证券经纪商处工作人员账户表       | B     |
+| capitalaccountio | 资金账户收支记录表           | B     |
+| bids             | 股票买入指令表             | D     |
+| asks             | 股票卖出指令表             | D     |
+| matchs           | 交易撮合表               | D     |
+| tempinstructions | 临时指令排队表             | D     |
+| intereststock    | 股票关注表               | C     |
 
 另有两个基于matchs的视图，用于展示买卖交易的交易结果情况。
 
-| 视图名称 |     说明     | 维护小组 |
-| :------: | :----------: | :------: |
-| dealsBid | 买入成交记录 |    D     |
-| dealsAsk | 卖出成交记录 |    D     |
+| 视图名称     | 说明     | 维护小组 |
+|:--------:|:------:|:----:|
+| dealsBid | 买入成交记录 | D    |
+| dealsAsk | 卖出成交记录 | D    |
 
 ## 数据库分表说明
 
@@ -55,16 +57,16 @@ stock表每天更新，所存储的信息均为今天的信息。
 ```sql
 drop table if exists stock;
 create table stock(
-	code varchar(20) primary key,   -- 股票ID
-	name_stock varchar(100),   -- 股票名称
-	current_price numeric(25, 2),   -- 实时价格
-	last_endprice numeric(25, 2),   -- 昨日收盘价
-	today_startprice numeric(25, 2),   -- 今日开盘价
-	amount bigint,   -- 总发行量
-	permission boolean default true,   -- 本股票是否允许交易
-	notification varchar(500) default null,   -- 通知
-	percentagePriceChange numeric(8, 3) default 0.1,   -- 最大涨跌幅
-	st boolean default false   -- 是否为ST股票
+    code varchar(20) primary key,   -- 股票ID
+    name_stock varchar(100),   -- 股票名称
+    current_price numeric(25, 2),   -- 实时价格
+    last_endprice numeric(25, 2),   -- 昨日收盘价
+    today_startprice numeric(25, 2),   -- 今日开盘价
+    amount bigint,   -- 总发行量
+    permission boolean default true,   -- 本股票是否允许交易
+    notification varchar(500) default null,   -- 通知
+    percentagepricechange numeric(10, 3) default 100000,   -- 最大涨跌幅
+    st boolean default false   -- 是否为ST股票
 );
 ```
 
@@ -87,7 +89,7 @@ create table stock_history(
     highest numeric(25, 2),   -- 当日最高价格
     lowest numeric(25, 2),   -- 当日最低价格
     startprice numeric(25, 2),   -- 当日开盘价格
-    endPrice numeric(25, 2),   -- 当日收盘价格
+    endprice numeric(25, 2),   -- 当日收盘价格
     notification varchar(500) default null,   -- 当日通知
     time date,   -- 日期
     primary key(code, time)
@@ -170,6 +172,7 @@ create table stockhold(
     personid bigint not null references idreference(personid),   -- 用户ID（10位，首位为0标记为个人账户，首位为1标记为法人账户）
     stockid varchar(20) not null references stock(code),   -- 股票ID
     stocknum bigint,   -- 该股票所持有的总数量
+    frozenstocknum bigint default 0,   -- 冻结的股票数量
     stockcost numeric(25, 2),   -- 该股票持有总成本
     updatetime timestamp default current_timestamp,   -- 更新时间
     primary key(personid, stockid)   -- 用户ID与股票ID共同构成主键
@@ -184,8 +187,8 @@ capitalaccount表，存储资金账户信息（主要是存款）。
 drop table if exists capitalaccount;
 create table capitalaccount(
     capitalaccountid bigint primary key,   -- 资金账户ID（主键）
-    tradepassWord varchar(100) not null,   -- 交易密码（用于交易客户端）
-    cashpassWord varchar(100) not null,   -- 存取款密码（用于存取款）
+    tradepassword varchar(100) not null,   -- 交易密码（用于交易客户端）
+    cashpassword varchar(100) not null,   -- 存取款密码（用于存取款）
     identificationid varchar(18) not null,   -- 开户身份证号码
     relatedsecuritiesaccountid bigint references idreference(accountid),   -- 相关联的证券账户ID（外键）
     capitalaccountstate enum('normal', 'frozen', 'logout') default 'normal',   -- 资金账户状态（正常，冻结，注销）
@@ -220,12 +223,12 @@ capitalaccountio表，存储资金流水，主要用于证券账户业务之利�
 ```sql
 drop table if exists capitalaccountio;
 create table capitalaccountio(
+    id serial primary key,
     capitalaccountid bigint references capitalaccount(capitalaccountid),   -- 资金账户ID（主键、外键）
     iotime timestamp default current_timestamp,   -- 交易时间（主键）
     ioamount numeric(25, 2) not null,   -- 交易金额
     moneytype enum('RMB', 'USD', 'CAD', 'AUD', 'EUR', 'GBP', 'HKD', 'JPY') default 'RMB',   -- 交易币种
-    iodescription varchar(500) not null,   -- 交易明细
-    primary key (capitalaccountid, iotime)
+    iodescription varchar(500) not null   -- 交易明细
 );
 ```
 
@@ -233,26 +236,66 @@ create table capitalaccountio(
 
 + 交易成交时需要对此表格进行更新，往往每次包括两个，一个买方，一个卖方
 
+### 股票关注表
+
+intereststock表，存储用户关注的股票及预期价格相关信息。
+
+```sql
+drop table if exists intereststock;
+create table intereststock(
+    capitalaccountid bigint references capitalaccount(capitalaccountid),
+    stockid varchar(20) references stock(code),
+    interestprice numeric(25, 2) not null,
+    intereststate tinyint(1) not null,
+    primary key(capitalaccountid, stockid)
+);
+```
+
+### 股票指令缓存表
+
+tempinstructions表，存储缓存指令，主要应对服务器撮合运算速度跟不上用户高频发布交易指令的情况，保证交易的公平。
+
+```sql
+drop table if exists tempinstructions;
+create table tempinstructions(
+    id serial primary key,   -- 编号：唯一性的编号
+    time timestamp(6) default current_timestamp(6),   -- 缓存时间
+    tradetype enum('sell', 'buy'),   -- 交易类型
+    uid bigint not null references idreference(personid),   -- 用户ID标识
+    code varchar(20) not null references stock(code),   -- 代交易的股票代码 例如'BABA','MSFT'
+    shares bigint not null,   -- 所有交易的股数
+    price numeric(25, 2) not null   -- 交易的单价（元/股）[0-999999.99]
+);
+```
+
++ 用户的交易指令一经发出，完成有效性检验之后就插入本表格
+
++ 本表格的全部指令均为等待撮合的指令
+
++ 完成撮合的指令会插入对应的正式买卖指令表格，同时本表格的对应记录删除
+
++ 撮合过程发生于从本表格向正式指令表格逐条导入指令的过程中
+
 ### 股票买入指令表
 
-bids表，存储股票购买指令，每当有用户发起购买指令即插入此表。
+bids表，存储股票购买指令，从临时缓存表向本表格逐条导入指令。
 
 ```sql
 drop table if exists bids;
 create table bids(
     id serial primary key,   -- 编号：唯一性的编号 作为指向该指令的索引
-    time timestamp default current_timestamp,   -- 时间
+    time timestamp(6) default current_timestamp(6),   -- 时间
     uid bigint not null references idreference(personid),   -- 用户ID标识
     code varchar(20) not null references stock(code),   -- 代交易的股票代码 例如'BABA','MSFT'
     shares bigint not null,   -- 所有交易的股数
     price numeric(25, 2) not null,   -- 交易的单价（元/股）[0-999999.99]
     shares2trade bigint,   -- 该指令中未被交易的部分的股数
-    timearchived timestamp default null,   -- 被存档的时间（加入该关系的时间）
-    status enum('complete', 'expired', 'partial') default 'partial'   -- 状态 complete, expired, partial
+    timearchived timestamp(6) default null,   -- 被存档的时间（加入该关系的时间）
+    status enum('complete', 'expired', 'partial', 'withdrawn') default 'partial'   -- 状态 complete, expired, partial
 );
 ```
 
-+ 每一个交易日结束时，将现存的全部指令状态修改为“过期”
++ 每一个交易日结束时，将现存的全部指令状态修改为“存档”
 
 + 每有（部分）交易发生都要对相应的指令进行更新
 
@@ -260,20 +303,20 @@ create table bids(
 
 ### 股票卖出指令表
 
-asks表，存储股票卖出指令，每当有用户发起出售指令即插入此表。
+asks表，存储股票卖出指令，从临时缓存表向本表格逐条导入指令。
 
 ```sql
 drop table if exists asks;
 create table asks(
     id serial primary key,   -- 编号：唯一性的编号 作为指向该指令的索引
-    time timestamp default current_timestamp,   -- 时间
+    time timestamp(6) default current_timestamp(6),   -- 时间
     uid bigint not null references idreference(personid),   -- 用户ID标识
     code varchar(20) not null references stock(code),   -- 代交易的股票代码 例如'BABA','MSFT'
     shares bigint not null,   -- 所有交易的股数
     price numeric(25, 2) not null,   -- 交易的单价（元/股）[0-999999.99]
     shares2trade bigint,   -- 该指令中未被交易的部分的股数
-    timearchived timestamp default null,   -- 被存档的时间（加入该关系的时间）
-    status enum('complete', 'expired', 'partial') default 'partial'   -- 状态 complete, expired, partial
+    timearchived timestamp(6) default null,   -- 被存档的时间（加入该关系的时间）
+    status enum('complete', 'expired', 'partial', 'withdrawn') default 'partial'   -- 状态 complete, expired, partial
 );
 ```
 
@@ -294,21 +337,22 @@ create table matchs(
     askid bigint references asks(id),   -- 卖指令编号
     bidid bigint references bids(id),   -- 买指令编号
     shares bigint,   -- 交易数量
-    askPrice numeric(25, 2),   -- 卖指令价格
-    bidPrice numeric(25, 2),   -- 买指令价格
+    askprice numeric(25, 2),   -- 卖指令价格
+    bidprice numeric(25, 2),   -- 买指令价格
     matchprice numeric(25, 2),   -- 撮合价格
-    matchtime timestamp default current_timestamp,   -- 撮合时间
+    matchtime timestamp(6) default current_timestamp(6),   -- 撮合时间
     code varchar(20) not null references stock(code) on delete set null on update cascade  -- 待交易的股票代码 例如'BABA','MSFT'
 );
 ```
 
 + 一旦发生了撮合，参与撮合的股份无法撤回
++ 部分撮合也会在本表格中形成一条记录
 
 ### 卖出成交视图
 
-```mysql
+```sql
 -- 卖出成交视图
-create view dealsAsk as
+create view dealsask as
 select askid, code,
        sum(shares) as sharesDealed,
        sum(shares * matchprice) as totalPrice,
@@ -320,9 +364,9 @@ group by askid, code;
 
 ### 买入成交视图
 
-```mysql
+```sql
 -- 买入成交视图
-create view dealsBid as
+create view dealsbid as
 select bidid, code,
        sum(shares) as sharesDealed,
        sum(shares * matchprice) as totalPrice,
