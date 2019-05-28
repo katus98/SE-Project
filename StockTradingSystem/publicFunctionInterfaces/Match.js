@@ -212,7 +212,7 @@ function Match() {
                                                                                                                         stock.modifyFrozenStockHoldNumber(sellPersonId, code, -hasDoneShares, function (result) {
                                                                                                                             if (result === true) {
                                                                                                                                 // 更新用户持股表 - 买家账户
-                                                                                                                                stock.modifyStockHoldNumber(buyPersonId, code, hasDoneShares, matchPrice, function (result) {
+                                                                                                                                stock.finishStockChange(buyPersonId, code, hasDoneShares, matchPrice, function (result) {
                                                                                                                                     if (result === true) {
                                                                                                                                         resu.result = true;
                                                                                                                                         if (shares > hasDoneShares) {

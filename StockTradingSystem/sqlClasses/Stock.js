@@ -181,6 +181,28 @@ function Stock() {
     //todo: 这里自己写就好了，应该没有其他小组会调用
     /****更新方法****/
     /*
+    方法名称：finishStockChang
+    实现功能：通过personId, stockId修改对应的成交的冻结持股数量（针对买家）
+    传入参数：personId（整数）, stockId（字符串）、变更的股票数deltaNum（整数、允许正负、负数表示减少）、撮合价格matchPrice、回调函数
+    回调参数：bool：true（修改成功）、false（修改失败）
+    编程者：孙克染
+    备注：正为增加持股，负为减少持股
+    * */
+    this.finishStockChange = function (personId, stockId, deltaNum, matchPrice, callback) {
+        let modSql = "UPDATE stockhold SET ";
+        let modSqlParams = [matchPrice, deltaNum, deltaNum, deltaNum, personId, stockId];
+        modSql += "stockcost = (stockcost*stocknum + ?*?)/(stocknum + ?), frozenstocknum = frozenstocknum + ?, updatetime = current_timestamp WHERE personid = ? and stockid = ?";
+        dbQuery(modSql, modSqlParams, function (err, result) {
+            if (err) {
+                console.log("ERROR: Stock: finishStockChange");
+                console.log('[UPDATE ERROR] - ', err.message);
+                callback(false);
+                return;
+            }
+            callback(true);
+        });
+    };
+    /*
     方法名称：modifyStockHoldNumber
     实现功能：通过personId, stockId修改对应的持股数量
     传入参数：personId（整数）, stockId（字符串）、变更的股票数deltaNum（整数、允许正负、负数表示减少）、回调函数
@@ -188,10 +210,10 @@ function Stock() {
     编程者：黄欣雨、孙克染、陈玮烨
     备注：正为增加持股，负为减少持股
     * */
-    this.modifyStockHoldNumber = function (personId, stockId, deltaNum, matchPrice, callback) {
+    this.modifyStockHoldNumber = function (personId, stockId, deltaNum, callback) {
         let modSql = "UPDATE stockhold SET ";
-        let modSqlParams = [matchPrice, deltaNum, deltaNum, deltaNum, personId, stockId];
-        modSql += "stockcost = (stockcost*stocknum + ?*?)/(stocknum + ?), stocknum = stocknum + ?, updatetime = current_timestamp WHERE personid = ? and stockid = ?";
+        let modSqlParams = [deltaNum, personId, stockId];
+        modSql += "stocknum = stocknum + ?, updatetime = current_timestamp WHERE personid = ? and stockid = ?";
         dbQuery(modSql, modSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: Stock: modifyStockHoldNumber");
