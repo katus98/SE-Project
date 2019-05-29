@@ -152,7 +152,7 @@ function Match() {
                         } else {
                             //传入指令是买
                             sellPersonId = res.personId;
-                            buyPersonId = istID;
+                            buyPersonId = personId;
                             askId = res.id;
                             bidId = istID;
                             askPrice = res.price;
