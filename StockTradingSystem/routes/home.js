@@ -46,20 +46,20 @@ router.post('/orderSubmit', function (req, res) {
                                         res0.remark = "证券账户对应股票持股数不足, 仅持有" + stockNum + "股!";
                                         resolve(res0);
                                     } else {
-                                        stock.convertStockToFrozenStock(result0.personId, req.body.stockId, parseInt(req.body.stockNum), function (result) {
-                                            if (result === true) {
-                                                instructions.addTempInstructions('sell', result0.personId, req.body.stockId, parseInt(req.body.stockNum), parseFloat(req.body.pricePer), function (result) {
-                                                    if (result.status === false) {
-                                                        res0.remark = "指令存在问题：" + result.info;
-                                                    } else {
+                                        instructions.addTempInstructions('sell', result0.personId, req.body.stockId, parseInt(req.body.stockNum), parseFloat(req.body.pricePer), function (result) {
+                                            if (result.status === false) {
+                                                res0.remark = "指令存在问题：" + result.info;
+                                                resolve(res0);
+                                            } else {
+                                                stock.convertStockToFrozenStock(result0.personId, req.body.stockId, parseInt(req.body.stockNum), function (result) {
+                                                    if (result === true) {
                                                         res0.result = true;
                                                         res0.remark = "股票出售指令发布成功!";
+                                                    } else {
+                                                        res0.remark = "股票冻结失败!";
                                                     }
                                                     resolve(res0);
                                                 });
-                                            } else {
-                                                res0.remark = "股票冻结失败!";
-                                                resolve(res0);
                                             }
                                         });
                                     }
