@@ -213,4 +213,32 @@ router.post('/stopSystem', function (req, res) {
     res.end("Stop system successfully!");
 });
 
+router.post('/queryStockHold', function (req, res) {
+    let stock = new Stock();
+    stock.getAllStockHoldInfo(function (result) {
+        res.end(JSON.stringify(result));
+    });
+});
+
+router.post('/queryCapital', function (req, res) {
+    let capitalAccount = new CapitalAccount();
+    capitalAccount.getAllCapitalAccountInfo(function (result) {
+        res.end(JSON.stringify(result));
+    });
+});
+
+router.post('/queryMatch', function (req, res) {
+    let match = new Match();
+    match.getAllMatch(function (result) {
+        res.end(JSON.stringify(result));
+    });
+});
+
+router.post('/queryStock', function (req, res) {
+    let stock = new Stock();
+    stock.getAllStockInfo(function (result) {
+        res.end(JSON.stringify(result));
+    });
+});
+
 module.exports = router;

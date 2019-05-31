@@ -18,6 +18,25 @@ let flag = false;
 * 备注：禁止D组外其他小组调用！
 * */
 function Match() {
+    /*
+    方法名称：getAllMatch
+    实现功能：获取全部的撮合信息
+    传入参数：回调函数
+    回调参数：直接承接result
+    编程者：孙克染
+    备注：调用后需要先判断length是否大于0
+    * */
+    this.getAllMatch = function (callback) {
+        let getSql = "SELECT * FROM matchs";
+        dbQuery(getSql, [], function (err, result) {
+            if (err) {
+                console.log("ERROR: Stock: getAllMatch");
+                console.log('[SELECT ERROR] - ', err.message);
+                return;
+            }
+            callback(result);
+        });
+    };
 
     /*
     方法名称：convertTempInstructionsToInstructions

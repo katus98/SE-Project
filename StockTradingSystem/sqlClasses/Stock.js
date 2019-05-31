@@ -28,6 +28,25 @@ function Stock() {
         });
     };
     /*
+    方法名称：getAllStockHoldInfo
+    实现功能：查询全部持股信息
+    传入参数：回调函数
+    回调参数：json：直接承接result
+    编程者：孙克染
+    备注：调用时需要先判断返回的结果length>0
+    * */
+    this.getAllStockHoldInfo = function (callback) {
+        let getSql = "SELECT * FROM stockhold WHERE stocknum > 0 OR frozenstocknum > 0";
+        dbQuery(getSql, [], function (err, result) {
+            if (err) {
+                console.log("ERROR: Stock: getAllStockHoldInfo");
+                console.log('[SELECT ERROR] - ', err.message);
+                return;
+            }
+            callback(result);
+        });
+    };
+    /*
     方法名称：getStockHoldInfoByPersonId
     实现功能：通过personID获取持股信息（仅返回持股数不为0的记录）
     传入参数：personId（整数或者数字字符串）、回调函数

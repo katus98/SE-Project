@@ -24,7 +24,9 @@
         <p>单价: <input name="pricePer" type="number" value="" id="pricePer" />元/股</p>
         <p><input type="button" value="提交指令" id="submit" /> <input type="reset" value="重置输入" /></p>
     </form>
+
     <hr>
+
     <h1>大盘开闭总控制台</h1>
     <div>
         控制撮合系统立即启动
@@ -41,20 +43,49 @@
 
 <div class="consoles">
     <h1>撮合结果查验控制台</h1>
-    <input type="button" value="查询全部的缓存指令" id="queryAllTemp" />
-    <input type="button" value="查询全部的出售指令" id="queryAllSell" />
-    <input type="button" value="查询全部的购买指令" id="queryAllBuy" />
-    <div id="temp">
-        缓存指令查询结果:
-        <table id="tabTemp"></table>
+    <div class="subConsoles">
+        <h2>指令查验</h2>
+        <input type="button" value="查询全部的缓存指令" id="queryAllTemp" />
+        <input type="button" value="查询全部的出售指令" id="queryAllSell" />
+        <input type="button" value="查询全部的购买指令" id="queryAllBuy" />
+        <div id="temp">
+            缓存指令查询结果:
+            <table id="tabTemp"></table>
+        </div>
+        <div id="sell">
+            出售指令查询结果:
+            <table id="tabSell"></table>
+        </div>
+        <div id="buy">
+            购买指令查询结果:
+            <table id="tabBuy"></table>
+        </div>
     </div>
-    <div id="sell">
-        出售指令查询结果:
-        <table id="tabSell"></table>
+    <div class="subConsoles">
+        <h2>用户持股和资金查验</h2>
+        <input type="button" value="查询全部的用户持股" id="queryAllStockHold" />
+        <input type="button" value="查询全部的用户资金" id="queryAllCapital" />
+        <div id="stockHold">
+            用户持股查询结果:
+            <table id="tabStockHold"></table>
+        </div>
+        <div id="capital">
+            用户资金查询结果:
+            <table id="tabCapital"></table>
+        </div>
     </div>
-    <div id="buy">
-        购买指令查询结果:
-        <table id="tabBuy"></table>
+    <div class="subConsoles">
+        <h2>撮合记录与股票实时信息查验</h2>
+        <input type="button" value="查询全部的撮合记录" id="queryAllMatch" />
+        <input type="button" value="查询全部的股票信息" id="queryAllStock" />
+        <div id="match">
+            撮合记录查询结果:
+            <table id="tabMatch"></table>
+        </div>
+        <div id="stock">
+            股票实时信息查询结果:
+            <table id="tabStock"></table>
+        </div>
     </div>
 </div>
 

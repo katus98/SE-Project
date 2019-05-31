@@ -12,6 +12,25 @@ function CapitalAccount() {
     /****查询方法****/
     //Info查询
     /*
+    方法名称：getAllCapitalAccountInfo
+    实现功能：查询全部的资金账户信息
+    传入参数：回调函数
+    回调参数：json：直接承接result
+    编程者：孙克染
+    备注：调用时需要先判断返回的结果length>0
+    * */
+    this.getAllCapitalAccountInfo = function (callback) {
+        let getSql = "SELECT capitalaccountid, relatedsecuritiesaccountid, capitalaccountstate, availablemoney, frozenmoney, interestremained FROM capitalaccount";
+        dbQuery(getSql, [], function (err, result) {
+            if (err) {
+                console.log("ERROR: CapitalAccount: getAllCapitalAccountInfo");
+                console.log('[SELECT ERROR] - ', err.message);
+                return;
+            }
+            callback(result);
+        });
+    };
+    /*
     方法名称：getCapitalAccountInfoByCapitalAccountId
     实现功能：通过资金账户ID获取资金账户信息
     传入参数：capitalAccountId（整数或者数字字符串）、回调函数
