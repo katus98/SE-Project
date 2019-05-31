@@ -35,18 +35,22 @@ function genTab2 (json, eleId) {
 
 $(document).ready(function () {
     $("#submit").click(function () {
-        $.ajax({
-            type: "POST",
-            dataType: "text",
-            url: "/home/orderSubmit",
-            data: $("#tradeOrder").serialize(),
-            success: function (result) {
-                alert(result);
-            },
-            error: function () {
-                alert("由于系统原因交易指令发出失败!");
-            }
-        });
+        if ($("#stockNum").val() > 0 && $("#pricePer").val() > 0 && $("#userId").val() !== '') {
+            $.ajax({
+                type: "POST",
+                dataType: "text",
+                url: "/home/orderSubmit",
+                data: $("#tradeOrder").serialize(),
+                success: function (result) {
+                    alert(result);
+                },
+                error: function () {
+                    alert("由于系统原因交易指令发出失败!");
+                }
+            });
+        } else {
+            alert("请输入合法的用户ID、股票数量和价格！");
+        }
     });
     $("#queryAllSell").click(function () {
         $.ajax({

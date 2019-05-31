@@ -110,7 +110,7 @@ router.post('/orderSubmit', function (req, res) {
                         res0.remark = "该股票不允许交易！";
                         resolve(res0);
                     } else {
-                        res0.result = "股票不存在！";
+                        res0.remark = "股票不存在！";
                         resolve(res0);
                     }
                 });

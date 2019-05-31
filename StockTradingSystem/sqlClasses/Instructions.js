@@ -171,7 +171,7 @@ function Instructions() {
             }
             const low = result.low;
             const high = result.high;
-            if (price < low || price > high){
+            if (price < low && tradeType === 'buy'){
                 res.info = "The price specified is not acceptable. " + result.message;  // 没有指定代号的股票
                 res.status = false;
                 callback(res);
