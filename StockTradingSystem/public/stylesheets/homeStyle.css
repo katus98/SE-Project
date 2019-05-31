@@ -1,3 +1,11 @@
 table, th, td {
     border: 1px solid blue;
 }
+
+.consoles {
+    border: 1px solid black;
+    margin: 10px;
+    padding: 20px;
+    width: fit-content;
+    float: left;
+}

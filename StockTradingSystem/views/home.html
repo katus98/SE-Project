@@ -9,41 +9,55 @@
 </head>
 <body>
 
-<h1>发出交易指令操作台</h1>
-<p>说明：使用此操作必须保证用户已经处于登录状态。</p>
-<form id="tradeOrder">
-    <p>用户ID: <input name="userId" type="number" value="" id="userId" /></p>
-    <p>
-        交易类型:
-        <input type="radio" name="tradeType" value="sell" checked="true" />卖出
-        <input type="radio" name="tradeType" value="buy" />购买
-    </p>
-    <p>股票ID: <input name="stockId" type="text" value="" /></p>
-    <p>股数: <input name="stockNum" type="number" value="" id="stockNum" /></p>
-    <p>单价: <input name="pricePer" type="number" value="" id="pricePer" />元/股</p>
-    <p><input type="button" value="提交" id="submit" />&nbsp;<input type="reset" value="重置" /></p>
-</form>
-<hr>
-<input type="button" value="立即启动撮合系统" id="start" />
-<input type="button" value="立即停止撮合系统" id="stop" />
-<hr>
-<input type="button" value="启动自动撮合系统" id="startSystem" />
-<input type="button" value="停止自动撮合系统" id="stopSystem" />
-<hr>
-<input type="button" value="查询全部的缓存指令" id="queryAllTemp" />
-<input type="button" value="查询全部的出售指令" id="queryAllSell" />
-<input type="button" value="查询全部的购买指令" id="queryAllBuy" />
-<div id="temp">
-    缓存指令查询结果:
-    <table id="tabTemp"></table>
+<div class="consoles">
+    <h1>发出交易指令操作台</h1>
+    <p>说明：使用此操作必须保证用户已经处于登录状态。</p>
+    <form id="tradeOrder">
+        <p>用户ID: <input name="userId" type="number" value="" id="userId" /></p>
+        <p>
+            交易类型:
+            <input type="radio" name="tradeType" value="sell" checked="true" />卖出
+            <input type="radio" name="tradeType" value="buy" />购买
+        </p>
+        <p>股票ID: <input name="stockId" type="text" value="" /></p>
+        <p>股数: <input name="stockNum" type="number" value="" id="stockNum" /></p>
+        <p>单价: <input name="pricePer" type="number" value="" id="pricePer" />元/股</p>
+        <p><input type="button" value="提交指令" id="submit" /> <input type="reset" value="重置输入" /></p>
+    </form>
 </div>
-<div id="sell">
-    出售指令查询结果:
-    <table id="tabSell"></table>
+
+<div class="consoles">
+    <h1>大盘开闭总控制台</h1>
+    <div>
+        控制撮合系统立即启动
+        <input type="button" value="立即启动撮合系统" id="start" />
+        <input type="button" value="立即停止撮合系统" id="stop" />
+    </div>
+    <div>
+        控制撮合系统定时启动
+        <input type="button" value="启动自动撮合系统" id="startSystem" />
+        <input type="button" value="停止自动撮合系统" id="stopSystem" />
+        <p>说明：默认工作日早上8时开盘，晚间16时收盘。</p>
+    </div>
 </div>
-<div id="buy">
-    购买指令查询结果:
-    <table id="tabBuy"></table>
+
+<div class="consoles">
+    <h1>撮合结果查验控制台</h1>
+    <input type="button" value="查询全部的缓存指令" id="queryAllTemp" />
+    <input type="button" value="查询全部的出售指令" id="queryAllSell" />
+    <input type="button" value="查询全部的购买指令" id="queryAllBuy" />
+    <div id="temp">
+        缓存指令查询结果:
+        <table id="tabTemp"></table>
+    </div>
+    <div id="sell">
+        出售指令查询结果:
+        <table id="tabSell"></table>
+    </div>
+    <div id="buy">
+        购买指令查询结果:
+        <table id="tabBuy"></table>
+    </div>
 </div>
 
 </body>
