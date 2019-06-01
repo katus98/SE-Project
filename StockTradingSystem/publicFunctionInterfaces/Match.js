@@ -389,6 +389,18 @@ function Match() {
             });
         });
     };
+    /*
+    方法名称：getStateOfMatch
+    实现功能：获取撮合系统运行状态
+    传入参数：回调函数
+    编程者：孙克染
+    * */
+    this.getStateOfMatch = function (callback) {
+        let result = {start: false, flag: false};
+        result.start = start;
+        result.flag = flag;
+        callback(result);
+    };
 }
 
 module.exports = Match;

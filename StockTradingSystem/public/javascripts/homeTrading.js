@@ -182,6 +182,9 @@ $(document).ready(function () {
             data: {},
             success: function (result) {
                 alert(result);
+                $("#start").prop("disabled", true);
+                $("#stop").prop("disabled", false);
+                document.getElementById('state1').innerText = '已开启';
             },
             error: function () {
                 alert("Start failed!");
@@ -196,6 +199,9 @@ $(document).ready(function () {
             data: {},
             success: function (result) {
                 alert(result);
+                $("#start").prop("disabled", false);
+                $("#stop").prop("disabled", true);
+                document.getElementById('state1').innerText = '已关闭';
             },
             error: function () {
                 alert("Stop failed!");
@@ -210,6 +216,9 @@ $(document).ready(function () {
             data: {},
             success: function (result) {
                 alert(result);
+                $("#startSystem").prop("disabled", true);
+                $("#stopSystem").prop("disabled", false);
+                document.getElementById('state2').innerText = '已开启';
             },
             error: function () {
                 alert("Start System Error!");
@@ -224,6 +233,9 @@ $(document).ready(function () {
             data: {},
             success: function (result) {
                 alert(result);
+                $("#startSystem").prop("disabled", false);
+                $("#stopSystem").prop("disabled", true);
+                document.getElementById('state2').innerText = '已关闭';
             },
             error: function () {
                 alert("Stop System Error!");

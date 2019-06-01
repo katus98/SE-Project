@@ -1,7 +1,7 @@
 var express = require('express');
 var schedule = require('node-schedule');
 var router = express.Router();
-var job1, job2;
+var job1 = '', job2 = '';
 
 // 数据库连接
 let dbQuery = require('../database/MySQLquery');
@@ -17,7 +17,12 @@ let Match = require('../publicFunctionInterfaces/Match');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('home');
+    let match = new Match();
+    match.getStateOfMatch(function (result) {
+        let st = (result.start) ? '已开启' : '已关闭';
+        let end = (job1 === '' && job2 === '') ? '已关闭' : '已开启';
+        res.render('home', {state1: st, state2: end});
+    });
 });
 
 router.get('/index', function (req, res, next) {
@@ -163,54 +168,76 @@ router.post('/queryTemp', function (req, res) {
 
 router.post('/start', function (req, res) {
     let match = new Match();
-    match.startMatching(function (result) {
-        res.end("Start successfully!");
-        match.convertTempInstructionsToInstructions(function (result) {
-            //res.end(result.remark);
-        });
+    match.getStateOfMatch(function (result) {
+        if (result.start) {
+            res.end('撮合系统已经运行!');
+        } else {
+            match.startMatching(function (result) {
+                res.end("Start successfully!");
+                match.convertTempInstructionsToInstructions(function (result) {
+                    //res.end(result.remark);
+                });
+            });
+        }
     });
 });
 
 router.post('/stop', function (req, res) {
     let match = new Match();
-    match.stopMatching(function (result) {
-        res.end("Stop successfully!");
+    match.getStateOfMatch(function (result) {
+        if (result.start) {
+            match.stopMatching(function (result) {
+                res.end("Stop successfully!");
+            });
+        } else {
+            res.end("撮合系统未在运行!");
+        }
     });
 });
 
 router.post('/startSystem', function (req, res) {
-    let rule1 = new schedule.RecurrenceRule();
-    rule1.dayOfWeek = [new schedule.Range(1, 5)];
-    rule1.hour = 8;
-    rule1.minute = 0;
-    rule1.second = 0;
-    job1 = schedule.scheduleJob(rule1, function () {
-        let match = new Match();
-        match.startMatching(function (result) {
-            console.log("今日开盘!");
-            match.convertTempInstructionsToInstructions(function (result) {
-                //res.end(result.remark);
+    if (job1 === '' && job2 === '') {
+        let rule1 = new schedule.RecurrenceRule();
+        rule1.dayOfWeek = [new schedule.Range(1, 5)];
+        rule1.hour = 8;
+        rule1.minute = 0;
+        rule1.second = 0;
+        job1 = schedule.scheduleJob(rule1, function () {
+            let match = new Match();
+            match.startMatching(function (result) {
+                console.log("今日开盘!");
+                match.convertTempInstructionsToInstructions(function (result) {
+                    //res.end(result.remark);
+                });
             });
         });
-    });
-    let rule2 = new schedule.RecurrenceRule();
-    rule2.dayOfWeek = [new schedule.Range(1, 5)];
-    rule2.hour = 16;
-    rule2.minute = 0;
-    rule2.second = 0;
-    job2 = schedule.scheduleJob(rule2, function () {
-        let match = new Match();
-        match.stopMatching(function (result) {
-            console.log("今日收盘!");
+        let rule2 = new schedule.RecurrenceRule();
+        rule2.dayOfWeek = [new schedule.Range(1, 5)];
+        rule2.hour = 16;
+        rule2.minute = 0;
+        rule2.second = 0;
+        job2 = schedule.scheduleJob(rule2, function () {
+            let match = new Match();
+            match.stopMatching(function (result) {
+                console.log("今日收盘!");
+            });
         });
-    });
-    res.end("Start system successfully!");
+        res.end("定时自动开盘系统开启成功!");
+    } else {
+        res.end("定时自动开盘系统已经开启，无法重复开启!");
+    }
 });
 
 router.post('/stopSystem', function (req, res) {
-    job1.cancel();
-    job2.cancel();
-    res.end("Stop system successfully!");
+    if (job1 !== '' && job2 !== '') {
+        job1.cancel();
+        job2.cancel();
+        job1 = '';
+        job2 = '';
+        res.end("定时自动开盘系统关闭成功!");
+    } else {
+        res.end("定时自动开盘系统已经关闭，无法重复关闭!");
+    }
 });
 
 router.post('/queryStockHold', function (req, res) {

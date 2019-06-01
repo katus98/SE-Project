@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <title>Home - Stock Trading</title>
     <link rel='stylesheet' href='/stylesheets/homeStyle.css' />
-    <script src="/javascripts/jquery-3.4.1.js"></script>
-    <script src="/javascripts/homeTrading.js"></script>
 </head>
 <body>
 
@@ -29,12 +27,14 @@
 
     <h1>大盘开闭总控制台</h1>
     <div>
-        控制撮合系统立即启动
+        <h2>控制撮合系统立即启动</h2>
+        <p>状态：<b id="state1"><%= state1 %></b></p>
         <input type="button" value="立即启动撮合系统" id="start" />
         <input type="button" value="立即停止撮合系统" id="stop" />
     </div>
     <div>
-        控制撮合系统定时启动
+        <h2>控制撮合系统定时启动</h2>
+        <p>状态：<b id="state2"><%= state2 %></b></p>
         <input type="button" value="启动自动撮合系统" id="startSystem" />
         <input type="button" value="停止自动撮合系统" id="stopSystem" />
         <p>说明：默认工作日早上8时开盘，晚间16时收盘。</p>
@@ -88,6 +88,9 @@
         </div>
     </div>
 </div>
+
+<script src="/javascripts/jquery-3.4.1.js"></script>
+<script src="/javascripts/homeTrading.js"></script>
 
 </body>
 </html>
