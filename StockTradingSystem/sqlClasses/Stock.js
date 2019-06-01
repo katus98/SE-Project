@@ -171,7 +171,7 @@ function Stock() {
      编程者：杨清杰、陈玮烨
      * */
     this.getActiveInstructionsByPersonID = function (personid, tradeType, callback) {
-        if(tradeType === 'sell'){
+        if(tradeType === 'sell') {
             let getSql = "SELECT * FROM bids WHERE uid = ? and status = ?";
             let getSqlParams = [personid,'partial'];
             dbQuery(getSql, getSqlParams, function (err, result) {
@@ -182,8 +182,7 @@ function Stock() {
                 }
                 callback(result);
             });
-        }
-        else{
+        } else {
             let getSql = "SELECT * FROM asks WHERE uid = ? and status = ?";
             let getSqlParams = [personid,'partial'];
             dbQuery(getSql, getSqlParams, function (err, result) {
@@ -210,7 +209,7 @@ function Stock() {
     this.finishStockChange = function (personId, stockId, deltaNum, matchPrice, callback) {
         let modSql = "UPDATE stockhold SET ";
         let modSqlParams = [matchPrice, deltaNum, deltaNum, deltaNum, personId, stockId];
-        modSql += "stockcost = (stockcost*stocknum + ?*?)/(stocknum + ?), frozenstocknum = frozenstocknum + ?, updatetime = current_timestamp WHERE personid = ? and stockid = ?";
+        modSql += "stockcost = (stockcost*(stocknum+frozenstocknum) + ?*?)/(stocknum + frozenstocknum + ?), frozenstocknum = frozenstocknum + ?, updatetime = current_timestamp WHERE personid = ? and stockid = ?";
         dbQuery(modSql, modSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: Stock: finishStockChange");
