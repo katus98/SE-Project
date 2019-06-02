@@ -4,6 +4,7 @@ let dbQuery = require('../database/MySQLquery');
 // 引用的其他功能类
 let Stock = require('../sqlClasses/Stock');
 let CapitalAccount = require('../sqlClasses/CapitalAccount');
+let User = require('../publicFunctionInterfaces/Users');
 /*
 * Instructions类：包含对数据库表格bids、asks、matchs、dealsbid、dealsask的直接SQL操作
 * 维护小组：D组
@@ -11,6 +12,7 @@ let CapitalAccount = require('../sqlClasses/CapitalAccount');
 function Instructions() {
     this.stock = new Stock();
     this.capitalAccount = new CapitalAccount();
+    this.user = new User();
     /****查询方法****/
     //Info查询
     /*
@@ -307,7 +309,7 @@ function Instructions() {
     * */
     this.withdrawInstruction = function (tradeType, instructionId, callback) {
         let instruct = this;
-        this.completeInstructions(function (result) {
+        Instructions.completeInstructions(function (result) {
             if (result === false){
                 callback(false);
                 return;
