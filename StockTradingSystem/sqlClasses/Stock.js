@@ -157,8 +157,8 @@ function Stock() {
             res.status = true;
             res.high = high;
             res.low = low;
-            res.message = "The range of acceptable price of the security (code: " + stockID +
-                ") is [" + low + ", " + high + "] today.";
+            res.message = "今日允许的最低交易购买价格不得低于 (code: " + stockID +
+                ") " + low + "元。";
             callback(res);
         });
     };

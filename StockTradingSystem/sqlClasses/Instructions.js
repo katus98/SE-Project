@@ -149,14 +149,14 @@ function Instructions() {
         let res = {info: "", status: false};
         if (shares <= 0)
         {
-            res.info = " Quantity of shares must not be zero or negative.";
+            res.info = "交易股数必须为正整数。";
             res.status = false;
             callback(res);
             return;
         }
         if (price <= 0)
         {
-            res.info = " Price must not be zero or negative.";
+            res.info = "价格必须为正数。";
             res.status = false;
             callback(res);
             return;
@@ -172,7 +172,7 @@ function Instructions() {
             const low = result.low;
             const high = result.high;
             if (price < low && tradeType === 'buy'){
-                res.info = "The price specified is not acceptable. " + result.message;  // 没有指定代号的股票
+                res.info = "非法的交易价格; " + result.message;  // 没有指定代号的股票
                 res.status = false;
                 callback(res);
                 return;
@@ -184,12 +184,12 @@ function Instructions() {
                 if (err) {
                     console.log("ERROR: Instructions: addTempInstructions");
                     console.log('[INSERT ERROR] - ', err.message);
-                    res.info = "Error inserting into the database";
+                    res.info = "插入数据库时出现问题。";
                     res.status = false;
                     callback(res);
                     return;
                 }
-                res.info = "Success.";
+                res.info = "发布成功。";
                 res.status = true;
                 callback(res);
             });
@@ -277,9 +277,9 @@ function Instructions() {
     备注：类成员函数，仅限于类内调用
     * */
     Instructions.completeInstructions = function (callback) {
-        let modSql1 = "UPDATE asks SET status = ?, timearchived = current_timestamp(6) WHERE shares2trade = 0;";
-        let modSql2 = "UPDATE bids SET status = ?, timearchived = current_timestamp(6) WHERE shares2trade = 0;";
-        let modSqlParams = ['complete'];
+        let modSql1 = "UPDATE asks SET status = ?, timearchived = current_timestamp(6) WHERE shares2trade = 0 AND status = ?;";
+        let modSql2 = "UPDATE bids SET status = ?, timearchived = current_timestamp(6) WHERE shares2trade = 0 AND status = ?;";
+        let modSqlParams = ['complete', 'partial'];
         dbQuery(modSql1, modSqlParams, function (err, result) {
             if (err) {
                 console.log("ERROR: Instructions: completeInstructions1");
@@ -339,7 +339,6 @@ function Instructions() {
                             }
                             instruct.stock.modifyStockHoldNumber(uid, code, shares2trade, function (result) {
                                 callback(result);
-                                return;
                             });
                         });
                     }
