@@ -20,14 +20,14 @@ delete from stock;
 insert into 
 	stock(code, name_stock, current_price, last_endprice, amount, permission, notification, percentagePriceChange, st) 
 	values
-	("000001", "平安银行", 12.75, 12.79, 1000000000, true, null, 0.1, false), 
+	("000001", "平安银行", 12.79, 12.79, 1000000000, true, null, 0.1, false), 
 	("000002", "万科A", 29.53, 29.15, 1000000000, true, null, 0.1, false), 
-	("000003", "国农科技", 19.6, 19.64, 1000000000, true, null, 0.2, false), 
+	("000003", "国农科技", 19.6, 19.64, 1000000000, true, null, 0.05, true), 
 	("000004", "世纪星源", 3.73, 3.72, 1000000000, true, null, 0.1, false), 
 	("000005", "深振业A", 6.5, 6.5, 1000000000, true, null, 0.1, false), 
-	("000006", "全新好", 8.26, 8.41, 1000000000, true, null, 0.8, false), 
+	("000006", "全新好", 8.26, 8.41, 1000000000, true, null, 0.05, true), 
 	("000007", "神州高铁", 4.67, 4.59, 1000000000, true, null, 0.1, false), 
-	("000008", "中国宝安", 6.88, 6.57, 1000000000, true, null, 100, false), 
+	("000008", "中国宝安", 6.88, 6.57, 1000000000, true, null, 0.1, false), 
 	("000009", "美丽生态", 3.97, 3.87, 1000000000, true, null, 0.1, false), 
 	("000010", "深物业A", 11.15, 11.09, 1000000000, true, null, 0.1, false),
 	("000011", "南玻A", 5.59, 5.63, 1000000000, true, null, 10000, false),
@@ -42,16 +42,16 @@ insert into
 	("000020", "深天地A", 15.98, 16.04, 1000000000, true, null, 10000, false),
 	("000021", "特力A", 33.17, 33.09, 1000000000, true, null, 10000, false),
 	("000022", "飞亚达A", 9.15, 9.23, 1000000000, true, null, 10000, false),
-	("000023", "深圳能源", 6.58, 6.49, 1000000000, true, null, 56, false),
-	("000024", "国药一致", 49.1, 49.09, 1000000000, true, null, 124, false),
-	("000025", "富奥股份", 5.09, 5.26, 1000000000, true, null, 0.87, false),
-	("000026", "中粮地产", 6.12, 6.19, 1000000000, true, null, 0.66, false),
-	("000027", "深桑达A", 9.7, 9.59, 1000000000, true, null, 0.44, false),
+	("000023", "深圳能源", 6.58, 6.49, 1000000000, true, null, 0.1, false),
+	("000024", "国药一致", 49.1, 49.09, 1000000000, true, null, 0.05, true),
+	("000025", "富奥股份", 5.09, 5.26, 1000000000, true, null, 0.1, false),
+	("000026", "中粮地产", 6.12, 6.19, 1000000000, true, null, 0.1, false),
+	("000027", "深桑达A", 9.7, 9.59, 1000000000, true, null, 0.1, false),
 	("000028", "神州数码", 14.99, 14.79, 1000000000, true, null, 0.1, false),
-	("000029", "中国天楹", 5.47, 5.61, 1000000000, true, null, 0.46, false),
-	("000030", "中集集团", 13.8, 13.69, 1000000000, true, null, 0.1, false);
+	("000029", "中国天楹", 5.47, 5.61, 1000000000, true, null, 0.1, false),
+	("000030", "中集集团", 13.8, 13.69, 1000000000, true, null, 0.05, true);
 
-update stock set today_startprice = last_endprice;
+update stock set today_startprice = last_endprice, current_price = last_endprice;
 
 -- Group-A
 insert into 
@@ -96,6 +96,10 @@ insert into
 	select distinct personid, code, 0 as stocknum, 0.00 as stockcost from idreference cross join stock;
 update stockhold set stocknum = 1000000, stockcost = 12 where personid <> 3 and stockid = "000001";
 update stockhold set stocknum = 5201024, stockcost = 3.7 where personid <> 3 and stockid = "000004";
+update stockhold set stocknum = 6000000 where personid <> 3 and stockid = "000002";
+update stockhold set stocknum = 5201024 where personid <> 3 and stockid = "000003";
+update stockhold set stocknum = 6000000 where personid <> 3 and stockid = "000011";
+update stockhold set stocknum = 5201024 where personid <> 3 and stockid = "000012";
 -- 请根据需要进一步补充
 
 -- Group-B
@@ -111,7 +115,7 @@ insert into
 	(2019106, '196273', '972194', '419252196608162588', 1000000005, 'normal', 56127.96, 0.00, 8.96),
 	(2019107, '896922', '289229', '491527199006252698', null, 'frozen', 0.00, 9551.16, 2.39),
 	(2019108, '516921', '714921', '429891198509152896', null, 'logout', 0.00, 0.00, 0.00),
-	(2019109, '113965', '493965', '481192198412232666', 1000000004, 'normal', 4124.38, 0.00, 3.45),
+	(2019109, '113965', '493965', '481192198412232666', 1000000004, 'normal', 414897456424.38, 0.00, 3.45),
 	(2019110, '198783', '977964', '429212196608162588', 1000000003, 'normal', 56127.96, 0.00, 8.96),
 	(2019111, '846952', '254829', '491470199006252698', null, 'frozen', 0.00, 9551.16, 2.39),
 	(2019112, '518951', '799921', '464098198509152896', null, 'logout', 0.00, 0.00, 0.00),
