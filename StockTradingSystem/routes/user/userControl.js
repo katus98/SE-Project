@@ -1,7 +1,6 @@
 const express = require('express');
 const mysql = require('mysql');
 
-const db = require('../../database/MySQLconnection');
 const dbQuery = require('../../database/MySQLquery');
 
 let SecuritiesAccount = require('../../sqlClasses/SecuritiesAccount');

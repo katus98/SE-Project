@@ -2,17 +2,16 @@ const express = require('express');
 const mysql = require('mysql');
 
 const dbQuery = require('../database/MySQLquery');
-const db = require('../database/MySQLconnection');
 
 module.exports = function () {
     var router = express.Router();
     var finished = false;
 
-    router.get('/', (req, res) => {
-        res.redirect('/login');
-    });
+    // router.get('/', (req, res) => {
+    //     res.redirect('/login');
+    // });
 
-    router.get('/login', (req, res) => {
+    router.get('/', (req, res) => {
         // res.redirect('/user/index');
         res.render('login');
     });
@@ -47,7 +46,7 @@ module.exports = function () {
 
     });
 
-    router.post('/login/submit', (req, res) => {
+    router.post('/submit', (req, res) => {
         // res.redirect('/user/index'); ajax,无法重定向
         var sqlQuery = "select * from capitalaccount where capitalaccountid = ?";
         var params = [req.body.f_username];

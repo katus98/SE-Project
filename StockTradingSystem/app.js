@@ -1,17 +1,47 @@
 var createError = require('http-errors');
 var express = require('express');
+const bodyParser = require('body-parser');
 var path = require('path');
 var cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
 var logger = require('morgan');
 var ejs = require('ejs');
 
 // 设置路由控制器路径
 var firstRouter = require('./routes/first');
 var registerRouter = require('./routes/register');
-var usersRouter = require('./routes/users');
+var usersRouter = require('./routes/user/userControl');
+var loginRouter = require('./routes/login');
 var homeRouter = require("./routes/home");
 
 var app = express();
+app.all('*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
+    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+    res.header("X-Powered-By",' 3.2.1');
+    if(req.method == "OPTIONS") res.send(200);/*让options请求快速返回*/
+    else next();
+});
+
+//1.获取请求数据
+app.use(bodyParser.urlencoded({extended: false}));
+
+//2.cookie session
+app.use(cookieParser());
+(function () {
+    var keys = [];
+    for(var i = 0; i < 100000; i++){
+        keys[i] = 'user_' + Math.random();
+    }
+    app.use(cookieSession(
+        {
+            name: 'sess_id',
+            keys: keys,
+            maxAge: 20*60*1000 //20min
+        }
+    ));
+})();
 
 // view engine setup
 // 设置 views 文件夹为存放视图文件的目录
@@ -35,7 +65,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // 指定路由控制器
 app.use('/', firstRouter);
 app.use('/register', registerRouter);
-app.use('/users', usersRouter);
+app.use('/user', usersRouter());
+app.use('/login', loginRouter());
 app.use('/home', homeRouter);
 
 // catch 404 and forward to error handler
