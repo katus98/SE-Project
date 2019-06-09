@@ -45,7 +45,6 @@ $(document).ready(function () {
                 dataType: 'json',
                 data: $("#registerForm").serialize(),
                 success: function (data) {
-                    alert(data.remark);
                     if (data.result) {
                         console.log("Open Accounts Successfully!");
                         let gotoURL = '/register/success?';
@@ -54,10 +53,20 @@ $(document).ready(function () {
                         gotoURL += 'personId=' + PrefixInteger(data.personId, 10) + '&';
                         gotoURL += 'name=' + data.name + '&';
                         gotoURL += 'type=' + data.type;
+                        //todo
+                        $.message({
+                            message: data.remark,
+                            type: 'success'
+                        });
                         setTimeout(function () {
                             $(window).attr('location', gotoURL);
-                        }, 2000);
+                        }, 2500);
                     } else {
+                        //todo
+                        $.message({
+                            message: data.remark,
+                            type: 'error'
+                        });
                         console.log("Open Accounts Filed!");
                     }
                 },

@@ -869,7 +869,6 @@ module.exports = function () {
         promise1.then(function (res0) {
             res.end(JSON.stringify(res0));
             if (res0.result === true) {
-                //todo: 撮合系统唤醒
                 console.log("指令加入缓存成功！");
             }
         });
