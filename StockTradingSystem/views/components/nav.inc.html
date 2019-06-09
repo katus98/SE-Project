@@ -1,0 +1,71 @@
+<!--for 弹出框提示-->
+<link rel="stylesheet" href="/css/message.css">
+<!--for 弹出框提示-->
+<script src="/js/message.js"></script>
+<nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index">股票交易系统</a>
+    </div>
+    <div style="color: white;
+        padding: 15px 50px 5px 50px;
+        float: right;
+        font-size: 16px;">  <a href="../login" class="btn btn-danger square-btn-adjust" onclick="logout()">登出</a></div>
+    <script>
+        function logout() {
+           $.ajax({
+               url:'/user/logout',
+               type:'POST',
+               success: function (data) {
+
+                   if (data.success) {
+                       urlRedirect = true;
+                       // console.log("登出成功");
+                       // console.log(data);
+                       $.message('登出成功');
+
+                   } else {
+                       console.log("登出出现错误");
+                       $.message({
+                           message: '登出错误',
+                           type: 'error'
+                       })
+                       // alert("密码或账号错误！");
+                   }
+               }
+           })
+        }
+    </script>
+</nav>
+<!-- /. NAV TOP  -->
+<nav class="navbar-default navbar-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav" id="main-menu">
+            <li class="text-center">
+                <img src="/img/find_user.png" class="user-image img-responsive"/>
+            </li>
+            <li>
+                <a id="indexBtn" href="index"><i class="fa fa-line-chart fa-3x"></i>&nbsp;股票账户</a>
+            </li>
+            <li>
+                <a id="uiBtn" href="ui"><i class="fa fa-dollar fa-3x"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;资金账户</a>
+            </li>
+            <li>
+                <a id="tab-panelBtn" href="tab-panel"><i class="fa fa-search fa-3x"></i>&nbsp;&nbsp;&nbsp;&nbsp;搜索股票</a>
+            </li>
+            <li>
+                <a id="TradingBtn" href="Trading_instructions"><i class="fa fa-undo fa-3x"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;撤销指令</a>
+            </li>
+
+        </ul>
+
+    </div>
+
+</nav>
+<!-- /. NAV SIDE  -->
+

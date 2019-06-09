@@ -1,12 +1,833 @@
-<!DOCTYPE html>
-<html>
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Free Bootstrap Admin Template : Binary Admin</title>
+    <!-- BOOTSTRAP STYLES-->
+    <link href="/css/bootstrap.css" rel="stylesheet"/>
+    <!-- FONTAWESOME STYLES-->
+    <link href="/css/font-awesome.css" rel="stylesheet"/>
+    <!-- MORRIS CHART STYLES-->
+    <link href="/js/morris/morris-0.4.3.min.css" rel="stylesheet"/>
+    <!-- CUSTOM STYLES-->
+    <link href="/css/custom.css" rel="stylesheet"/>
+    <!-- GOOGLE FONTS-->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+    <!-- TABLE STYLES-->
+    <link href="/js/dataTables/dataTables.bootstrap.css" rel="stylesheet"/>
+    <!--for 弹出框提示-->
+    <link rel="stylesheet" href="/css/message.css">
+
+    <!-- JQUERY SCRIPTS -->
+    <script src="/js/jquery-1.10.2.js"></script>
+    <!-- BOOTSTRAP SCRIPTS -->
+    <script src="/js/bootstrap.min.js"></script>
+    <!-- METISMENU SCRIPTS -->
+    <script src="/js/jquery.metisMenu.js"></script>
+    <!-- MORRIS CHART SCRIPTS -->
+    <script src="/js/morris/raphael-2.1.0.min.js"></script>
+    <script src="/js/morris/morris.js"></script>
+    <!-- CUSTOM SCRIPTS -->
+    <script src="/js/custom.js"></script>
+    <!-- DATA TABLE SCRIPTS -->
+    <script src="/js/dataTables/jquery.dataTables.js"></script>
+    <script src="/js/dataTables/dataTables.bootstrap.js"></script>
+    <script src="/js/accountFunction.js"></script>
+    <!--for 弹出框提示-->
+    <script src="/js/message.js"></script>
+    <!--股票提示-->
+    <script src="/js/checkInterest.js"></script>
 </head>
 <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-    <p id="test">test</p>
+<div id="wrapper">
+    <% include components/nav.inc.html %>
+    <script>
+        $("#indexBtn").addClass("active-menu");
+
+    </script>
+    <div id="page-wrapper">
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>持有股票</h2>
+                    <!--<h5>Welcome Jhon Deo , Love to see you back. </h5>-->
+                </div>
+            </div>
+            <!-- /. ROW  -->
+            <!--<hr/>-->
+            <!--<div class="row">-->
+                <!--<div class="col-md-3 col-sm-6 col-xs-6">-->
+                    <!--<div class="panel panel-back noti-box">-->
+                <!--<span class="icon-box bg-color-red set-icon">-->
+                    <!--<i class="fa fa-envelope-o"></i>-->
+                <!--</span>-->
+                        <!--<div class="text-box">-->
+                            <!--<p class="main-text">120 New</p>-->
+                            <!--<p class="text-muted">Messages</p>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="col-md-3 col-sm-6 col-xs-6">-->
+                    <!--<div class="panel panel-back noti-box">-->
+                <!--<span class="icon-box bg-color-green set-icon">-->
+                    <!--<i class="fa fa-bars"></i>-->
+                <!--</span>-->
+                        <!--<div class="text-box">-->
+                            <!--<p class="main-text">30 Tasks</p>-->
+                            <!--<p class="text-muted">Remaining</p>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="col-md-3 col-sm-6 col-xs-6">-->
+                    <!--<div class="panel panel-back noti-box">-->
+                <!--<span class="icon-box bg-color-blue set-icon">-->
+                    <!--<i class="fa fa-bell-o"></i>-->
+                <!--</span>-->
+                        <!--<div class="text-box">-->
+                            <!--<p class="main-text">240 New</p>-->
+                            <!--<p class="text-muted">Notifications</p>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="col-md-3 col-sm-6 col-xs-6">-->
+                    <!--<div class="panel panel-back noti-box">-->
+                <!--<span class="icon-box bg-color-brown set-icon">-->
+                    <!--<i class="fa fa-rocket"></i>-->
+                <!--</span>-->
+                        <!--<div class="text-box">-->
+                            <!--<p class="main-text">3 Orders</p>-->
+                            <!--<p class="text-muted">Pending</p>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!-- /. ROW  -->
+            <hr/>
+            <div class="col-md-12">
+                <!-- Advanced Tables -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        持有股票列表
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover" id="sellTable">
+                                <thead>
+                                <tr>
+                                    <th>个人编号</th>
+                                    <th>股票代码</th>
+                                    <th>当前价格</th>
+                                    <th>持有数量</th>
+                                    <th>冻结股票数量</th>
+                                    <th>持有成本</th>
+                                    <th>持股损益</th>
+                                    <th>上次更新时间</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <tr>
+                                    <th>个人编号</th>
+                                    <th>股票代码</th>
+                                    <th>当前价格</th>
+                                    <th>持有数量</th>
+                                    <th>冻结股票数量</th>
+                                    <th>持有成本</th>
+                                    <th>持股损益</th>
+                                    <th>上次更新时间</th>
+                                    <th>操作</th>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!--End Advanced Tables -->
+                <!-- Advanced Tables -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        关注股票列表
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover" id="interestDataTables">
+                                <thead>
+                                <tr>
+                                    <th>股票代码</th>
+                                    <th>股票名称</th>
+                                    <th>当前价格</th>
+                                    <th>昨日收盘价格</th>
+                                    <th>今日开盘价格</th>
+                                    <th>数量</th>
+                                    <th>是否允许交易</th>
+                                    <th>公告</th>
+                                    <th>涨跌幅</th>
+                                    <th>是否ST股</th>
+                                    <th>提醒价格</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!--End Advanced Tables -->
+            </div>
+        </div>
+        <!-- /. PAGE INNER  -->
+    </div>
+    <!-- /. PAGE WRAPPER  -->
+</div>
+
+<div class="modal fade" id="myModal"  role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">卖出股票</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label for="txt_departmentname">股票代码</label>
+                    <input type="text" name="txt_departmentname" class="form-control" id="sellStockId"
+                           placeholder="000010">
+                </div>
+                <div class="form-group">
+                    <label for="txt_parentdepartment">预期价格</label>
+                    <input type="text" name="txt_parentdepartment" class="form-control" id="sellPrice"
+                           placeholder="10">
+                </div>
+                <div class="form-group" id="priceFloorCeil" style=" color: red; font-size: 10px">
+                    价格上下限：0 ~ 0
+                </div>
+                <div class="form-group">
+                    <label for="txt_departmentlevel">数量</label>
+                    <input type="text" name="txt_departmentlevel" class="form-control" id="sellAmount"
+                           placeholder="100">
+                </div>
+                <div class="form-group" id="numFloorCeil" style=" color: red; font-size: 10px">
+                    数量上下限：0 ~ 0
+                </div>
+                <!--<div class="form-group">-->
+                <!--<label for="txt_statu">描述</label>-->
+                <!--<input type="text" name="txt_statu" class="form-control" id="txt_statu" placeholder="状态">-->
+                <!--</div>-->
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <label for="txt_departmentlevel" style="float: left">交易密码</label>
+                    <input type="password" name="txt_departmentlevel" class="form-control" id="tradePassword"
+                           placeholder="请输入交易密码">
+                </div>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><span
+                        class="glyphicon glyphicon-remove" aria-hidden="true"></span>取消
+                </button>
+                <button type="button" id="btn_submit" class="btn btn-primary" data-dismiss="modal"><span
+                        class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>确认
+                </button>
+                <script>
+                    $("#btn_submit").click(function () {
+                        var check1 = /(^[1-9](\d+)?(\.\d{1,2})?$)|(^\d\.\d{1,2}$)/;
+                        var check2 = /^[+]{0,1}(\d+)$/;
+                        var price = $("#sellPrice").val();
+                        var amount= $("#sellAmount").val();
+                        // check price
+                        if(check1.exec(price) && price!="" ){
+                            console.log("pass check!");
+                        }
+                        else{
+                            $.message({
+                                message:'请输入正确价格（两位小数）',
+                                type:'warning'
+                            });
+                            return ;
+                        }
+                        // check amount
+                        if(check2.exec(amount) && amount!=""){
+                            console.log("pass check!");
+                        }
+                        else{
+                            $.message({
+                                message:'请输入正确数量（正整数）',
+                                type:'warning'
+                            });
+                            return ;
+                        }
+
+                        var str=$("#priceFloorCeil").html();
+                        var lowprice = str.substring(str.indexOf('：')+1, str.indexOf('~'));
+                        if(parseFloat($("#sellPrice").val()) < parseFloat(lowprice)){
+                            $.message({
+                                message:"违背撮合原则操作，价格低于价格下限",
+                                type:'error'
+                            });
+                            return ;
+                        }
+                        // check the password
+                        $.ajax(
+                            {
+                                url:'/user/checkTradePassword',
+                                type:'POST',
+                                async:false,
+                                dataType: 'json',
+                                data:{
+                                    password: $("#tradePassword").val(),
+                                },
+
+                                success:function(result){
+                                    if(result.result){
+                                        // $.message(result.remark);
+                                        console.log("sell successfully");
+                                        // submit
+                                        $.ajax(
+                                            {
+                                                url:'/user/orderSubmit',
+                                                type:'POST',
+                                                async:false,
+                                                dataType: 'json',
+                                                data:{
+                                                    userId: '0',
+                                                    stockId: $("#sellStockId").val(),
+                                                    pricePer: $("#sellPrice").val(),
+                                                    stockNum: $("#sellAmount").val(),
+                                                    tradeType: 'sell',
+                                                },
+
+                                                success:function(result){
+                                                    if(result.result){
+                                                        $.message(result.remark);
+                                                        // alert(result);
+                                                        console.log("sell successfully");
+                                                        // selltable();
+                                                        sellTable.ajax.reload();
+                                                        refreshselltable();
+                                                        // $(window).attr('location', 'http://localhost:3000/user/index');
+                                                    }
+                                                    else{
+                                                        $.message({
+                                                            message:result.remark,
+                                                            type:'warning'
+                                                        });
+                                                        console.log("sell unsuccessfully");
+                                                        // alert();
+                                                    }
+                                                },
+                                                error: function () {
+                                                    $.message({
+                                                        message:'由于系统原因查询失败',
+                                                        type:'error'
+                                                    });
+                                                    console.log("system error");
+                                                    // alert("由于系统原因查询失败!");
+                                                }
+                                            }
+                                        );
+                                    }
+                                    else{
+                                        $.message({
+                                            message:result.remark,
+                                            type:'warning'
+                                        });
+                                        console.log("sell unsuccessfully");
+                                    }
+                                },
+                                error: function () {
+                                    $.message({
+                                        message:result.remark,
+                                        type:'error'
+                                    });
+                                    console.log("system error");
+                                }
+                            }
+                        );
+
+                    })
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /. WRAPPER  -->
+
+<script>
+    var sellTable;
+    var InterestTable;
+    window.onload = function selltable () {
+        sellTable = $('#sellTable').DataTable({
+            searching: true, //是否开启搜索功能
+            ordering: true,//是否排序
+            bPaginate: true,//是否允许分页
+            bInfo: true,//是否显示表格相关信息
+            bFilter: true,  //检索、筛选框
+            destroy: true,//销毁一个实例
+            // iDisplayLength:5,//分页时每页显示的行数
+            // bLengthChange:false,
+            bLengthChange: true,
+            info: true, //控制总数信息(标准界面右下角显示总数和过滤条数的控件)的显隐
+            "bSort": true, // 排序图标
+
+            "processing": true,//获取数据过程中是否出现加载指示
+            "serverSide": false,//当用ajax请求数据源时，这个属性必须添加
+            "paging": true,//开启分页
+            lengthMenu: [ //自定义分页长度
+                [5, 10, 20, 30, 50],
+                ['5 条', '10 条', '20 条', '30 条', '50 条']
+            ],
+            "ajax": {
+                "url": "/user/Trading_instructions/sell_table",
+                "type": "POST",
+                "data": function (d) {
+                    //删除多余请求参数
+                    for (var key in d) {
+                        if (key.indexOf("columns") == 0 || key.indexOf("order") == 0 || key.indexOf("search") == 0) { //以columns开头的参数删除
+                            delete d[key];
+                        }
+                    }
+                    // var searchParams= {
+                    //     "retryType":$("#retryType").val(),
+                    //     "departmentCode":$("#departmentCode").val()!=""?$("#departmentCode").val():null,
+                    //     "projectCode":$("#projectCode").val()!=""?$("#projectCode").val():null,
+                    //     "serviceName":$("#serviceName").val()!=""?$("#serviceName").val():null,
+                    //     "csrfmiddlewaretoken":csrftoken
+                    // };
+                    // //附加查询参数
+                    // if(searchParams){
+                    //     $.extend(d,searchParams); //给d扩展参数
+                    // }
+                },
+                "dataType": "json",
+                "dataFilter": function (json) {//json是服务器端返回的数据
+                    json = JSON.parse(json);
+                    var returnData = {};
+                    returnData.draw = 3; // json.data.draw;
+                    returnData.recordsTotal = json.length; // json.data.total;//返回数据全部记录
+                    returnData.recordsFiltered = json.length; // json.data.total;//后台不实现过滤功能，每次查询均视作全部结果
+                    returnData.data = json;//返回的数据列表
+                    return JSON.stringify(returnData);//这几个参数都是datatable需要的，必须要
+                }
+            },
+            "columns": [
+                {"data": "personid"},
+                {"data": "stockid"},
+                {"data": "current_price"},
+                {"data": "stocknum"},
+                {"data": "frozenstocknum"},
+                {"data": "stockcost"},
+                {"data": "income"},
+                {"data": "updatetime"},
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        return "<button style='width: 80px;height: 22px;border: medium none;border-radius: 2px;background: RED none repeat scroll 0% 0%;font-size: 14px;color: #FFF;cursor: pointer;' " +
+                            "onclick='funSell(" + "\"" + data.stockid + "\"" + "," + data.stocknum + "," + data.frozenstocknum + "," + data.stockcost + ")'" +
+                            ">卖出</button>";
+                    }
+                }
+            ],
+            "oLanguage": { // 国际化配置
+                "sProcessing": "正在获取数据，请稍后...",
+                "sLengthMenu": "显示 _MENU_ 页",
+                "sZeroRecords": "没有找到数据",
+                "sInfo": "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",
+                "sInfoEmpty": "记录数为0",
+                "sInfoFiltered": "(全部记录数 _MAX_ 条)",
+                "sInfoPostFix": "",
+                "sSearch": "查询 ",
+                "sUrl": "",
+                "oPaginate": {
+                    "sFirst": "第一页",
+                    "sPrevious": "上一页",
+                    "sNext": "下一页",
+                    "sLast": "最后一页"
+                }
+            }
+        });
+        // myTable.ajax.reload();
+
+        InterestTable = $('#interestDataTables').DataTable({
+            // searching: true, //是否开启搜索功能
+            ordering: true,//是否排序
+            bPaginate: true,//是否允许分页
+            bInfo: false,//是否显示表格相关信息
+            bFilter: true,  //检索、筛选框
+            destroy: true,//销毁一个实例
+            // iDisplayLength:5,//分页时每页显示的行数
+            // bLengthChange:false,
+            bLengthChange: true,
+            info: true, //控制总数信息(标准界面右下角显示总数和过滤条数的控件)的显隐
+            "bSort": true, // 排序图标
+
+            "processing": true,//获取数据过程中是否出现加载指示
+            "serverSide": false,//当用ajax请求数据源时，这个属性必须添加
+            "paging": true,//开启分页
+            lengthMenu: [ //自定义分页长度
+                [5, 10, 20, 30, 50],
+                ['5 条', '10 条', '20 条', '30 条', '50 条']
+            ],
+            "ajax": {
+                "url": "/user/searchInterest",
+                "type": "POST",
+                "data": function (d) {
+                    //删除多余请求参数
+                    for (var key in d) {
+                        if (key.indexOf("columns") == 0 || key.indexOf("order") == 0 || key.indexOf("search") == 0) { //以columns开头的参数删除
+                            delete d[key];
+                        }
+                    }
+                    // console.log("xxxxxxxxxxxxxxxxxxx");
+                },
+                "dataType": "json",
+                "dataFilter": function (json) {//json是服务器端返回的数据
+                    console.log("xxxxxxxxxxxxxxxxxxx");
+                    json = JSON.parse(json);
+                    var returnData = {};
+                    returnData.draw = 3; // json.data.draw;
+                    returnData.recordsTotal = json.length; // json.data.total;//返回数据全部记录
+                    returnData.recordsFiltered = json.length; // json.data.total;//后台不实现过滤功能，每次查询均视作全部结果
+                    returnData.data = json;//返回的数据列表
+                    return JSON.stringify(returnData);//这几个参数都是datatable需要的，必须要
+                }
+            },
+            "columns": [
+                {"data": "code"},
+                {"data": "name_stock"},
+                {"data": "current_price"},
+                {"data": "last_endprice"},
+                {"data": "today_startprice"},
+                {"data": "amount"},
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        if (data.permission == 0){
+                            return "否";
+                        }
+                        else{
+                            return "是";
+                        }
+                    }
+                },
+                {"data": "notification"},
+                {"data": "percentagepricechange"},
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        if (data.st == 0){
+                            return "否";
+                        }
+                        else{
+                            return "是";
+                        }
+                    }
+                },
+                {"data": "interestprice"},
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        return "<button style='width: 80px;height: 22px;border: medium none;border-radius: 2px;background: red none repeat scroll 0% 0%;font-size: 16px;color: #FFF;cursor: pointer;' " +
+                            "onclick='deleteInterest(" + "\"" + data.code + "\"" +")'" +
+                            ">删除</button>";
+                    }
+                }
+            ],
+            "oLanguage": { // 国际化配置
+                "sProcessing": "正在获取数据，请稍后...",
+                "sLengthMenu": "显示 _MENU_ 页",
+                "sZeroRecords": "没有找到数据",
+                "sInfo": "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",
+                "sInfoEmpty": "记录数为0",
+                "sInfoFiltered": "(全部记录数 _MAX_ 条)",
+                "sInfoPostFix": "",
+                "sSearch": "查询 ",
+                "sUrl": "",
+                "oPaginate": {
+                    "sFirst": "第一页",
+                    "sPrevious": "上一页",
+                    "sNext": "下一页",
+                    "sLast": "最后一页"
+                }
+            }
+        });
+    };
+
+    function refreshselltable () {
+        sellTable = $('#sellTable').DataTable({
+            searching: true, //是否开启搜索功能
+            ordering: true,//是否排序
+            bPaginate: true,//是否允许分页
+            bInfo: true,//是否显示表格相关信息
+            bFilter: true,  //检索、筛选框
+            destroy: true,//销毁一个实例
+            // iDisplayLength:5,//分页时每页显示的行数
+            // bLengthChange:false,
+            bLengthChange: true,
+            info: true, //控制总数信息(标准界面右下角显示总数和过滤条数的控件)的显隐
+            "bSort": true, // 排序图标
+
+            "processing": true,//获取数据过程中是否出现加载指示
+            "serverSide": false,//当用ajax请求数据源时，这个属性必须添加
+            "paging": true,//开启分页
+            lengthMenu: [ //自定义分页长度
+                [5, 10, 20, 30, 50],
+                ['5 条', '10 条', '20 条', '30 条', '50 条']
+            ],
+            "ajax": {
+                "url": "/user/Trading_instructions/sell_table",
+                "type": "POST",
+                "data": function (d) {
+                    //删除多余请求参数
+                    for (var key in d) {
+                        if (key.indexOf("columns") == 0 || key.indexOf("order") == 0 || key.indexOf("search") == 0) { //以columns开头的参数删除
+                            delete d[key];
+                        }
+                    }
+                    // var searchParams= {
+                    //     "retryType":$("#retryType").val(),
+                    //     "departmentCode":$("#departmentCode").val()!=""?$("#departmentCode").val():null,
+                    //     "projectCode":$("#projectCode").val()!=""?$("#projectCode").val():null,
+                    //     "serviceName":$("#serviceName").val()!=""?$("#serviceName").val():null,
+                    //     "csrfmiddlewaretoken":csrftoken
+                    // };
+                    // //附加查询参数
+                    // if(searchParams){
+                    //     $.extend(d,searchParams); //给d扩展参数
+                    // }
+                },
+                "dataType": "json",
+                "dataFilter": function (json) {//json是服务器端返回的数据
+                    json = JSON.parse(json);
+                    var returnData = {};
+                    returnData.draw = 3; // json.data.draw;
+                    returnData.recordsTotal = json.length; // json.data.total;//返回数据全部记录
+                    returnData.recordsFiltered = json.length; // json.data.total;//后台不实现过滤功能，每次查询均视作全部结果
+                    returnData.data = json;//返回的数据列表
+                    return JSON.stringify(returnData);//这几个参数都是datatable需要的，必须要
+                }
+            },
+            "columns": [
+                {"data": "personid"},
+                {"data": "stockid"},
+                {"data": "stocknum"},
+                {"data": "frozenstocknum"},
+                {"data": "stockcost"},
+                {"data": "income"},
+                {"data": "updatetime"},
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        return "<button style='width: 80px;height: 22px;border: medium none;border-radius: 2px;background: RED none repeat scroll 0% 0%;font-size: 14px;color: #FFF;cursor: pointer;' " +
+                            "onclick='funSell(" + "\"" + data.stockid + "\"" + "," + data.stocknum + "," + data.frozenstocknum + "," + data.stockcost + ")'" +
+                            ">卖出</button>";
+                    }
+                }
+            ],
+            "oLanguage": { // 国际化配置
+                "sProcessing": "正在获取数据，请稍后...",
+                "sLengthMenu": "显示 _MENU_ 页",
+                "sZeroRecords": "没有找到数据",
+                "sInfo": "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",
+                "sInfoEmpty": "记录数为0",
+                "sInfoFiltered": "(全部记录数 _MAX_ 条)",
+                "sInfoPostFix": "",
+                "sSearch": "查询",
+                "sUrl": "",
+                "oPaginate": {
+                    "sFirst": "第一页",
+                    "sPrevious": "上一页",
+                    "sNext": "下一页",
+                    "sLast": "最后一页"
+                }
+            }
+        });
+        // myTable.ajax.reload();
+
+        InterestTable = $('#interestDataTables').DataTable({
+            // searching: true, //是否开启搜索功能
+            ordering: true,//是否排序
+            bPaginate: true,//是否允许分页
+            bInfo: false,//是否显示表格相关信息
+            bFilter: true,  //检索、筛选框
+            destroy: true,//销毁一个实例
+            // iDisplayLength:5,//分页时每页显示的行数
+            // bLengthChange:false,
+            bLengthChange: true,
+            info: true, //控制总数信息(标准界面右下角显示总数和过滤条数的控件)的显隐
+            "bSort": true, // 排序图标
+
+            "processing": true,//获取数据过程中是否出现加载指示
+            "serverSide": false,//当用ajax请求数据源时，这个属性必须添加
+            "paging": true,//开启分页
+            lengthMenu: [ //自定义分页长度
+                [5, 10, 20, 30, 50],
+                ['5 条', '10 条', '20 条', '30 条', '50 条']
+            ],
+            "ajax": {
+                "url": "/user/searchInterest",
+                "type": "POST",
+                "data": function (d) {
+                    //删除多余请求参数
+                    for (var key in d) {
+                        if (key.indexOf("columns") == 0 || key.indexOf("order") == 0 || key.indexOf("search") == 0) { //以columns开头的参数删除
+                            delete d[key];
+                        }
+                    }
+                    // console.log("xxxxxxxxxxxxxxxxxxx");
+                },
+                "dataType": "json",
+                "dataFilter": function (json) {//json是服务器端返回的数据
+                    console.log("xxxxxxxxxxxxxxxxxxx");
+                    json = JSON.parse(json);
+                    var returnData = {};
+                    returnData.draw = 3; // json.data.draw;
+                    returnData.recordsTotal = json.length; // json.data.total;//返回数据全部记录
+                    returnData.recordsFiltered = json.length; // json.data.total;//后台不实现过滤功能，每次查询均视作全部结果
+                    returnData.data = json;//返回的数据列表
+                    return JSON.stringify(returnData);//这几个参数都是datatable需要的，必须要
+                }
+            },
+            "columns": [
+                {"data": "code"},
+                {"data": "name_stock"},
+                {"data": "current_price"},
+                {"data": "last_endprice"},
+                {"data": "today_startprice"},
+                {"data": "amount"},
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        if (data.permission == 0){
+                            return "否";
+                        }
+                        else{
+                            return "是";
+                        }
+                    }
+                },
+                {"data": "notification"},
+                {"data": "percentagepricechange"},
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        if (data.st == 0){
+                            return "否";
+                        }
+                        else{
+                            return "是";
+                        }
+                    }
+                },
+                {"data": "interestprice"},
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        return "<button style='width: 80px;height: 22px;border: medium none;border-radius: 2px;background: red none repeat scroll 0% 0%;font-size: 16px;color: #FFF;cursor: pointer;' " +
+                            "onclick='deleteInterest(" + "\"" + data.code + "\"" +")'" +
+                            ">删除</button>";
+                    }
+                }
+            ],
+            "oLanguage": { // 国际化配置
+                "sProcessing": "正在获取数据，请稍后...",
+                "sLengthMenu": "显示 _MENU_ 页",
+                "sZeroRecords": "没有找到数据",
+                "sInfo": "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",
+                "sInfoEmpty": "记录数为0",
+                "sInfoFiltered": "(全部记录数 _MAX_ 条)",
+                "sInfoPostFix": "",
+                "sSearch": "查询",
+                "sUrl": "",
+                "oPaginate": {
+                    "sFirst": "第一页",
+                    "sPrevious": "上一页",
+                    "sNext": "下一页",
+                    "sLast": "最后一页"
+                }
+            }
+        });
+    };
+</script>
+<script>
+    //注册新增按钮的事件
+    function funSell(stockid, stocknum, frozenstocknum, stockcost) {
+        $('#myModal').modal("show");
+
+        $('#myModal').on('shown.bs.modal', function () {
+            // 执行一些动作...
+            var modal = $(this);
+            // modal.find("#buyStockId").val(code);
+            // $("#buyStockId").val(code+"s");
+
+            $("#myModalLabel").text("卖出股票");
+            $("#sellStockId").val(stockid);
+            $("#sellStockId").attr("disabled","disabled");
+            // $("#sellPrice").attr('placeholder', Math.round(stockcost / (stocknum + frozenstocknum)*100)/100);
+            // $("#sellPrice").val('');
+            // $("#sellAmount").attr('placeholder', "0 - " + (stocknum>0 ? stocknum : 0 ));
+            // $("#sellAmount").val('');
+
+            $.ajax(
+                {
+                    url:'/user/checkFloorCeil',
+                    type:'POST',
+                    data:{
+                        stockid: stockid
+                    },
+
+                    success:function(result){
+                        var jn = $.parseJSON(result);
+                        if(document.getElementById("sellStockId").value == jn[0].code){
+                            console.log("check successfully");
+                            var cp = jn[0].current_price;
+                            var lp = jn[0].last_endprice;
+                            var tp = jn[0].today_startprice;
+                            var pc = jn[0].percentagepricechange;
+
+                            const high = Math.floor(tp * 100 * (1 + pc)) / 100;
+                            const low = Math.floor(tp * 100 * (1 - pc)) / 100;
+                            $("#priceFloorCeil").html("价格上下限：" + (low>0?low:0) + " ~ " + high);
+
+                            $("#sellPrice").attr('placeholder', Math.round((cp + lp + tp)/3*100)/100);
+                            $("#sellPrice").val('');
+
+                            $("#sellAmount").attr('placeholder', "0 ~ " + (stocknum>0 ? stocknum : 0 ));
+                            $("#sellAmount").val('');
+                            $("#numFloorCeil").html("数量上下限：" + "0 ~ " + (stocknum>0 ? stocknum : 0 ));
+                            $("#tradePassword").val('');
+                        }
+                    },
+                    error: function () {
+                        alert("由于系统原因查询失败!");
+                    }
+                }
+            );
+        });
+    }
+
+    function deleteInterest(stockid) {
+        $.ajax(
+            {
+                url: '/user/deleteInterest',
+                type:'POST',
+                data:{
+                    stockid: stockid
+                },
+                success:function(result){
+                    if(result.success){
+                        $.message('删除成功');
+                        InterestTable.ajax.reload();
+                    }else{
+                        $.message({
+                            message:'删除失败',
+                            type:'error'
+                        });
+                    }
+                },
+                error: function () {
+                    $.message({
+                        message:'由于系统原因查询失败',
+                        type:'error'
+                    });
+                }
+            }
+        )
+    }
+</script>
 </body>
 </html>

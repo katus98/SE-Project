@@ -1,0 +1,739 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Free Bootstrap Admin Template : Binary Admin</title>
+    <!-- BOOTSTRAP STYLES-->
+    <link href="/css/bootstrap.css" rel="stylesheet"/>
+    <!-- FONTAWESOME STYLES-->
+    <link href="/css/font-awesome.css" rel="stylesheet"/>
+    <!-- MORRIS CHART STYLES-->
+    <link href="/js/morris/morris-0.4.3.min.css" rel="stylesheet"/>
+    <!-- CUSTOM STYLES-->
+    <link href="/css/custom.css" rel="stylesheet"/>
+    <!-- GOOGLE FONTS-->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+    <!-- TABLE STYLES-->
+    <link href="/js/dataTables/dataTables.bootstrap.css" rel="stylesheet"/>
+    <!--for 弹出框提示-->
+    <link rel="stylesheet" href="/css/message.css">
+    <!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">-->
+
+    <!-- SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME-->
+    <!-- JQUERY SCRIPTS -->
+    <script src="/js/jquery-1.10.2.js"></script>
+    <!-- BOOTSTRAP SCRIPTS -->
+    <script src="/js/bootstrap.min.js"></script>
+    <!-- METISMENU SCRIPTS -->
+    <script src="/js/jquery.metisMenu.js"></script>
+    <!-- MORRIS CHART SCRIPTS -->
+    <script src="/js/morris/raphael-2.1.0.min.js"></script>
+    <script src="/js/morris/morris.js"></script>
+    <!-- DATA TABLE SCRIPTS -->
+    <script src="/js/dataTables/jquery.dataTables.js"></script>
+    <script src="/js/dataTables/dataTables.bootstrap.js"></script>
+    <!--for 弹出框提示-->
+    <script src="/js/message.js"></script>
+    <!--股票提示-->
+    <script src="/js/checkInterest.js"></script>
+
+    <!--buy table setting-->
+    <script>
+        var buyTable;
+        $(document).ready(function() {
+            buyTable = $('#buyTable').DataTable( {
+                searching: true, //是否开启搜索功能
+                ordering: true,//是否排序
+                bPaginate:true,//是否允许分页
+                bInfo:true,//是否显示表格相关信息
+                bFilter:true,  //检索、筛选框
+                destroy:true,//销毁一个实例
+                // iDisplayLength:5,//分页时每页显示的行数
+                // bLengthChange:false,
+                bLengthChange:true,
+                info:true, //控制总数信息(标准界面右下角显示总数和过滤条数的控件)的显隐
+                "bSort" : true, // 排序图标
+
+                "processing": true,//获取数据过程中是否出现加载指示
+                "serverSide": false,//当用ajax请求数据源时，这个属性必须添加
+                "paging": true,//开启分页
+                lengthMenu: [ //自定义分页长度
+                    [ 5, 10, 20, 30, 50 ],
+                    [ '5 页', '10 页', '20 页', '30 页', '50 页' ]
+                ],
+                "ajax": {
+                    "url": "/user/Trading_instructions/buy_table",
+                    "type": "POST",
+                    "data": function (d) {
+                        //删除多余请求参数
+                        for(var key in d){
+                            if(key.indexOf("columns")==0||key.indexOf("order")==0||key.indexOf("search")==0){ //以columns开头的参数删除
+                                delete d[key];
+                            }
+                        }
+                        // var searchParams= {
+                        //     "retryType":$("#retryType").val(),
+                        //     "departmentCode":$("#departmentCode").val()!=""?$("#departmentCode").val():null,
+                        //     "projectCode":$("#projectCode").val()!=""?$("#projectCode").val():null,
+                        //     "serviceName":$("#serviceName").val()!=""?$("#serviceName").val():null,
+                        //     "csrfmiddlewaretoken":csrftoken
+                        // };
+                        // //附加查询参数
+                        // if(searchParams){
+                        //     $.extend(d,searchParams); //给d扩展参数
+                        // }
+                    },
+                    "dataType" : "json",
+                    "dataFilter": function (json) {//json是服务器端返回的数据
+                        json = JSON.parse(json);
+                        var returnData = {};
+                        returnData.draw = 3; // json.data.draw;
+                        returnData.recordsTotal = json.length; // json.data.total;//返回数据全部记录
+                        returnData.recordsFiltered = json.length; // json.data.total;//后台不实现过滤功能，每次查询均视作全部结果
+                        returnData.data = json;//返回的数据列表
+                        return JSON.stringify(returnData);//这几个参数都是datatable需要的，必须要
+                    }
+                },
+                "columns": [
+                    { "data": "code" },
+                    { "data": "name_stock" },
+                    { "data": "current_price" },
+                    { "data": "last_endprice" },
+                    { "data": "today_startprice" },
+                    { "data": "amount" },
+                    { "data": "permission" },
+                    { "data": "notification" },
+                    { "data": "percentagepricechange" },
+                    { "data": "st" },
+                    { "data": null, "render":function (data, type, row, meta) {
+                            return "<button style='width: 80px;height: 22px;border: medium none;border-radius: 2px;background: #00A3D9 none repeat scroll 0% 0%;font-size: 14px;color: #FFF;cursor: pointer;' " +
+                                "onclick='fn_BID(" + "\""+ data.code +"\"" +","+ data.current_price +","+
+                                data.last_endprice +","+ data.today_startprice + ")'" +
+                                ">SELECT</button>";
+                        }}
+                ],
+                "oLanguage" : { // 国际化配置
+                    "sProcessing" : "正在获取数据，请稍后...",
+                    "sLengthMenu" : "显示 _MENU_ 条",
+                    "sZeroRecords" : "没有找到数据",
+                    "sInfo" : "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",
+                    "sInfoEmpty" : "记录数为0",
+                    "sInfoFiltered" : "(全部记录数 _MAX_ 条)",
+                    "sInfoPostFix" : "",
+                    "sSearch" : "查询 ",
+                    "sUrl" : "",
+                    "oPaginate" : {
+                        "sFirst" : "第一页",
+                        "sPrevious" : "上一页",
+                        "sNext" : "下一页",
+                        "sLast" : "最后一页"
+                    }
+                }
+            });
+            // buyTable.ajax.reload();
+
+        });
+    </script>
+
+    <!--sell table setting-->
+    <script>
+        var sellTable;
+        $(document).ready(function() {
+            sellTable = $('#sellTable').DataTable( {
+                searching: true, //是否开启搜索功能
+                ordering: true,//是否排序
+                bPaginate:true,//是否允许分页
+                bInfo:true,//是否显示表格相关信息
+                bFilter:true,  //检索、筛选框
+                destroy:true,//销毁一个实例
+                // iDisplayLength:5,//分页时每页显示的行数
+                // bLengthChange:false,
+                bLengthChange:true,
+                info:true, //控制总数信息(标准界面右下角显示总数和过滤条数的控件)的显隐
+                "bSort" : true, // 排序图标
+
+                "processing": true,//获取数据过程中是否出现加载指示
+                "serverSide": false,//当用ajax请求数据源时，这个属性必须添加
+                "paging": true,//开启分页
+                lengthMenu: [ //自定义分页长度
+                    [ 5, 10, 20, 30, 50 ],
+                    [ '5 页', '10 页', '20 页', '30 页', '50 页' ]
+                ],
+                "ajax": {
+                    "url": "/user/Trading_instructions/sell_table",
+                    "type": "POST",
+                    "data": function (d) {
+                        //删除多余请求参数
+                        for(var key in d){
+                            if(key.indexOf("columns")==0||key.indexOf("order")==0||key.indexOf("search")==0){ //以columns开头的参数删除
+                                delete d[key];
+                            }
+                        }
+                        // var searchParams= {
+                        //     "retryType":$("#retryType").val(),
+                        //     "departmentCode":$("#departmentCode").val()!=""?$("#departmentCode").val():null,
+                        //     "projectCode":$("#projectCode").val()!=""?$("#projectCode").val():null,
+                        //     "serviceName":$("#serviceName").val()!=""?$("#serviceName").val():null,
+                        //     "csrfmiddlewaretoken":csrftoken
+                        // };
+                        // //附加查询参数
+                        // if(searchParams){
+                        //     $.extend(d,searchParams); //给d扩展参数
+                        // }
+                    },
+                    "dataType" : "json",
+                    "dataFilter": function (json) {//json是服务器端返回的数据
+                        json = JSON.parse(json);
+                        var returnData = {};
+                        returnData.draw = 3; // json.data.draw;
+                        returnData.recordsTotal = json.length; // json.data.total;//返回数据全部记录
+                        returnData.recordsFiltered = json.length; // json.data.total;//后台不实现过滤功能，每次查询均视作全部结果
+                        returnData.data = json;//返回的数据列表
+                        return JSON.stringify(returnData);//这几个参数都是datatable需要的，必须要
+                    }
+                },
+                "columns": [
+                    { "data": "personid" },
+                    { "data": "stockid" },
+                    { "data": "stocknum" },
+                    { "data": "frozenstocknum" },
+                    { "data": "stockcost" },
+                    { "data": "updatetime" },
+                    { "data": null, "render":function (data, type, row, meta) {
+                            return "<button style='width: 80px;height: 22px;border: medium none;border-radius: 2px;background: #00A3D9 none repeat scroll 0% 0%;font-size: 14px;color: #FFF;cursor: pointer;' " +
+                                "onclick='fn_ASK(" +"\""+ data.stockid +"\""+","+ data.stocknum +","+ data.frozenstocknum +","+ data.stockcost + ")'" +
+                                ">SELECT</button>";
+                        }}
+                ],
+                "oLanguage" : { // 国际化配置
+                    "sProcessing" : "正在获取数据，请稍后...",
+                    "sLengthMenu" : "显示 _MENU_ 条",
+                    "sZeroRecords" : "没有找到数据",
+                    "sInfo" : "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",
+                    "sInfoEmpty" : "记录数为0",
+                    "sInfoFiltered" : "(全部记录数 _MAX_ 条)",
+                    "sInfoPostFix" : "",
+                    "sSearch" : "查询 ",
+                    "sUrl" : "",
+                    "oPaginate" : {
+                        "sFirst" : "第一页",
+                        "sPrevious" : "上一页",
+                        "sNext" : "下一页",
+                        "sLast" : "最后一页"
+                    }
+                }
+            });
+            // myTable.ajax.reload();
+
+        });
+    </script>
+
+    <!--undo table setting-->
+    <script>
+        var undoTable;
+        $(document).ready(function() {
+            undoTable = $('#undoTable').DataTable( {
+                searching: true, //是否开启搜索功能
+                ordering: true,//是否排序
+                bPaginate:true,//是否允许分页
+                bInfo:true,//是否显示表格相关信息
+                bFilter:true,  //检索、筛选框
+                destroy:true,//销毁一个实例
+                // iDisplayLength:5,//分页时每页显示的行数
+                // bLengthChange:false,
+                bLengthChange:true,
+                info:true, //控制总数信息(标准界面右下角显示总数和过滤条数的控件)的显隐
+                "bSort" : true, // 排序图标
+
+                "processing": true,//获取数据过程中是否出现加载指示
+                "serverSide": false,//当用ajax请求数据源时，这个属性必须添加
+                "paging": true,//开启分页
+                lengthMenu: [ //自定义分页长度
+                    [ 5, 10, 20, 30, 50 ],
+                    [ '5 页', '10 页', '20 页', '30 页', '50 页' ]
+                ],
+                "ajax": {
+                    "url": "/user/Trading_instructions/undo_table",
+                    "type": "POST",
+                    "data": function (d) {
+                        //删除多余请求参数
+                        for(var key in d){
+                            if(key.indexOf("columns")==0||key.indexOf("order")==0||key.indexOf("search")==0){ //以columns开头的参数删除
+                                delete d[key];
+                            }
+                        }
+                        // var searchParams= {
+                        //     "retryType":$("#retryType").val(),
+                        //     "departmentCode":$("#departmentCode").val()!=""?$("#departmentCode").val():null,
+                        //     "projectCode":$("#projectCode").val()!=""?$("#projectCode").val():null,
+                        //     "serviceName":$("#serviceName").val()!=""?$("#serviceName").val():null,
+                        //     "csrfmiddlewaretoken":csrftoken
+                        // };
+                        // //附加查询参数
+                        // if(searchParams){
+                        //     $.extend(d,searchParams); //给d扩展参数
+                        // }
+                    },
+                    "dataType" : "json",
+                    "dataFilter": function (json) {//json是服务器端返回的数据
+                        json = JSON.parse(json);
+                        var returnData = {};
+                        returnData.draw = 3; // json.data.draw;
+                        returnData.recordsTotal = json.length; // json.data.total;//返回数据全部记录
+                        returnData.recordsFiltered = json.length; // json.data.total;//后台不实现过滤功能，每次查询均视作全部结果
+                        returnData.data = json;//返回的数据列表
+                        return JSON.stringify(returnData);//这几个参数都是datatable需要的，必须要
+                    }
+                },
+                "columns": [
+                    // { "data": "type" },
+                    {
+                        "data": null, "render": function (data, type, row, meta) {
+                            if(data.type == "SELL"){
+                                return "卖出";
+                            }
+                            else{
+                                return "买入";
+                            }
+                        }
+                    },
+                    { "data": "id" },
+                    { "data": "time" },
+                    { "data": "uid" },
+                    { "data": "code" },
+                    { "data": "shares" },
+                    { "data": "price" },
+                    { "data": "shares2trade" },
+                    { "data": "timearchived" },
+                    // { "data": "status" },
+                    {
+                        "data": null, "render": function (data, type, row, meta) {
+                            if(data.status == "withdrawn"){
+                                return "已撤销";
+                            }
+                            else if(data.status == "partial"){
+                                return "未交易";
+                            }
+                            else if(data.status == "complete"){
+                                return "交易完成";
+                            }
+                            else if(data.status == "expired"){
+                                return "指令过期";
+                            }
+                        }
+                    },
+                    { "data": null, "render":function (data, type, row, meta) {
+                            if(data.status == 'partial'){
+                                return "<button style='width: 80px;height: 22px;border: medium none;border-radius: 2px;background: #00A3D9 none repeat scroll 0% 0%;font-size: 14px;color: #FFF;cursor: pointer;' " +
+                                    "onclick='fn_UNDO(" +"\""+ data.type +"\""+"," + data.id  + ")'" +
+                                    ">撤销</button>";
+                            }
+                            else{
+                                return "<button type=\"button\" disabled=\"disabled\" style='width: 80px;height: 22px;border: medium none;border-radius: 2px;background: #808080 none repeat scroll 0% 0%;font-size: 14px;color: #FFF;cursor: pointer;'" +
+                                    ">撤销</button>";
+                            }
+                        }}
+                ],
+                "oLanguage" : { // 国际化配置
+                    "sProcessing" : "正在获取数据，请稍后...",
+                    "sLengthMenu" : "显示 _MENU_ 条",
+                    "sZeroRecords" : "没有找到数据",
+                    "sInfo" : "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",
+                    "sInfoEmpty" : "记录数为0",
+                    "sInfoFiltered" : "(全部记录数 _MAX_ 条)",
+                    "sInfoPostFix" : "",
+                    "sSearch" : "查询 ",
+                    "sUrl" : "",
+                    "oPaginate" : {
+                        "sFirst" : "第一页",
+                        "sPrevious" : "上一页",
+                        "sNext" : "下一页",
+                        "sLast" : "最后一页"
+                    }
+                }
+            });
+            // undoTable.ajax.reload();
+
+        });
+    </script>
+
+    <script language=javascript>
+        // var int=self.setInterval("clock()",5000);  // 以毫秒计
+        function clock()
+        {
+            undoTable.ajax.reload();
+        }
+    </script>
+
+    <!-- CUSTOM SCRIPTS -->
+    <script src="/js/custom.js"></script>
+</head>
+<body>
+<div id="wrapper">
+    <% include components/nav.inc.html %>
+    <script>
+        $("#TradingBtn").addClass("active-menu");
+    </script>
+    <div id="page-wrapper">
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>交易指令界面</h2>
+                    <!--<h5>欢迎王洛洛，很开心在这里遇见你！</h5>-->
+                    <br>
+                </div>
+            </div>
+
+            <!-- /. ROW  -->
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            指令界面
+                        </div>
+                        <div class="panel-body">
+                            <ul class="nav nav-tabs">
+                                <!--<li class="active"><a href="#buy" data-toggle="tab">购买指令</a>-->
+                                <!--</li>-->
+                                <!--<li class=""><a href="#sell" data-toggle="tab">出售指令</a>-->
+                                <!--</li>-->
+                                <li class="active"><a href="#undo" data-toggle="tab">撤销指令</a>
+                                </li>
+                                <li class=""><a href="#settings" data-toggle="tab">设置</a>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content">
+                                <div class="tab-pane fade active in" id="undo">
+                                    <h4>撤销 功能页</h4>
+                                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;恭喜你成功进入指令管理界面，在这里你可以查看所有的
+                                        历史记录指令，并允许你对为成交的指令进行修改。通过界面上的撤销功能，可以撤销发出的指令。指令如果尚未执行，
+                                        则可以撤销，如果指令已经执行，拒绝投资者的请求。
+                                    </p>
+                                    <p></p>
+
+                                    <!-- Form Elements 3 -->
+                                    <br>
+                                    <!--  Advanced Tables -->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            现有的表格
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered table-hover" id="undoTable">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>指令类型</th>
+                                                        <th>ID</th>
+                                                        <th>时间</th>
+                                                        <th>用户ID</th>
+                                                        <th>股票ID</th>
+                                                        <th>总交易数量</th>
+                                                        <th>价格</th>
+                                                        <th>未交易数量</th>
+                                                        <th>存档时间</th>
+                                                        <th>状态&nbsp;&nbsp;</th>
+                                                        <th>操作</th>
+                                                    </tr>
+                                                    </thead>
+
+                                                    <tbody>
+                                                    <tr>
+                                                        <th>指令类型</th>
+                                                        <th>ID</th>
+                                                        <th>时间</th>
+                                                        <th>用户ID</th>
+                                                        <th>股票ID</th>
+                                                        <th>总交易数量</th>
+                                                        <th>价格</th>
+                                                        <th>未交易数量</th>
+                                                        <th>存档时间</th>
+                                                        <th>状态&nbsp;&nbsp;</th>
+                                                        <th>操作</th>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--  End Advanced Tables -->
+
+                                    <!-- End Form Elements 3 -->
+
+                                </div>
+                                <div class="tab-pane fade" id="settings">
+                                    <h4>设置页面</h4>
+                                    <p>洛雷姆·伊普索姆·多洛尔·西特·阿米特，连续的阿迪皮西克精英，赛德·多·艾乌斯莫德节奏
+
+                                        在阿利夸多洛里马格纳和拉伯之间。乌特伊姆·德米尼姆·维尼姆，奎斯·诺斯特德
+
+                                        实习，实习，实习杜伊斯奥特
+
+                                        伊鲁尔·多尔（Irure Dolor in Reprehenderit）在色彩斑斓的维利特岛（Velit Esse Cillum Dolore Eu Fugiat Nulla）
+
+                                        副医师。除了西方国家以外，库皮达特不胆怯，在官方场合也不谦虚。
+
+                                        沙漠中的软体动物是最辛苦的。</p>
+                                    <p>未完待续。。。。。。。。。</p>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /. ROW  -->
+            <hr/>
+            <div class="row">
+                <div class="col-md-12">
+
+                </div>
+            </div>
+            <!-- /. ROW  -->
+
+            <!-- /. ROW  -->
+        </div>
+        <!-- /. PAGE INNER  -->
+    </div>
+    <!-- /. PAGE WRAPPER  -->
+</div>
+<!-- /. WRAPPER  -->
+
+<!--back-end-->
+
+<!--btn_bid-->
+<script>
+    $("#btn_bid").click(function () {
+        $.ajax(
+            {
+                url:'/user/Trading_instructions/btn_bid',
+                type:'POST',
+                data:{
+                    stockid: $("#bid_stockid").val(),
+                    price: $("#bid_price").val(),
+                    share: $("#bid_share").val()
+                },
+
+                success:function(data){
+                    if(data.success){
+                        console.log("insert successfully");
+                        // console.log(result);
+                        alert("BID OPERATION SUCCESSFULLY !!!");
+                        // alert("Register successfully!\nYou will return login page in 3 seconds.");
+                    }else{
+                        console.log("insert unsuccessfully");
+                        alert("Insufficient fund account balance!!!");
+                    }
+                    buyTable.ajax.reload();
+                },
+                error: function () {
+                    alert("由于系统原因查询失败!");
+                }
+            }
+        )
+        buyTable.ajax.reload();
+        // alert("BID OPERATION SUCCESSFULLY !!!");
+    })
+</script>
+
+<!--fn_BID-->
+<script>
+    function fn_getmoneyaccount(cp) {
+        var availablemoney;
+        $.ajax(
+            {
+                url:'/user/Trading_instructions/get_availablemoney',
+                type:'POST',
+                success:function(results){
+                    availablemoney = results;
+                    // return results;
+                    var json = $.parseJSON(results);
+                    var element_share = document.getElementById("bid_share");
+                    element_share.placeholder = "1-" + Math.ceil(availablemoney/cp);
+                    element_share.value = '';
+                }
+            }
+        );
+    }
+
+    function fn_BID(code, cp, lp, tp) {
+        var element_stockid = document.getElementById("bid_stockid");
+        var element_price = document.getElementById("bid_price");
+        var element_share = document.getElementById("bid_share");
+
+        element_stockid.value = code;
+        element_price.placeholder = (cp+lp+tp)/3;
+        element_price.value = '';
+        fn_getmoneyaccount(cp);
+
+        alert("SELECT OPERATION SUCCESSFULLY !!!");
+    }
+</script>
+
+<!--btn_asks-->
+<script>
+    $("#btn_ask").click(function () {
+        $.ajax(
+            {
+                url:'/user/Trading_instructions/btn_ask',
+                type:'POST',
+                data:{
+                    stockid: $("#ask_stockid").val(),
+                    price: $("#ask_price").val(),
+                    share: $("#ask_share").val()
+                },
+
+                success:function(data){
+                    if(data.success){
+                        console.log("insert successfully");
+                        // console.log(result);
+                        alert("Register successfully!\nYou will return login page in 3 seconds.");
+                    }else{
+                        console.log("insert unsuccessfully");
+                        alert("The total number of shares sold should not exceed the total number of shares held by investors.");
+                    }
+                    // sellTable.clean();
+                    sellTable.ajax.reload();
+                },
+                error: function () {
+                    alert("由于系统原因查询失败!");
+                }
+            }
+        );
+        // sellTable.ajax.reload();
+    });
+</script>
+
+<!--fn_ASK-->
+<script>
+    function fn_ASK(stockid, stocknum, frozenstocknum, stockcost) {
+        var element_stockid = document.getElementById("ask_stockid");
+        var element_price = document.getElementById("ask_price");
+        var element_share = document.getElementById("ask_share");
+
+        element_stockid.value = stockid;
+        element_price.placeholder = stockcost / (stocknum + frozenstocknum);
+        element_price.value = '';
+        element_share.placeholder = "1-" + stocknum;
+        element_share.value = '';
+
+        alert("SELECT OPERATION SUCCESSFULLY !!!");
+    }
+</script>
+
+<!--btn_undo useless-->
+<script>
+    $("#btn_undo").click(function () {
+        $.ajax(
+            {
+                url:'/user/Trading_instructions/btn_undo',
+                type:'POST',
+                data:{
+                    id:9
+                },
+
+                success:function(data){
+                    if(data.success){
+                        console.log("insert successfully");
+                        console.log(result);
+                        alert("Register successfully!\nYou will return login page in 3 seconds.");
+                    }else{
+                        console.log("insert unsuccessfully");
+                        alert("Error!Something Wrong!");
+                    }
+                },
+                error: function () {
+                    alert("由于系统原因查询失败!");
+                }
+            }
+        )
+        undoTable.ajax.reload();
+    })
+</script>
+
+<!--fn_UNDO-->
+<script>
+    function fn_UNDO(type, id) {
+        $.ajax(
+            {
+                url:'/user/withdrawInstruction',
+                type:'POST',
+                data:{
+                    type:type,
+                    id:id,
+                },
+
+                success:function(result){
+                    $.message('撤销成功');
+                    // alert(result);
+                    console.log("undo successfully");
+                    undoTable.ajax.reload();
+                },
+                error: function () {
+                    $.message({
+                        message:'由于系统原因查询失败!',
+                        type:'error'
+                    });
+                    // alert("由于系统原因查询失败!");
+                }
+            }
+        );
+        // undoTable.ajax.reload();
+        // alert("UNDO OPERATION SUCCESSFULLY !!!");
+    }
+</script>
+
+<!--fn_refreshTable-->
+<script>
+    function refreshTable (jsonstr, elementId) {
+        document.getElementById(elementId).innerHTML = "";
+        var str1 = "";
+        var json = $.parseJSON(jsonstr);
+
+        for (let i in json) {
+            str1 +=
+                "<tr class=\"odd gradeX\">\n" +
+                "<td>" + json[i].id + "</td>\n" +
+                "<td>" + json[i].time + "</td>\n" +
+                "<td>" + json[i].uid + "</td>\n" +
+                "<td>" + json[i].code + "</td>\n" +
+                "<td>" + json[i].shares + "</td>\n" +
+                "<td>" + json[i].price + "</td>\n" +
+                "<td>" + json[i].shares2trade + "</td>\n" +
+                "<td>" + json[i].timearchived + "</td>\n" +
+                "<td>" + json[i].status + "</td>\n" +
+                "</tr>\n";
+        }
+        document.getElementById(elementId).innerHTML = str1;
+    }
+</script>
+
+<!--byn_refresh_bids_table-->
+<script>
+    $("#refresh_bids_table").click(function () {
+        $.ajax({
+            url:'/user/Trading_instructions/btn_selectTable',
+            type:'POST',
+            data:{
+                searchtype: "bids"
+            },
+
+            success:function(result){
+                console.log("select successfully");
+                console.log(result);
+                refreshTable(result, "bid_tbody_table");
+                alert("search successfully!");
+            },
+            error: function () {
+                console.log("select unsuccessfully");
+                alert("Error!Something Wrong!");
+            }
+        })
+    })
+</script>
+
+</body>
+</html>

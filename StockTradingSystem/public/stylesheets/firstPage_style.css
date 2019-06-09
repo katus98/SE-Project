@@ -7,7 +7,7 @@ html, body {
 }
 
 .head-section {
-  background-image: url(../images/backgrounds/1.jpg);
+  background-image: url(../images/backgrounds/2.jpg);
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
@@ -64,7 +64,7 @@ html, body {
   }
 
 .eq-section, .workflow-section {
-  background-image: url(../images/backgrounds/2.jpg);
+  background-image: url(../images/backgrounds/1.jpg);
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
@@ -87,7 +87,7 @@ html, body {
 }
 
 .third-section {
-  background-image: url(../images/backgrounds/3.jpg);
+  background-image: url(../images/backgrounds/4.jpg);
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
@@ -106,7 +106,7 @@ html, body {
     }
 
 .perturb-section {
-  background-image: url(../images/backgrounds/4.jpg);
+  background-image: url(../images/backgrounds/3.jpg);
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;

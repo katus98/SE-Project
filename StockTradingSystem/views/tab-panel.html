@@ -1,0 +1,1621 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Free Bootstrap Admin Template : Binary Admin</title>
+    <!-- BOOTSTRAP STYLES-->
+    <link href="/css/bootstrap.css" rel="stylesheet"/>
+    <!-- FONTAWESOME STYLES-->
+    <link href="/css/font-awesome.css" rel="stylesheet"/>
+    <!-- MORRIS CHART STYLES-->
+    <link href="/js/morris/morris-0.4.3.min.css" rel="stylesheet"/>
+    <!-- CUSTOM STYLES-->
+    <link href="/css/custom.css" rel="stylesheet"/>
+    <!-- GOOGLE FONTS-->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+    <!-- TABLE STYLES-->
+    <link href="/js/dataTables/dataTables.bootstrap.css" rel="stylesheet"/>
+    <!--for 弹出框提示-->
+    <link rel="stylesheet" href="/css/message.css">
+
+    <!-- JQUERY SCRIPTS -->
+    <script src="/js/jquery-1.10.2.js"></script>
+    <!-- BOOTSTRAP SCRIPTS -->
+    <script src="/js/bootstrap.min.js"></script>
+    <!-- METISMENU SCRIPTS -->
+    <script src="/js/jquery.metisMenu.js"></script>
+    <!-- MORRIS CHART SCRIPTS -->
+    <script src="/js/morris/raphael-2.1.0.min.js"></script>
+    <script src="/js/morris/morris.js"></script>
+    <!-- CUSTOM SCRIPTS -->
+    <script src="/js/custom.js"></script>
+    <!-- DATA TABLE SCRIPTS -->
+    <script src="/js/dataTables/jquery.dataTables.js"></script>
+    <script src="/js/dataTables/dataTables.bootstrap.js"></script>
+    <script src="/js/accountFunction.js"></script>
+    <!--for 弹出框提示-->
+    <script src="/js/message.js"></script>
+    <!--股票提示-->
+    <script src="/js/checkInterest.js"></script>
+</head>
+<body>
+<div id="wrapper">
+    <% include components/nav.inc.html %>
+    <script>
+        $("#tab-panelBtn").addClass("active-menu");
+
+    </script>
+    <div id="page-wrapper">
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>查询股票</h2>
+                    <!--<h5>Welcome Jhon Deo , Love to see you back. </h5>-->
+                </div>
+            </div>
+
+            <!-- /. ROW  -->
+            <hr/>
+
+            <!--<div class="panel panel-default col-md-12">-->
+                <!--<div class="panel-heading"></div>-->
+            <div class="col-md-6">
+                <!--<h4 align="center">按信息查询</h4>-->
+                <form role="form">
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">@股票代码</span>
+                        <input type="text" class="form-control" placeholder="股票代码" id="stockID">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" id="searchBtn1">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">@股票名称</span>
+                        <input type="text" class="form-control" placeholder="股票名称" id="stockName">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" id="searchBtn3">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <!--<h4 align="center">按价格查询</h4>-->
+                <form>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">$价格下限</span>
+                        <input type="text" class="form-control" id="priceFloor">
+                        <!--<span class="input-group-addon"></span>-->
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">$价格上限</span>
+                        <input type="text" class="form-control" id="priceCap">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" id="searchBtn2">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+
+            <!--</div>-->
+            <hr/>
+
+
+            <div class="col-md-12">
+                <!-- Advanced Tables -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        股票列表
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover" id="dataTables">
+                                <thead>
+                                <tr>
+                                    <th>股票代码</th>
+                                    <th>股票名称</th>
+                                    <th>现价</th>
+                                    <th>最高买价</th>
+                                    <th>最低卖价</th>
+                                    <th>日最高成交价</th>
+                                    <th>日最低成交价</th>
+                                    <th>周最高成交价</th>
+                                    <th>周最低成交价</th>
+                                    <th>本月最高成交价</th>
+                                    <th>本月最低成交价</th>
+                                    <th>股票公告</th>
+                                    <!--<th>详细信息</th>-->
+                                    <th>操作</th>
+                                    <th>关注</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!--End Advanced Tables -->
+            </div>
+        </div>
+        <!-- /. PAGE INNER  -->
+    </div>
+    <!-- /. PAGE WRAPPER  -->
+</div>
+
+
+<div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">买入股票</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label for="txt_departmentname">股票代码</label>
+                    <input type="text" name="txt_departmentname" class="form-control" id="buyStockId">
+
+                </div>
+                <div class="form-group">
+                    <label for="txt_parentdepartment">预期价格</label>
+                    <input type="text" name="txt_parentdepartment" class="form-control" id="buyPrice"
+                           oninput="realtimecheck(event)" onporpertychange="realtimecheck(event)">
+                </div>
+                <div class="form-group" id="priceFloorCeil" style=" color: red; font-size: 10px">
+                    价格上下限：0 ~ 0
+                </div>
+                <div class="form-group">
+                    <label for="txt_departmentlevel">数量</label>
+                    <input type="text" name="txt_departmentlevel" class="form-control" id="buyAmount">
+                </div>
+                <div class="form-group" id="numFloorCeil" style=" color: red; font-size: 10px">
+                    数量上下限：0 ~ 0
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <label for="txt_departmentlevel" style="float: left">交易密码</label>
+                    <input type="password" name="txt_departmentlevel" class="form-control" id="tradePassword"
+                           placeholder="请输入交易密码">
+                </div>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><span
+                        class="glyphicon glyphicon-remove" aria-hidden="true"></span>取消
+                </button>
+                <button type="button" id="btn_submit" class="btn btn-primary" data-dismiss="modal"><span
+                        class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>确认
+                </button>
+            </div>
+            <script>
+                $("#btn_submit").click(function () {
+                    var check1 = /(^[1-9](\d+)?(\.\d{1,2})?$)|(^\d\.\d{1,2}$)/;
+                    var check2 = /^[+]{0,1}(\d+)$/;
+                    var price = $("#buyPrice").val();
+                    var amount= $("#buyAmount").val();
+                    // check price
+                    if(check1.exec(price) && price!="" ){
+                        console.log("pass check!");
+                    }
+                    else{
+                        $.message({
+                            message:'请输入正确价格（两位小数）',
+                            type:'warning'
+                        });
+                        return ;
+                    }
+                    // check amount
+                    if(check2.exec(amount) && amount!=""){
+                        console.log("pass check!");
+                    }
+                    else{
+                        $.message({
+                            message:'请输入正确数量（正整数）',
+                            type:'warning'
+                        });
+                        return ;
+                    }
+
+                    var str=$("#priceFloorCeil").html();
+                    var lowprice = str.substring(str.indexOf('：')+1, str.indexOf('~'));
+                    if(parseFloat($("#buyPrice").val()) < parseFloat(lowprice)){
+                        $.message({
+                            message:"违背撮合原则操作，价格低于价格下限",
+                            type:'error'
+                        });
+                        return ;
+                    }
+                    // check the password
+                    $.ajax(
+                        {
+                            url:'/user/checkTradePassword',
+                            type:'POST',
+                            async:false,
+                            dataType: 'json',
+                            data:{
+                                password: $("#tradePassword").val(),
+                            },
+
+                            success:function(result){
+                                if(result.result){
+                                    // $.message(result.remark);
+                                    console.log("sell successfully");
+                                    // submit
+                                    $.ajax(
+                                        {
+                                            url:'/user/orderSubmit',
+                                            type:'POST',
+                                            async:false,
+                                            dataType: 'json',
+                                            data:{
+                                                userId: '0',
+                                                stockId: $("#buyStockId").val(),
+                                                pricePer: $("#buyPrice").val(),
+                                                stockNum: $("#buyAmount").val(),
+                                                tradeType: 'buy',
+                                            },
+
+                                            success:function(result){
+                                                if(result.result){
+                                                    $.message(result.remark);
+                                                    // alert(result);
+                                                    console.log("sell successfully");
+                                                    Table.ajax.reload();
+                                                    refreshbuytable();
+                                                    // $("#dataTables").DataTable().ajax.reload(null,false);
+                                                    // $(window).attr('location', 'http://localhost:3000/user/tab-panel');
+                                                }
+                                                else{
+                                                    $.message({
+                                                        message:result.remark,
+                                                        type:'warning'
+                                                    });
+                                                }
+                                            },
+                                            error: function () {
+                                                $.message({
+                                                    message:'由于系统原因查询失败!',
+                                                    type:'error'
+                                                });
+                                                // alert("由于系统原因查询失败!");
+                                            }
+                                        }
+                                    )
+                                }
+                                else{
+                                    $.message({
+                                        message:result.remark,
+                                        type:'warning'
+                                    });
+                                    console.log("sell unsuccessfully");
+                                }
+                            },
+                            error: function () {
+                                $.message({
+                                    message:result.remark,
+                                    type:'error'
+                                });
+                                console.log("system error");
+                            }
+                        }
+                    );
+
+                })
+            </script>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal2"  role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" id="btn_cancelx"class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">关注此支股票</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label for="txt_departmentname">股票代码</label>
+                    <input type="text" name="txt_departmentname" class="form-control" id="interestStockId"
+                           placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="txt_parentdepartment">提醒价格</label>
+                    <input type="text" name="txt_parentdepartment" class="form-control" id="interestPrice"
+                           placeholder="">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn_cancel2" class="btn btn-default" data-dismiss="modal"><span
+                        class="glyphicon glyphicon-remove" aria-hidden="true"></span>取消
+                </button>
+                <button type="button" id="btn_submit2" class="btn btn-primary" data-dismiss="modal"><span
+                        class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>确认
+                </button>
+                <script>
+
+                    $("#btn_submit2").click(function () {
+                        var interestPrice = $("#interestPrice").val();
+                        if(interestPrice <=0){
+                            $.message({
+                                message:'请输入合适的提示价格',
+                                type:'info'
+                            });
+                            return;
+                        }else{
+                            $.ajax(
+                                {
+                                    url: '/user/addInterest',
+                                    type:'POST',
+                                    data:{
+                                        stockid: $("#interestStockId").val(),
+                                        interestprice:interestPrice
+                                    },
+                                    success:function(result){
+                                        if(result.success){
+                                            $.message('关注成功');
+                                            Table.ajax.reload();
+
+                                        }else{
+                                            $.message({
+                                                message:'关注失败',
+                                                type:'error'
+                                            });
+                                        }
+                                    },
+                                    error: function () {
+                                        $.message({
+                                            message:'由于系统原因查询失败',
+                                            type:'error'
+                                        });
+                                    }
+                                }
+                            )
+                        }
+                        // Table.ajax.reload();
+                    })
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var Table;
+    window.onload = function () {
+        Table = $('#dataTables').DataTable({
+            searching: true, //是否开启搜索功能
+            ordering: true,//是否排序
+            bPaginate: true,//是否允许分页
+            bInfo: true,//是否显示表格相关信息
+            bFilter: true,  //检索、筛选框
+            destroy: true,//销毁一个实例
+            // iDisplayLength:5,//分页时每页显示的行数
+            // bLengthChange:false,
+            bLengthChange: true,
+            info: true, //控制总数信息(标准界面右下角显示总数和过滤条数的控件)的显隐
+            "bSort": true, // 排序图标
+
+            "processing": true,//获取数据过程中是否出现加载指示
+            "serverSide": false,//当用ajax请求数据源时，这个属性必须添加
+            "paging": true,//开启分页
+            lengthMenu: [ //自定义分页长度
+                [5, 10, 20, 30, 50],
+                ['5 条', '10 条', '20 条', '30 条', '50 条']
+            ],
+            "ajax": {
+                "url": "/user/searchAll",
+                "type": "POST",
+                "data": function (d) {
+                    //删除多余请求参数
+                    for (var key in d) {
+                        if (key.indexOf("columns") == 0 || key.indexOf("order") == 0 || key.indexOf("search") == 0) { //以columns开头的参数删除
+                            delete d[key];
+                        }
+                    }
+                    // console.log("xxxxxxxxxxxxxxxxxxx");
+                },
+                "dataType": "json",
+                "dataFilter": function (json) {//json是服务器端返回的数据
+                    // console.log("xxxxxxxxxxxxxxxxxxx");
+                    json = JSON.parse(json);
+                    var returnData = {};
+                    returnData.draw = 3; // json.data.draw;
+                    returnData.recordsTotal = json.length; // json.data.total;//返回数据全部记录
+                    returnData.recordsFiltered = json.length; // json.data.total;//后台不实现过滤功能，每次查询均视作全部结果
+                    returnData.data = json;//返回的数据列表
+                    return JSON.stringify(returnData);//这几个参数都是datatable需要的，必须要
+                }
+            },
+            "columns": [
+                {"data": "code"},
+                {"data": "name_stock"},
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.current_price==null)
+                            return "无";
+                        else{
+                            str += data.current_price;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.maxBuyPrice==null)
+                            return "无";
+                        else{
+                            str += data.maxBuyPrice;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.minSellPrice==null)
+                            return "无";
+                        else{
+                            str += data.minSellPrice;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.daymax==null)
+                            return "无";
+                        else{
+                            str += data.daymax;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.daymin==null)
+                            return "无";
+                        else{
+                            str += data.daymin;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.weekmax==null)
+                            return "无";
+                        else{
+                            str += data.weekmax;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.weekmin==null)
+                            return "无";
+                        else{
+                            str += data.weekmin;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.monthmax==null)
+                            return "无";
+                        else{
+                            str += data.monthmax;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.monthmin==null)
+                            return "无";
+                        else{
+                            str += data.monthmin;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.notification==null)
+                            return "无";
+                        else{
+                            str += data.notification;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        return "<button style='width: 80px;height: 22px;border: medium none;border-radius: 2px;background: red none repeat scroll 0% 0%;font-size: 16px;color: #FFF;cursor: pointer;' " +
+                            "onclick='funBuy(" + "\"" + data.code + "\"" + "," + data.current_price + "," +
+                            data.last_endprice + "," + data.today_startprice + "," + data.percentagepricechange +")'" +
+                            ">买入</button>";
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str="";
+                        var interestState = data.intereststate;
+                        if(interestState == null){
+                            str +="<input type='checkbox' onchange='setInterest("+"\""+data.code+"\""+","+ 0 +"," + data.current_price +")' style='horiz-align:middle; '>";
+                        }else{
+                            str +="<input type='checkbox' checked='" + true +"' onchange='setInterest("+"\""+data.code+"\""+","+1+"," + data.current_price +")' style='horiz-align:middle; '>";
+                        }
+
+                        return str;
+                    }
+                }
+
+            ],
+            "oLanguage": { // 国际化配置
+                "sProcessing": "正在获取数据，请稍后...",
+                "sLengthMenu": "显示 _MENU_ 页",
+                "sZeroRecords": "没有找到数据",
+                "sInfo": "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",
+                "sInfoEmpty": "记录数为0",
+                "sInfoFiltered": "(全部记录数 _MAX_ 条)",
+                "sInfoPostFix": "",
+                "sSearch": "全局查询 ",
+                "sUrl": "",
+                "oPaginate": {
+                    "sFirst": "第一页",
+                    "sPrevious": "上一页",
+                    "sNext": "下一页",
+                    "sLast": "最后一页"
+                }
+            }
+        });
+        // undoTable.ajax.reload();
+
+    };
+
+    function refreshbuytable() {
+        Table = $('#dataTables').DataTable({
+            searching: true, //是否开启搜索功能
+            ordering: true,//是否排序
+            bPaginate: true,//是否允许分页
+            bInfo: true,//是否显示表格相关信息
+            bFilter: true,  //检索、筛选框
+            destroy: true,//销毁一个实例
+            // iDisplayLength:5,//分页时每页显示的行数
+            // bLengthChange:false,
+            bLengthChange: true,
+            info: true, //控制总数信息(标准界面右下角显示总数和过滤条数的控件)的显隐
+            "bSort": true, // 排序图标
+
+            "processing": true,//获取数据过程中是否出现加载指示
+            "serverSide": false,//当用ajax请求数据源时，这个属性必须添加
+            "paging": true,//开启分页
+            lengthMenu: [ //自定义分页长度
+                [5, 10, 20, 30, 50],
+                ['5 条', '10 条', '20 条', '30 条', '50 条']
+            ],
+            "ajax": {
+                "url": "/user/searchAll",
+                "type": "POST",
+                "data": function (d) {
+                    //删除多余请求参数
+                    for (var key in d) {
+                        if (key.indexOf("columns") == 0 || key.indexOf("order") == 0 || key.indexOf("search") == 0) { //以columns开头的参数删除
+                            delete d[key];
+                        }
+                    }
+                    // console.log("xxxxxxxxxxxxxxxxxxx");
+                },
+                "dataType": "json",
+                "dataFilter": function (json) {//json是服务器端返回的数据
+                    // console.log("xxxxxxxxxxxxxxxxxxx");
+                    json = JSON.parse(json);
+                    var returnData = {};
+                    returnData.draw = 3; // json.data.draw;
+                    returnData.recordsTotal = json.length; // json.data.total;//返回数据全部记录
+                    returnData.recordsFiltered = json.length; // json.data.total;//后台不实现过滤功能，每次查询均视作全部结果
+                    returnData.data = json;//返回的数据列表
+                    return JSON.stringify(returnData);//这几个参数都是datatable需要的，必须要
+                }
+            },
+            "columns": [
+                {"data": "code"},
+                {"data": "name_stock"},
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.current_price==null)
+                            return "无";
+                        else{
+                            str += data.current_price;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.maxBuyPrice==null)
+                            return "无";
+                        else{
+                            str += data.maxBuyPrice;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.minSellPrice==null)
+                            return "无";
+                        else{
+                            str += data.minSellPrice;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.daymax==null)
+                            return "无";
+                        else{
+                            str += data.daymax;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.daymin==null)
+                            return "无";
+                        else{
+                            str += data.daymin;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.weekmax==null)
+                            return "无";
+                        else{
+                            str += data.weekmax;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.weekmin==null)
+                            return "无";
+                        else{
+                            str += data.weekmin;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.monthmax==null)
+                            return "无";
+                        else{
+                            str += data.monthmax;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.monthmin==null)
+                            return "无";
+                        else{
+                            str += data.monthmin;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.notification==null)
+                            return "无";
+                        else{
+                            str += data.notification;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        return "<button style='width: 80px;height: 22px;border: medium none;border-radius: 2px;background: red none repeat scroll 0% 0%;font-size: 16px;color: #FFF;cursor: pointer;' " +
+                            "onclick='funBuy(" + "\"" + data.code + "\"" + "," + data.current_price + "," +
+                            data.last_endprice + "," + data.today_startprice + "," + data.percentagepricechange +")'" +
+                            ">买入</button>";
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str="";
+                        var interestState = data.intereststate;
+                        if(interestState == null){
+                            str +="<input type='checkbox' onchange='setInterest("+"\""+data.code+"\""+","+ 0 +"," + data.current_price +")' style='horiz-align:middle; '>";
+                        }else{
+                            str +="<input type='checkbox' checked='" + true +"' onchange='setInterest("+"\""+data.code+"\""+","+1+"," + data.current_price +")' style='horiz-align:middle; '>";
+                        }
+
+                        return str;
+                    }
+                }
+
+            ],
+            "oLanguage": { // 国际化配置
+                "sProcessing": "正在获取数据，请稍后...",
+                "sLengthMenu": "显示 _MENU_ 页",
+                "sZeroRecords": "没有找到数据",
+                "sInfo": "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",
+                "sInfoEmpty": "记录数为0",
+                "sInfoFiltered": "(全部记录数 _MAX_ 条)",
+                "sInfoPostFix": "",
+                "sSearch": "全局查询 ",
+                "sUrl": "",
+                "oPaginate": {
+                    "sFirst": "第一页",
+                    "sPrevious": "上一页",
+                    "sNext": "下一页",
+                    "sLast": "最后一页"
+                }
+            }
+        });
+        // undoTable.ajax.reload();
+
+    };
+
+
+    function setInterest(stockid, state, pricenow) {
+        if(state == 0)//未选中-->选中
+        {
+            $('#myModal2').modal("show");
+
+            $('#myModal2').on('shown.bs.modal', function () {
+                // 执行一些动作...
+                var modal = $(this)
+                $("#interestStockId").val(stockid);
+                $("#interestStockId").attr("disabled","disabled");
+                $("#interestPrice").val('');
+                $("#interestPrice").attr('placeholder',pricenow);
+
+            })
+            $("#myModal2").on("hide.bs.modal",function(){
+                Table.ajax.reload();
+            });
+        }else{
+            $.ajax(
+                {
+                    url: '/user/deleteInterest',
+                    type:'POST',
+                    async:false,
+                    data:{
+                        stockid: stockid
+                    },
+                    success:function(result){
+                        if(result.success){
+                            $.message('取消关注成功');
+                            Table.ajax.reload();
+                        }else{
+                            $.message({
+                                message:'取消关注失败',
+                                type:'error'
+                            });
+                        }
+                    },
+                    error: function () {
+                        $.message({
+                            message:'由于系统原因查询失败',
+                            type:'error'
+                        });
+                    }
+                }
+            )
+            Table.ajax.reload();
+        }
+    }
+
+</script>
+<script type="text/javascript">
+    function realtimecheck(e){
+        var availableMoney = fn_getmoneyaccount();
+        var realprice = parseInt(document.getElementById("buyPrice").value);
+        // alert(""+availableMoney+"and"+realprice);
+        $("#buyAmount").attr('placeholder', "0 ~ " + (Math.floor(availableMoney/realprice)>0 ? Math.floor(availableMoney/realprice) : 0));
+        $("#buyAmount").val('');
+        // numFloorCeil
+        $("#numFloorCeil").html("数量上下限：" + "0" + " ~ " + (Math.floor(availableMoney/realprice)>0 ? Math.floor(availableMoney/realprice) : 0));
+    }
+</script>
+<script>
+    function funBuy(code, cp) {
+
+        $('#myModal').modal("show");
+
+        $('#myModal').on('shown.bs.modal', function () {
+            // 执行一些动作...
+            var modal = $(this)
+            // modal.find("#buyStockId").val(code);
+            // $("#buyStockId").val(code+"s");
+
+            function fn(availableMoney){
+                // const high = Math.floor(tp * 100 * (1 + pc)) / 100;
+                // const low = Math.floor(tp * 100 * (1 - pc)) / 100;
+                $("#myModalLabel").text("买入股票");
+                $("#buyStockId").val(code);
+                $("#buyStockId").attr("disabled","disabled");
+                $("#buyPrice").attr('placeholder', Math.round(cp*100)/100);
+                $("#buyPrice").val('');
+                $("#buyAmount").attr('placeholder', Math.floor(availableMoney/cp/2));
+                $("#buyAmount").val('');
+                $("#numFloorCeil").html("数量上下限：" + "0" + " ~ " + Math.floor(availableMoney/cp));
+                $("#tradePassword").val('');
+            }
+
+            function callback(fn) {
+                var availableMoney = fn_getmoneyaccount();
+                fn(availableMoney);
+            }
+
+            callback(fn);
+
+            // my position
+            $.ajax(
+                {
+                    url:'/user/checkFloorCeil',
+                    type:'POST',
+                    data:{
+                        stockid: code
+                    },
+
+                    success:function(result){
+                        var jn = $.parseJSON(result);
+                        if(document.getElementById("buyStockId").value == jn[0].code) {
+                            console.log("check successfully");
+                            var cp = jn[0].current_price;
+                            var lp = jn[0].last_endprice;
+                            var tp = jn[0].today_startprice;
+                            var pc = jn[0].percentagepricechange;
+
+                            const high = Math.floor(tp * 100 * (1 + pc)) / 100;
+                            const low = Math.floor(tp * 100 * (1 - pc)) / 100;
+                            $("#priceFloorCeil").html("价格上下限：" + (low>0?low:0) + " ~ " + high);
+                            // sellTable.ajax.reload();
+                        }
+                    },
+                    error: function () {
+                        alert("由于系统原因查询失败!");
+                    }
+                }
+            );
+        })
+    }
+
+
+    var TableByID;
+    $("#searchBtn1").click(function () {
+
+        var ID = $("#stockID").val();
+
+        // check price
+        if(ID != ""){
+            console.log("pass check!");
+        }
+        else{
+            $.message({
+                message:'请输入正确编号',
+                type:'warning'
+            });
+            return ;
+        }
+
+        TableByID = $('#dataTables').DataTable({
+            searching: false, //是否开启搜索功能
+            ordering: true,//是否排序
+            bPaginate: true,//是否允许分页
+            bInfo: false,//是否显示表格相关信息
+            bFilter: true,  //检索、筛选框
+            destroy: true,//销毁一个实例
+            // iDisplayLength:5,//分页时每页显示的行数
+            // bLengthChange:false,
+            bLengthChange: true,
+            info: true, //控制总数信息(标准界面右下角显示总数和过滤条数的控件)的显隐
+            "bSort": true, // 排序图标
+
+            "processing": true,//获取数据过程中是否出现加载指示
+            "serverSide": false,//当用ajax请求数据源时，这个属性必须添加
+            "paging": true,//开启分页
+            lengthMenu: [ //自定义分页长度
+                [5, 10, 20, 30, 50],
+                ['5 页', '10 页', '20 页', '30 页', '50 页']
+            ],
+            "ajax": {
+                "url": "/user/searchByID",
+                "type": "POST",
+                "data": function ( d ) {
+                    return $.extend({}, d, {
+                        "stockID": document.getElementById("stockID").value
+                    });
+                },
+
+                // "dataType": "json",
+                "dataFilter": function (json) {//json是服务器端返回的数据
+                    // console.log(data);
+                    json = JSON.parse(json);
+                    var returnData = {};
+                    returnData.draw = 3; // json.data.draw;
+                    returnData.recordsTotal = json.length; // json.data.total;//返回数据全部记录
+                    returnData.recordsFiltered = json.length; // json.data.total;//后台不实现过滤功能，每次查询均视作全部结果
+                    returnData.data = json;//返回的数据列表
+                    return JSON.stringify(returnData);//这几个参数都是datatable需要的，必须要
+                },
+                "error": function (jqXHR, textStatus, errorThrown) {
+
+                },
+                // "success":function (data) {
+                //     $("#priceCap").val("");
+                //     $("#priceFloor").val("");
+                // }
+            },
+            "columns": [
+                {"data": "code"},
+                {"data": "name_stock"},
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.current_price==null)
+                            return "无";
+                        else{
+                            str += data.current_price;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.maxBuyPrice==null)
+                            return "无";
+                        else{
+                            str += data.maxBuyPrice;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.minSellPrice==null)
+                            return "无";
+                        else{
+                            str += data.minSellPrice;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.daymax==null)
+                            return "无";
+                        else{
+                            str += data.daymax;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.daymin==null)
+                            return "无";
+                        else{
+                            str += data.daymin;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.weekmax==null)
+                            return "无";
+                        else{
+                            str += data.weekmax;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.weekmin==null)
+                            return "无";
+                        else{
+                            str += data.weekmin;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.monthmax==null)
+                            return "无";
+                        else{
+                            str += data.monthmax;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.monthmin==null)
+                            return "无";
+                        else{
+                            str += data.monthmin;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.notification==null)
+                            return "无";
+                        else{
+                            str += data.notification;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        return "<button style='width: 80px;height: 22px;border: medium none;border-radius: 2px;background: red none repeat scroll 0% 0%;font-size: 16px;color: #FFF;cursor: pointer;' " +
+                            "onclick='funBuy(" + "\"" + data.code + "\"" + "," + data.current_price + "," +
+                            data.last_endprice + "," + data.today_startprice + "," + data.percentagepricechange +")'" +
+                            ">买入</button>";
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str="";
+                        var interestState = data.intereststate;
+                        if(interestState == null){
+                            str +="<input type='checkbox' onchange='setInterest("+"\""+data.code+"\""+","+ 0 +"," + data.current_price +")' style='horiz-align:middle; '>";
+                        }else{
+                            str +="<input type='checkbox' checked='" + true +"' onchange='setInterest("+"\""+data.code+"\""+","+1+"," + data.current_price +")' style='horiz-align:middle; '>";
+                        }
+
+                        return str;
+                    }
+                }
+            ],
+            "oLanguage": { // 国际化配置
+                "sProcessing": "正在获取数据，请稍后...",
+                "sLengthMenu": "显示 _MENU_ 条",
+                "sZeroRecords": "没有找到数据",
+                "sInfo": "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",
+                "sInfoEmpty": "记录数为0",
+                "sInfoFiltered": "(全部记录数 _MAX_ 条)",
+                "sInfoPostFix": "",
+                "sSearch": "全局查询 ",
+                "sUrl": "",
+                "oPaginate": {
+                    "sFirst": "第一页",
+                    "sPrevious": "上一页",
+                    "sNext": "下一页",
+                    "sLast": "最后一页"
+                }
+            }
+        });
+        // undoTable.ajax.reload();
+        $("#priceCap").val("");
+        $("#priceFloor").val("");
+        $("#stockName").val("");
+
+    });
+
+    var TableByName;
+    $("#searchBtn3").click(function () {
+
+        var name = $("#stockName").val();
+
+        // check price
+        if(name != ""){
+            console.log("pass check!");
+        }
+        else{
+            $.message({
+                message:'请输入正确名称',
+                type:'warning'
+            });
+            return ;
+        }
+
+
+        TableByName = $('#dataTables').DataTable({
+            searching: false, //是否开启搜索功能
+            ordering: true,//是否排序
+            bPaginate: true,//是否允许分页
+            bInfo: false,//是否显示表格相关信息
+            bFilter: true,  //检索、筛选框
+            destroy: true,//销毁一个实例
+            // iDisplayLength:5,//分页时每页显示的行数
+            // bLengthChange:false,
+            bLengthChange: true,
+            info: true, //控制总数信息(标准界面右下角显示总数和过滤条数的控件)的显隐
+            "bSort": true, // 排序图标
+
+            "processing": true,//获取数据过程中是否出现加载指示
+            "serverSide": false,//当用ajax请求数据源时，这个属性必须添加
+            "paging": true,//开启分页
+            lengthMenu: [ //自定义分页长度
+                [5, 10, 20, 30, 50],
+                ['5 页', '10 页', '20 页', '30 页', '50 页']
+            ],
+            "ajax": {
+                "url": "/user/searchByName",
+                "type": "POST",
+                "data": function ( d ) {
+                    return $.extend({}, d, {
+                        "stockName": document.getElementById("stockName").value
+                    });
+                },
+
+                // "dataType": "json",
+                "dataFilter": function (json) {//json是服务器端返回的数据
+                    // console.log(data);
+                    json = JSON.parse(json);
+                    var returnData = {};
+                    returnData.draw = 3; // json.data.draw;
+                    returnData.recordsTotal = json.length; // json.data.total;//返回数据全部记录
+                    returnData.recordsFiltered = json.length; // json.data.total;//后台不实现过滤功能，每次查询均视作全部结果
+                    returnData.data = json;//返回的数据列表
+                    return JSON.stringify(returnData);//这几个参数都是datatable需要的，必须要
+                },
+                "error": function (jqXHR, textStatus, errorThrown) {
+
+                },
+                // "success":function (data) {
+                //     $("#priceCap").val("");
+                //     $("#priceFloor").val("");
+                // }
+            },
+            "columns": [
+                {"data": "code"},
+                {"data": "name_stock"},
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.current_price==null)
+                            return "无";
+                        else{
+                            str += data.current_price;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.maxBuyPrice==null)
+                            return "无";
+                        else{
+                            str += data.maxBuyPrice;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.minSellPrice==null)
+                            return "无";
+                        else{
+                            str += data.minSellPrice;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.daymax==null)
+                            return "无";
+                        else{
+                            str += data.daymax;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.daymin==null)
+                            return "无";
+                        else{
+                            str += data.daymin;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.weekmax==null)
+                            return "无";
+                        else{
+                            str += data.weekmax;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.weekmin==null)
+                            return "无";
+                        else{
+                            str += data.weekmin;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.monthmax==null)
+                            return "无";
+                        else{
+                            str += data.monthmax;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.monthmin==null)
+                            return "无";
+                        else{
+                            str += data.monthmin;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.notification==null)
+                            return "无";
+                        else{
+                            str += data.notification;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        return "<button style='width: 80px;height: 22px;border: medium none;border-radius: 2px;background: red none repeat scroll 0% 0%;font-size: 16px;color: #FFF;cursor: pointer;' " +
+                            "onclick='funBuy(" + "\"" + data.code + "\"" + "," + data.current_price + "," +
+                            data.last_endprice + "," + data.today_startprice + "," + data.percentagepricechange +")'" +
+                            ">买入</button>";
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str="";
+                        var interestState = data.intereststate;
+                        if(interestState == null){
+                            str +="<input type='checkbox' onchange='setInterest("+"\""+data.code+"\""+","+ 0 +"," + data.current_price +")' style='horiz-align:middle; '>";
+                        }else{
+                            str +="<input type='checkbox' checked='" + true +"' onchange='setInterest("+"\""+data.code+"\""+","+1+"," + data.current_price +")' style='horiz-align:middle; '>";
+                        }
+
+                        return str;
+                    }
+                }
+            ],
+            "oLanguage": { // 国际化配置
+                "sProcessing": "正在获取数据，请稍后...",
+                "sLengthMenu": "显示 _MENU_ 条",
+                "sZeroRecords": "没有找到数据",
+                "sInfo": "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",
+                "sInfoEmpty": "记录数为0",
+                "sInfoFiltered": "(全部记录数 _MAX_ 条)",
+                "sInfoPostFix": "",
+                "sSearch": "全局查询 ",
+                "sUrl": "",
+                "oPaginate": {
+                    "sFirst": "第一页",
+                    "sPrevious": "上一页",
+                    "sNext": "下一页",
+                    "sLast": "最后一页"
+                }
+            }
+        });
+        // undoTable.ajax.reload();
+        $("#priceCap").val("");
+        $("#priceFloor").val("");
+        $("#stockID").val("");
+    });
+
+    var TableByPrice;
+    $("#searchBtn2").click(function () {
+
+        var cap = $("#priceCap").val();
+        var floor = $("#priceFloor").val();
+
+        var check1 = /^\d+(\.{0,1}\d+){0,1}$/;
+        // check price
+        if(check1.exec(cap) && cap!="" && check1.exec(floor) && floor!=""){
+            console.log("pass check!");
+        }
+        // if( cap!="" && floor!="" ){
+        //     console.log("pass check!");
+        // }
+        else{
+            $.message({
+                message:'请输入正确价格',
+                type:'warning'
+            });
+            return ;
+        }
+
+        TableByPrice = $('#dataTables').DataTable({
+            searching: false, //是否开启搜索功能
+            ordering: true,//是否排序
+            bPaginate: true,//是否允许分页
+            bInfo: false,//是否显示表格相关信息
+            bFilter: true,  //检索、筛选框
+            destroy: true,//销毁一个实例
+            // iDisplayLength:5,//分页时每页显示的行数
+            // bLengthChange:false,
+            bLengthChange: true,
+            info: true, //控制总数信息(标准界面右下角显示总数和过滤条数的控件)的显隐
+            "bSort": true, // 排序图标
+
+            "processing": true,//获取数据过程中是否出现加载指示
+            "serverSide": false,//当用ajax请求数据源时，这个属性必须添加
+            "paging": true,//开启分页
+            lengthMenu: [ //自定义分页长度
+                [5, 10, 20, 30, 50],
+                ['5 页', '10 页', '20 页', '30 页', '50 页']
+            ],
+            "ajax": {
+                "url": "/user/searchByPrice",
+                "type": "POST",
+                "data": function ( d ) {
+                    return $.extend({}, d, {
+                        "priceCap": document.getElementById("priceCap").value,
+                        "priceFloor": document.getElementById("priceFloor").value,
+                    });
+                },
+
+                "dataType": "json",
+                "dataFilter": function (json) {//json是服务器端返回的数据
+                    // console.log(data);
+                    json = JSON.parse(json);
+                    var returnData = {};
+                    returnData.draw = 3; // json.data.draw;
+                    returnData.recordsTotal = json.length; // json.data.total;//返回数据全部记录
+                    returnData.recordsFiltered = json.length; // json.data.total;//后台不实现过滤功能，每次查询均视作全部结果
+                    returnData.data = json;//返回的数据列表
+                    return JSON.stringify(returnData);//这几个参数都是datatable需要的，必须要
+                },
+                "error": function (jqXHR, textStatus, errorThrown) {
+
+                },
+                // "success":function (data) {
+                //     $("#stockID").val("");
+                // },
+
+            },
+            "columns": [
+                {"data": "code"},
+                {"data": "name_stock"},
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.current_price==null)
+                            return "无";
+                        else{
+                            str += data.current_price;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.maxBuyPrice==null)
+                            return "无";
+                        else{
+                            str += data.maxBuyPrice;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.minSellPrice==null)
+                            return "无";
+                        else{
+                            str += data.minSellPrice;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.daymax==null)
+                            return "无";
+                        else{
+                            str += data.daymax;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.daymin==null)
+                            return "无";
+                        else{
+                            str += data.daymin;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.weekmax==null)
+                            return "无";
+                        else{
+                            str += data.weekmax;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.weekmin==null)
+                            return "无";
+                        else{
+                            str += data.weekmin;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.monthmax==null)
+                            return "无";
+                        else{
+                            str += data.monthmax;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.monthmin==null)
+                            return "无";
+                        else{
+                            str += data.monthmin;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str = "";
+                        if(data.notification==null)
+                            return "无";
+                        else{
+                            str += data.notification;
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        return "<button style='width: 80px;height: 22px;border: medium none;border-radius: 2px;background: red none repeat scroll 0% 0%;font-size: 16px;color: #FFF;cursor: pointer;' " +
+                            "onclick='funBuy(" + "\"" + data.code + "\"" + "," + data.current_price + "," +
+                            data.last_endprice + "," + data.today_startprice + "," + data.percentagepricechange +")'" +
+                            ">买入</button>";
+                    }
+                },
+                {
+                    "data": null, "render": function (data, type, row, meta) {
+                        var str="";
+                        var interestState = data.intereststate;
+                        if(interestState == null){
+                            str +="<input type='checkbox' onchange='setInterest("+"\""+data.code+"\""+","+ 0 +"," + data.current_price +")' style='horiz-align:middle; '>";
+                        }else{
+                            str +="<input type='checkbox' checked='" + true +"' onchange='setInterest("+"\""+data.code+"\""+","+1+"," + data.current_price +")' style='horiz-align:middle; '>";
+                        }
+
+                        return str;
+                    }
+                }
+                // {
+                //     "data": null, "render": function (data, type, row, meta) {
+                //         return "<button style='width: 80px;height: 22px;border: medium none;border-radius: 2px;background: red none repeat scroll 0% 0%;font-size: 16px;color: #FFF;cursor: pointer;' " +
+                //             "onclick='funBuy(" + "\"" + data.code + "\"" + "," + data.current_price + "," +
+                //             data.last_endprice + "," + data.today_startprice + "," + data.percentagepricechange +")'" +
+                //             ">关注</button>";
+                //     }
+                // },
+            ],
+            "oLanguage": { // 国际化配置
+                "sProcessing": "正在获取数据，请稍后...",
+                "sLengthMenu": "显示 _MENU_ 条",
+                "sZeroRecords": "没有找到数据",
+                "sInfo": "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",
+                "sInfoEmpty": "记录数为0",
+                "sInfoFiltered": "(全部记录数 _MAX_ 条)",
+                "sInfoPostFix": "",
+                "sSearch": "全局查询 ",
+                "sUrl": "",
+                "oPaginate": {
+                    "sFirst": "第一页",
+                    "sPrevious": "上一页",
+                    "sNext": "下一页",
+                    "sLast": "最后一页"
+                }
+            }
+        });
+        // undoTable.ajax.reload();
+        $("#stockID").val("");
+        $("#stockName").val("");
+    })
+</script>
+</body>
+</html>
+
+
