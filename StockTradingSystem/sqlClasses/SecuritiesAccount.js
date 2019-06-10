@@ -115,10 +115,64 @@ function SecuritiesAccount() {
             }
         });
     };
+    /*
+    方法名称：checkSecuritiesAccountidAndIdentityid
+    实现功能：证券账户销户时通过accountId查找identityId核对两者信息是否有误
+    传入参数：accountId（整数）、 identityId（字符串）、回调函数
+    回调参数：字符串：匹配与否
+    编程者：黄欣雨
+    * */
+    this.checkSecuritiesAccountidAndIdentityid = function (accountId, identityId, callback) {
+        let getSql = "SELECT identityid FROM ";
+        if (accountId < 1000000000) {
+            getSql += "personalaccount where accountid= ?";
+        } else {
+            getSql+="corporateaccount where accountid= ?";
+        }
+        let getSqlParams = [accountId];
+        dbQuery(getSql, getSqlParams, function (err, result) {
+            if (err) {
+                console.log('[SELECT ERROR] - ', err.message);
+                return;
+            }
+            if (result.length > 0) {
+                if (result[0].identityid == identityId) {
+                    callback('Match');
+                } else {
+                    callback('notMatch');
+                }
+            } else {
+                callback('notFound');
+            }
+        });
+    };
     /****插入方法****/
     //todo: 这里自己写就好了，应该没有其他小组会调用
     /****更新方法****/
-    //todo: 这里自己写就好了，应该没有其他小组会调用
+    /*
+    方法名称：stateChangetoLogoutbyAccountid
+    实现功能：证券账户销户时将账户状态改为销户
+    传入参数：accountId（整数）、 回调函数
+    回调参数：字符串：成功与否
+    编程者：黄欣雨
+    备注：之前需判断账号存在且状态为正常或销户
+    * */
+    this.stateChangetoLogoutbyAccountid = function (accountId, callback) {
+        let getSql = "UPDATE ";
+        if (accountId < 1000000000) {
+            getSql+="personalaccount SET state='logout' where accountid= ?";
+        } else {
+            getSql+="corporateaccount SET state='logout' where accountid= ?";
+        }
+        let getSqlParams = [accountId];
+        dbQuery(getSql, getSqlParams, function (err, result) {
+            if (err) {
+                console.log('[SELECT ERROR] - ', err.message);
+                return;
+            }
+            callback('changeToLogoutSuccess');
+        });
+    };
 }
 
 module.exports = SecuritiesAccount;
