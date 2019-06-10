@@ -1,0 +1,236 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"> 
+	<title>法人证券账户开户</title>
+	<link rel="stylesheet" href="/stylesheets/forAB/bootstrap.min.css">
+    <link rel="stylesheet" href="/javascripts/forAB/bootstrap.min.js">
+    <link rel="stylesheet" href="/stylesheets/mystyle.css">
+    <script src="/javascripts/jquery.min.js"></script>
+    
+	<!-- Animate.css -->
+	<link rel="stylesheet" href="/stylesheets/animate.css">
+	<!-- Icomoon Icon Fonts-->
+	<link rel="stylesheet" href="/stylesheets/icomoon.css">
+	<!-- Bootstrap  -->
+	<link rel="stylesheet" href="/stylesheets/forAB/bootstrap1.css">
+	<!-- Magnific Popup -->
+	<link rel="stylesheet" href="/stylesheets/magnific-popup.css">
+	<!-- Flexslider  -->
+	<link rel="stylesheet" href="/stylesheets/flexslider.css">
+	<!-- Theme style  -->
+	<link rel="stylesheet" href="/stylesheets/style1.css">
+	<!-- Modernizr JS -->
+	<script src="/javascripts/modernizr-2.6.2.min.js"></script>
+	
+	<script src="/javascripts/testjh.js"></script>
+    
+	<style type="text/css">
+    	.hkh
+		{
+			position: absolute;
+    		height:700px;
+    		width: 1060px;
+			background-color:#FFFFFF;
+			margin-bottom:20px;
+			
+		}
+		.ph
+    	{
+    		position: absolute;
+			top:20px;
+			left:110px;  	
+    	}
+		.kh
+    	{
+    		position: absolute;
+			top:110px;
+			left:100px;  	
+    	}
+    	.kh1
+    	{
+    		position: absolute;
+			top:110px;
+			left:600px;
+    	}
+    	.kh2
+    	{
+    		position: absolute;
+    		top:450px;
+    		left:500px;
+    		height:400px;
+    		width: 300px;    	
+    	}
+    	.kh3
+    	{
+    		position: absolute;
+    		top:450px;
+    		left:660px;
+    		height:400px;
+    		width: 300px;    		
+    	}
+	    .fg
+	    {
+	    	position: absolute;
+	    	top:50px;
+	    	left:70px;
+	    	width:600px;
+	    	height:4px;
+	    }
+		.txb
+		{
+			position: relative;
+			width:300px;
+			height:80px;
+		}
+		.mxb
+		{
+			display:none;
+			position: absolute;
+			left:20px;
+			width:300px;
+			top:50px;
+			color:red;
+			font-size: 12px;
+		}
+    </style>
+</head>
+<body>
+<nav class="fh5co-nav" role="navigation">
+	<div class="container-wrap">
+		<div class="top-menu">
+			<div class="row">
+				<div class="col-xs-2">
+					<div id="fh5co-logo"><img src="/images/logo.png" alt="" width="300" height="90"></div>
+				</div>
+				<div class="col-xs-10 text-right menu-1">
+					<ul>
+						<li><a href="/securitiesaccount">首页</a></li>
+						<li class="active has-dropdown">
+							<a href="#">开户</a>
+							<ul class="dropdown">
+								<li><a href="/securitiesaccount/coa">法人开户</a></li>
+								<li><a href="/securitiesaccount/poa">个人开户</a></li>
+							</ul>
+						</li>
+						<li class="has-dropdown">
+							<a href="#">挂失</a>
+							<ul class="dropdown">
+								<li><a href="/securitiesaccount/cfa">法人挂失</a></li>
+								<li><a href="/securitiesaccount/pfa">个人挂失</a></li>
+							</ul>
+						</li>
+						<li class="has-dropdown">
+							<a href="#">补办</a>
+							<ul class="dropdown">
+								<li><a href="/securitiesaccount/cra">法人补办</a></li>
+								<li><a href="/securitiesaccount/pra">个人补办</a></li>
+							</ul>
+						</li>
+						<li class="has-dropdown">
+							<a href="#">销户</a>
+							<ul class="dropdown">
+								<li><a href="/securitiesaccount/cca">法人销户</a></li>
+								<li><a href="/securitiesaccount/pca">个人销户</a></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</nav>
+<div class="container-wrap">
+<div class="hkh">
+<div class="fg">
+	<img src="/images/fg.jpg" width="440px"height="4px">
+</div>
+<div class="ph">
+	<p style="font-size:20px;color:#A92443;font-weight:bold">法人证券账户开户</p>
+</div>
+<form id='coaccount'>
+	<div class="kh">
+		<div class="txb">
+			<input id="coaim0" required='' type='text' name='registrationid' onblur="checkFill('#coaim0', '#coawm0')">
+			<label alt='请输入法人注册登记号码' placeholder='法人注册登记号码'></label>
+			<div id="coawm0" class="mxb">法人注册登记号码栏不能为空</div>
+		</div>
+		<div class="txb">
+			<input id="coaim1" required='' type='text' name='licenseid' onblur="checkFill('#coaim1', '#coawm1')">
+			<label alt='请输入营业执照号码' placeholder='营业执照号码'></label>
+			<div id="coawm1" class="mxb">法人营业执照号码栏不能为空</div>
+		</div>
+		<div class="txb">
+			<input id="coaim2" required='' type='text' name='identityid' onblur="checkDiffer('#coaim2', '#coawm2','#coaim7', '#coawm7',1,0)">
+			<label alt='请输入身份证号码' placeholder='身份证号码'></label>
+			<div id="coawm2" class="mxb">法人身份证号码栏不能为空</div>
+		</div>
+		<div class="txb">
+			<input id="coaim3" required='' type='text' name='name' onblur="checkFill('#coaim3', '#coawm3')">
+			<label alt='请输入姓名' placeholder='姓名'></label>
+			<div id="coawm3" class="mxb">法人姓名栏不能为空</div>
+		</div>
+		<div class="txb">
+			<input id="coaim4" required='' type='text' name='phonenumber' onblur="checkPhoneNumber('#coaim4', '#coawm4')">
+			<label alt='请输入联系电话' placeholder='联系电话'></label>
+			<div id="coawm4" class="mxb">法人联系电话栏不能为空</div>
+		</div>
+		<div class="txb">
+			<input id="coaim5" required='' type='text' name='workaddress' onblur="checkFill('#coaim5', '#coawm5')">
+			<label alt='请输入联系地址' placeholder='联系地址'></label>
+			<div id="coawm5" class="mxb">法人联系地址栏不能为空</div>
+		</div>
+	</div>
+	<div class="kh1">
+		<div class="txb">
+			<input id="coaim6" required='' type='text' name='authorizername' onblur="checkFill('#coaim6', '#coawm6')">
+			<label alt='请输入授权证券交易执行人姓名' placeholder='授权证券交易执行人姓名'></label>
+			<div id="coawm6" class="mxb">授权证券交易执行人姓名栏不能为空</div>
+		</div>
+		<div class="txb">
+			<input id="coaim7" required='' type='text' name='authorizeridentityid' onblur="checkDiffer('#coaim2', '#coawm2','#coaim7', '#coawm7',1,1)">
+			<label alt='请输入授权人身份证号码' placeholder='授权人身份证号码'></label>
+			<div id="coawm7" class="mxb">授权人身份证号码栏不能为空</div>
+		</div>
+		<div class="txb">
+			<input id="coaim8" required='' type='text' name='authorizerphonenumber' onblur="checkPhoneNumber('#coaim8', '#coawm8')">
+			<label alt='请输入授权人联系电话' placeholder='授权人联系电话'></label>
+			<div id="coawm8" class="mxb">授权人联系电话栏不能为空</div>
+		</div>
+		<div class="txb">
+			<input id="coaim9" required='' type='text' name='authorizeraddress' onblur="checkFill('#coaim9', '#coawm9')">
+			<label alt='请输入授权人地址' placeholder='授权人地址'></label>
+			<div id="coawm9" class="mxb">授权人地址栏不能为空</div>
+		</div>
+	</div>
+</form>
+<div class="kh2" align=center>
+<button type="button" class="btn btn-default" id="submit1" onclick="window.location.href='/securitiesaccount/coa'">提交</button></td>
+</div>
+<div class="kh3" align=center>
+<button type="button" class="btn btn-default"  onclick="window.location.href='/securitiesaccount'">取消</button></td>
+</div>
+
+</div>
+</div>
+<!-- jQuery -->
+<script src="/javascripts/jquery1.min.js"></script>
+<!-- jQuery Easing -->
+<script src="/javascripts/jquery.easing.1.3.js"></script>
+<!-- Bootstrap -->
+<script src="/javascripts/forAB/bootstrap1.min.js"></script>
+<!-- Waypoints -->
+<script src="/javascripts/jquery.waypoints.min.js"></script>
+<!-- Flexslider -->
+<script src="/javascripts/jquery.flexslider-min.js"></script>
+<!-- Magnific Popup -->
+<script src="/javascripts/jquery.magnific-popup.min.js"></script>
+<script src="/javascripts/magnific-popup-options.js"></script>
+<!-- Counters -->
+<script src="/javascripts/jquery.countTo.js"></script>
+<!-- Main -->
+<script src="/javascripts/main.js"></script>
+
+</body>
+</html>

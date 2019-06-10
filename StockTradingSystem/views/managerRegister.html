@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>资金账户子系统-注册</title>
+	<link type="text/css" rel="stylesheet" href="/stylesheets/core.css">
+	<link type="text/css" rel="stylesheet" href="/stylesheets/home.css">
+	<script src="/javascripts/jquery-3.4.1.js"></script>
+	<script src="/javascripts/managerOrders.js"></script>
+</head>
+<body>
+
+<!-- capital head begin -->
+	<header class="capital-header">
+		<div class="capital-entered">
+			<div class="capital-header-content capital-flex">
+				<div class="capital-column">
+					<a href='/managerLogin/managerHome' class="capital-column-capital-logo">
+						<img src="/images/icon/capital-logo.png" title="" about="" alt="">
+					</a>
+				</div>
+			</div>
+		</div>
+	</header>
+<!-- capital head end -->
+
+<!-- capital content begin -->
+	<section>
+		<div class="capital-content-slide">
+			<div class="capital-flex">
+				<!-- left begin -->
+				<div class="capital-column capital-column-2">
+					<div class="capital-menu">
+						<ul>
+							<li class="capital-menu-item">
+								<a href='/managerLogin/managerHome'>首页</a>
+							</li>
+							<li class="capital-menu-item">
+								<span class="capital-menu-sub-title">操作</span>
+								<ul>
+									<li>
+										<a href='/managerLogin/managerHome/Register' class="active">账户注册</a>
+									</li>
+									<li>
+										<a href='/managerLogin/managerHome/PasswordChange'>密码修改</a>
+									</li>
+									<li>
+										<a href='/managerLogin/managerHome/ReportLoss'>账户挂失</a>
+									</li>
+									<li>
+										<a href='/managerLogin/managerHome/MakeUp'>账户补办</a>
+									</li>
+									<li>
+										<a href='/managerLogin/managerHome/Close'>账户销户</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- left end -->
+				<!-- center begin -->
+				<div class="capital-column capital-column-8">
+					<div class="capital-right-head">
+						<div class="capital-right-page-info">
+							<div class="capital-user-photo">
+								<a href="javascript:;">
+									<img src="/images/icon/photo.jpg" title="" about="" alt="">
+								</a>
+							</div>
+							<div class="capital-user-info">
+								<div class="capital-user-info-name capital-flex">
+									<a href="info.html">你好！</a>
+								</div>
+								<div class="capital-user-info-func capital-flex">
+									<span class="capital-tag"><%= workerid %></span>
+									<form id="managerLogoutOrder">
+										<input class="capital-user-info-func1" type="button" id="managerlogout" value="退出">
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="capital-loading-box">
+						<form id="managerRegisterOrder">
+							<div class="capital-reg-form-reg" style="margin-top:40px;">
+								<div class="capital-reg-form-group clearfix">
+									<label>交易密码：</label>
+									<div class="capital-reg-form-input">
+										<input type="password" name="tradepassWord" id="psd3" onchange="CheckNL(this);AntiSqlValid(this);CheckPassword43()" class="capital-form-control" autocomplete="off" placeholder="请设置6位及以上字母或数字" style="width:200px;">
+									</div>
+								</div>
+								<div class="capital-reg-form-group clearfix">
+									<label>确认交易密码：</label>
+									<div class="capital-reg-form-input">
+										<input type="password" name="tradepassWordCheck" id="psd4" onchange="CheckPassword34()" class="capital-form-control" autocomplete="off" placeholder="请再次输入交易密码" style="width:200px;">
+									</div>
+								</div>
+								<div class="capital-reg-form-group clearfix">
+								<label>存取款密码：</label>
+									<div class="capital-reg-form-input">
+										<input type="password" name="cashpassWord" id="psd5" onchange="CheckNL(this);AntiSqlValid(this);CheckPassword65()" class="capital-form-control" autocomplete="off" placeholder="请设置6位及以上字母或数字" style="width:200px;">
+									</div>
+								</div>
+								<div class="capital-reg-form-group clearfix">
+								<label>确认存取款密码：</label>
+									<div class="capital-reg-form-input">
+										<input type="password" name="cashpassWordCheck" id="psd6" onchange="CheckPassword56()" class="capital-form-control" autocomplete="off" placeholder="请再次输入存取款密码" style="width:200px;">
+									</div>
+								</div>
+								<div class="capital-reg-form-group clearfix">
+									<label>身份证号码：</label>
+									<div class="capital-reg-form-input">
+										<input type="text" name="identificationid" onblur="AntiSqlValid(this)" class="capital-form-control" autocomplete="off" placeholder="请输入身份证号码" style="width:200px;">
+									</div>
+								</div>
+								<div class="capital-reg-form-group clearfix">
+									<label>关联证券账户账号：</label>
+									<div class="capital-reg-form-input">
+										<input type="number" name="relatedsecuritiesaccountid" class="capital-form-control" autocomplete="off" placeholder="请输入关联证券账户账号" onkeyup = "value=value.replace(/[^\d]/g,'')" style="width:200px;">
+									</div>
+								</div>
+							</div>
+
+							<div class="capital-reg-form-group clearfix">
+								<div class="capital-reg-form-button" style="margin-left:255px;">
+									<input class="capital-body-submit1" type="button" id="managerregister" value="注册">
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<!-- center end -->
+				<!-- right begin-->
+				<div class="capital-column capital-column-1">
+					<img src="/images/ad/ad.jpg" alt="">
+				</div>
+				<!-- right end-->
+			</div>
+		</div>
+
+	</section>
+<!-- capital content end -->
+</body>
+</html>

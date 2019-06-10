@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>资金账户子系统-管理员登录</title>
+	<link type="text/css" rel="stylesheet" href="/stylesheets/core.css">
+	<link type="text/css" rel="stylesheet" href="/stylesheets/home.css">
+	<script src="/javascripts/jquery-3.4.1.js"></script>
+    <script src="/javascripts/managerOrders.js"></script>
+</head>
+
+<body>
+
+<div class="capital-body-content">
+	<div class="capital-body-bj">
+		<div class="capital-body-login">
+			<h2>管理员登录</h2>
+			<div class="capital-body-login-content">
+				<form id="managerLoginOrder">
+					<div class="capital-body-login-box">
+						<div class="capital-user-img">
+							<div class="capital-user-img-img"><img src="/images/icon/ph.png" alt=""></div>
+						</div>
+						<div class="capital-user-border">
+							<input type="number" name="managerid" onkeyup="value=value.replace(/[^\d]/g,'')" placeholder="请输入账号">
+						</div>
+					</div>
+					<div class="capital-body-login-box">
+						<div class="capital-user-img">
+							<div class="capital-user-img-img"><img src="/images/icon/pad.png" alt=""></div>
+						</div>
+						<div class="capital-user-border">
+							<input type="password" name="managerpassword" onblur="AntiSqlValid(this)" placeholder="请输入密码">
+						</div>
+					</div>
+					<input class="capital-body-submit" type="button" id="managerlogin" value="登录">
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>资金账户子系统-用户首页</title>
+	<link type="text/css" rel="stylesheet" href="/stylesheets/core.css">
+	<link type="text/css" rel="stylesheet" href="/stylesheets/home.css">
+	<script src="/javascripts/jquery-3.4.1.js"></script>
+	<script src="/javascripts/echarts.min.js"></script>
+	<script src="/javascripts/usersOrders.js"></script>
+</head>
+<body>
+
+<!-- capital head begin -->
+	<header class="capital-header">
+		<div class="capital-entered">
+			<div class="capital-header-content capital-flex">
+				<div class="capital-column">
+					<a href='/userLogin/userHome' class="capital-column-capital-logo">
+						<img src="/images/icon/capital-logo.png" title="" about="" alt="">
+					</a>
+				</div>
+			</div>
+		</div>
+	</header>
+<!-- capital head end -->
+
+<!-- capital content begin -->
+	<section>
+		<div class="capital-content-slide">
+			<div class="capital-flex">
+				<!-- left begin -->
+				<div class="capital-column capital-column-2">
+					<div class="capital-menu">
+						<ul>
+							<li class="capital-menu-item">
+								<a href='/userLogin/userHome'  class="active">首页</a>
+							</li>
+							<li class="capital-menu-item">
+								<span class="capital-menu-sub-title">操作</span>
+								<ul>
+									<li>
+										<a href='/userLogin/userHome/Deposit'>我要存款</a>
+									</li>
+									<li>
+										<a href='/userLogin/userHome/Withdraw'>我要取款</a>
+									</li>
+								</ul>
+							</li>
+							<li class="capital-menu-item">
+								<span class="capital-menu-sub-title">数据</span>
+								<ul>
+									<li>
+										<a href='/userLogin/userHome/CapitalDetails'>资金明细</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- left end -->
+				<!-- center begin -->
+				<div class="capital-column capital-column-8">
+					<div class="capital-right-head">
+						<div class="capital-right-page-info">
+							<div class="capital-user-photo">
+								<a href="javascript:;">
+									<img src="/images/icon/photo.jpg" title="" about="" alt="">
+								</a>
+							</div>
+							<div class="capital-user-info">
+								<div class="capital-user-info-name capital-flex">
+									<a>你好！</a>
+								</div>
+								<div class="capital-user-info-func capital-flex">
+									<span class="capital-tag"><%= accountid %></span>
+									<form id="usersLogoutOrder">
+										<input class="capital-user-info-func1" type="button" id="userslogout" value="退出">
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+						
+					<div class="capital-loading-box">
+						<div class="capital-right-head-info">
+							<dl>
+								<a href="#">
+									<dt>账户总资产/元</dt>
+									<dd><%= all %></dd>
+								</a>
+							</dl>
+							<dl>
+								<a href="#">
+									<dt>利息总额/元</dt>
+									<dd><%= interest %></dd>
+								</a>
+							</dl>
+							<dl>
+								<a href="#">
+									<dt>冻结金额/元</dt>
+									<dd><%= frozen %></dd>
+								</a>
+							</dl>
+							<dl>
+								<a href="#">
+									<dt>账户余额/元</dt>
+									<dd><%= remained %></dd>
+								</a>
+							</dl>
+						</div>
+
+						<div id="amountpie" style="width:1100px; height:500px; margin-top: -40px"></div>
+					</div>
+
+				</div>
+				<!-- center end -->
+				<!-- right begin-->
+				<div class="capital-column capital-column-1">
+					<img src="/images/ad/ad.jpg" alt="">
+				</div>
+				<!-- right end-->
+			</div>
+		</div>
+	</section>
+<!-- capital content end -->
+	<script type="text/javascript">
+		var myChart = echarts.init(document.getElementById('amountpie'));
+		var option = {
+			tooltip : {
+				trigger: 'item',
+				formatter: "{a} <br/>{b} : {c} ({d}%)"
+			},
+			legend: {
+				orient : 'vertical',
+				x : '15%',
+				y : '40%',
+				textStyle:{
+					fontSize: 14,
+					color: '#757575'
+				},
+				data:['账户余额','利息总额','冻结金额']
+			},
+			toolbox: {
+				show : true,
+				x : '15%',
+				y : '30%',
+				feature : {
+					saveAsImage : {show: true}
+				}
+			},
+			calculable : true,
+			series : [
+			{
+				name:'资产分布',
+				type:'pie',
+				radius : ['50%', '70%'],
+				itemStyle : {
+					normal : {
+						label : {
+							show : false
+						},
+						labelLine : {
+							show : false
+						}
+					}
+				},
+				data:[
+				{value:<%= remained %>, name:'账户余额'},
+				{value:<%= interest %>, name:'利息总额'},
+				{value:<%= frozen %>, name:'冻结金额'}
+				]
+			}
+			]
+		};
+		myChart.setOption(option);
+	</script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>法人证券账户挂失</title>
+	<link rel="stylesheet" href="/stylesheets/forAB/bootstrap.min.css">
+    <link rel="stylesheet" href="/javascripts/forAB/bootstrap.min.js">
+    <link rel="stylesheet" href="/stylesheets/mystyle.css">
+    <script src="/javascripts/jquery.min.js"></script>
+    
+	<!-- Animate.css -->
+	<link rel="stylesheet" href="/stylesheets/animate.css">
+	<!-- Icomoon Icon Fonts-->
+	<link rel="stylesheet" href="/stylesheets/icomoon.css">
+	<!-- Bootstrap  -->
+	<link rel="stylesheet" href="/stylesheets/forAB/bootstrap1.css">
+	<!-- Magnific Popup -->
+	<link rel="stylesheet" href="/stylesheets/magnific-popup.css">
+	<!-- Flexslider  -->
+	<link rel="stylesheet" href="/stylesheets/flexslider.css">
+	<!-- Theme style  -->
+	<link rel="stylesheet" href="/stylesheets/style1.css">
+	<!-- Modernizr JS -->
+	<script src="/javascripts/modernizr-2.6.2.min.js"></script>
+	
+	<script src="/javascripts/testjh.js"></script>
+	
+	<style type="text/css">
+	.hkh
+	{
+		position: absolute;
+		height:500px;
+		width: 1060px;
+		background-color:#FFFFFF;
+		margin-bottom:20px;
+	}
+	.ph
+	{
+		position: absolute;
+		top:90px;
+		left:570px;  	
+	}
+	.top
+    {
+       position: absolute;
+       top:150px;
+       left:570px;
+    }
+    .fg
+    {
+    	position: absolute;
+    	top:155px;
+    	left:550px;
+    	width:360px;
+    	height:4px;
+    } 
+    .zs
+    {
+       position: absolute;
+       top:0px;
+       left:0px;
+    }
+	.t1
+    {
+       position: absolute;
+       top:170px;
+	   left:70px;
+    }
+	.t2
+    {
+       position: absolute;
+       top:170px;
+       left:220px;
+       background:none;
+    }
+	.mt
+    {
+       position: absolute;
+       top:70px;
+       width:150px;
+       background:none;
+    }
+	.mi
+	{
+		position: relative;
+		top:70px;
+		width:200px;
+		left:170px;
+		background:none;
+	}
+	.mxb
+	{
+		display:none;
+		position: absolute;
+		left:20px;
+		width:300px;
+		top:50px;
+		color:red;
+		font-size: 12px;
+	}
+</style>
+
+</head>
+<body>
+<nav class="fh5co-nav" role="navigation">
+	<div class="container-wrap">
+		<div class="top-menu">
+			<div class="row">
+				<div class="col-xs-2">
+					<div id="fh5co-logo"><img src="/images/logo.png" alt="" width="300" height="90"></div>
+				</div>
+				<div class="col-xs-10 text-right menu-1">
+					<ul>
+						<li><a href="/securitiesaccount">首页</a></li>
+						<li class="has-dropdown">
+							<a href="#">开户</a>
+							<ul class="dropdown">
+								<li><a href="/securitiesaccount/coa">法人开户</a></li>
+								<li><a href="/securitiesaccount/poa">个人开户</a></li>
+							</ul>
+						</li>
+						<li class="active has-dropdown">
+							<a href="#">挂失</a>
+							<ul class="dropdown">
+								<li><a href="/securitiesaccount/cfa">法人挂失</a></li>
+								<li><a href="/securitiesaccount/pfa">个人挂失</a></li>
+							</ul>
+						</li>
+						<li class="has-dropdown">
+							<a href="#">补办</a>
+							<ul class="dropdown">
+								<li><a href="/securitiesaccount/cra">法人补办</a></li>
+								<li><a href="/securitiesaccount/pra">个人补办</a></li>
+							</ul>
+						</li>
+						<li class="has-dropdown">
+							<a href="#">销户</a>
+							<ul class="dropdown">
+								<li><a href="/securitiesaccount/cca">法人销户</a></li>
+								<li><a href="/securitiesaccount/pca">个人销户</a></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</nav>
+
+<div class="container-wrap">
+<div class="hkh">
+<div class="ph">
+	<p style="font-size:20px;color:#A92443;font-weight:bold">法人证券账户挂失</p>
+</div>
+<div class="zs">
+	<img src="/images/zs.jpg" width="500px"height="500px">
+</div>
+<div class="fg">
+	<img src="/images/fg.jpg" width="440px"height="4px">
+</div>
+<div class="top">
+	<div class="mt">
+		<p style="color:#595959;margin-left:1px;margin-top:7px;font-size:large">法人注册登记号码:</p>
+	</div>
+	<form id="cfaccount">
+	<div class="mi">
+		<input id="cfaim0" type="text" name="id" value="" onblur="checkFill('#cfaim0', '#cfawm0')">
+		<div id="cfawm0" class="mxb">法人注册登记号码栏不能为空</div>
+	</div>	
+	</form>
+	<div class="t1" align=center>
+		<button type="button" id="submit5" class="btn btn-default"  onclick="window.location.href='/securitiesaccount/cfa'">挂失</button></td>
+	</div>
+	<div class="t2" align=center>
+		<button type="button" class="btn btn-default"  onclick="window.location.href='/securitiesaccount'">取消</button></td>
+	</div>
+</div>
+</div>
+</div>
+<!-- jQuery -->
+<script src="/javascripts/jquery1.min.js"></script>
+<!-- jQuery Easing -->
+<script src="/javascripts/jquery.easing.1.3.js"></script>
+<!-- Bootstrap -->
+<script src="/javascripts/forAB/bootstrap1.min.js"></script>
+<!-- Waypoints -->
+<script src="/javascripts/jquery.waypoints.min.js"></script>
+<!-- Flexslider -->
+<script src="/javascripts/jquery.flexslider-min.js"></script>
+<!-- Magnific Popup -->
+<script src="/javascripts/jquery.magnific-popup.min.js"></script>
+<script src="/javascripts/magnific-popup-options.js"></script>
+<!-- Counters -->
+<script src="/javascripts/jquery.countTo.js"></script>
+<!-- Main -->
+<script src="/javascripts/main.js"></script>
+
+</body>
+</html>

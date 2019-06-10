@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>资金账户子系统-资金明细</title>
+	<link type="text/css" rel="stylesheet" href="/stylesheets/core.css">
+	<link type="text/css" rel="stylesheet" href="/stylesheets/home.css">
+	<script src="/javascripts/jquery-3.4.1.js"></script>
+	<script src="/javascripts/usersOrders.js"></script>
+</head>
+<body>
+
+<!-- capital head begin -->
+	<header class="capital-header">
+		<div class="capital-entered">
+			<div class="capital-header-content capital-flex">
+				<div class="capital-column">
+					<a href='/userLogin/userHome' class="capital-column-capital-logo">
+						<img src="/images/icon/capital-logo.png" title="" about="" alt="">
+					</a>
+				</div>
+			</div>
+		</div>
+	</header>
+<!-- capital head end -->
+
+<!-- capital content begin -->
+	<section>
+		<div class="capital-content-slide">
+			<div class="capital-flex">
+				<!-- left begin -->
+				<div class="capital-column capital-column-2">
+					<div class="capital-menu">
+						<ul>
+							<li class="capital-menu-item">
+								<a href='/userLogin/userHome'>首页</a>
+							</li>
+							<li class="capital-menu-item">
+								<span class="capital-menu-sub-title">操作</span>
+								<ul>
+									<li>
+										<a href='/userLogin/userHome/Deposit'>我要存款</a>
+									</li>
+									<li>
+										<a href='/userLogin/userHome/Withdraw'>我要取款</a>
+									</li>
+								</ul>
+							</li>
+							<li class="capital-menu-item">
+								<span class="capital-menu-sub-title">数据</span>
+								<ul>
+									<li>
+										<a href='/userLogin/userHome/CapitalDetails' class="active">资金明细</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- left end -->
+				<!-- center begin -->
+				<div class="capital-column capital-column-8">
+					<div class="capital-right-head">
+						<div class="capital-right-page-info">
+							<div class="capital-user-photo">
+								<a href="javascript:;">
+									<img src="/images/icon/photo.jpg" title="" about="" alt="">
+								</a>
+							</div>
+							<div class="capital-user-info">
+								<div class="capital-user-info-name capital-flex">
+									<a href="info.html">你好！</a>
+								</div>
+								<div class="capital-user-info-func capital-flex">
+									<span class="capital-tag"><%= accountid %></span>
+									<form id="usersLogoutOrder">
+										<input class="capital-user-info-func1" type="button" id="userslogout" value="退出">
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="capital-loading-box">
+						<form id="usersDetailsOrder">
+							<div class="capital-reg-form-group clearfix">
+								<div class="capital-reg-form-button" style="margin-left:215px;">
+									<input class="capital-body-submit1" type="button" id="usersdetails" value="查询" style="margin-top: 27px;">
+								</div>
+								<div style="margin-left: 460px;padding-top: 40px;">(仅显示最近100条)</div>
+							</div>
+						</form>
+
+						<div class="capital-table" style="margin-top: -40px;">
+							<table id="tabDetails"></table>
+							<div class="capital-table-pagination">
+								<button id="prev"></button>
+								<span id="pages"></span>
+								<button id="next"></button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- center end -->
+				<!-- right begin-->
+				<div class="capital-column capital-column-1">
+					<img src="/images/ad/ad.jpg" alt="">
+				</div>
+				<!-- right end-->
+			</div>
+		</div>
+
+	</section>
+<!-- capital content end -->
+</body>
+</html>

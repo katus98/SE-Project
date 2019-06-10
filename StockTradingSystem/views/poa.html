@@ -1,0 +1,288 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"> 
+	<title>个人证券账户开户</title>
+	<link rel="stylesheet" href="/stylesheets/forAB/bootstrap.min.css">
+    <link rel="stylesheet" href="/javascripts/forAB/bootstrap.min.js">
+    <link rel="stylesheet" href="/stylesheets/mystyle.css">
+    <script src="/javascripts/jquery.min.js"></script>
+    
+	<!-- Animate.css -->
+	<link rel="stylesheet" href="/stylesheets/animate.css">
+	<!-- Icomoon Icon Fonts-->
+	<link rel="stylesheet" href="/stylesheets/icomoon.css">
+	<!-- Bootstrap  -->
+	<link rel="stylesheet" href="/stylesheets/forAB/bootstrap1.css">
+	<!-- Magnific Popup -->
+	<link rel="stylesheet" href="/stylesheets/magnific-popup.css">
+	<!-- Flexslider  -->
+	<link rel="stylesheet" href="/stylesheets/flexslider.css">
+	<!-- Theme style  -->
+	<link rel="stylesheet" href="/stylesheets/style1.css">
+	<!-- Modernizr JS -->
+	<script src="/javascripts/modernizr-2.6.2.min.js"></script>
+	
+	<script src="/javascripts/testjh.js"></script>
+    
+	<style type="text/css">
+		.hkh
+		{
+			position: absolute;
+    		height:750px;
+    		width: 1060px;
+			background-color:#FFFFFF;
+			margin-bottom:20px;
+		}
+		.ph
+    	{
+    		position: absolute;
+			top:20px;
+			left:110px;  	
+    	}
+		.kh
+    	{
+    		position: absolute;
+			top:90px;
+			left:100px;  	
+    	}
+    	.kh1
+    	{
+    		position: absolute;
+			top:90px;
+			left:600px;  		
+    	}
+    	.kh2
+    	{
+    		position: absolute;
+    		top:330px;
+    		left:500px;
+    		height:50px;
+    		width: 300px;    	
+    	}
+    	.kh3
+    	{
+    		position: absolute;
+    		top:330px;
+    		left:660px;
+    		height:50px;
+    		width: 300px;    		
+    	}
+		.rt
+    	{
+    		position: absolute;
+			left:20px;
+    		height:30px;
+    	}
+		.r1
+    	{
+    		position: absolute;
+    		top:40px;
+			left:20px;
+    		height:50px;
+			width:50px; 
+    	}
+		.r2
+    	{
+    		position: absolute;
+    		top:40px;
+			left:100px;
+    		height:50px;
+			width:50px;
+    	}
+    	.fg
+        {
+            position: absolute;
+            top:50px;
+            left:70px;
+            width:600px;
+            height:4px;
+        }
+        .txb
+		{
+			position: relative;
+			width:300px;
+			height:80px;
+		}
+		.mxb
+		{
+			display:none;
+			position: absolute;
+			left:20px;
+			width:300px;
+			top:50px;
+			color:red;
+			font-size: 12px;
+		}
+    </style>
+</head>
+<body>
+
+<nav class="fh5co-nav" role="navigation">
+	<div class="container-wrap">
+		<div class="top-menu">
+			<div class="row">
+				<div class="col-xs-2">
+                    <div id="fh5co-logo"><img src="/images/logo.png" alt="" width="300" height="90"></div>
+                </div>
+				<div class="col-xs-10 text-right menu-1">
+					<ul>
+						<li><a href="/securitiesaccount">首页</a></li>
+						<li class="active has-dropdown">
+							<a href="#">开户</a>
+							<ul class="dropdown">
+								<li><a href="/securitiesaccount/coa">法人开户</a></li>
+								<li><a href="/securitiesaccount/poa">个人开户</a></li>
+							</ul>
+						</li>
+						<li class="has-dropdown">
+							<a href="#">挂失</a>
+							<ul class="dropdown">
+								<li><a href="/securitiesaccount/cfa">法人挂失</a></li>
+								<li><a href="/securitiesaccount/pfa">个人挂失</a></li>
+							</ul>
+						</li>
+						<li class="has-dropdown">
+							<a href="#">补办</a>
+							<ul class="dropdown">
+								<li><a href="/securitiesaccount/cra">法人补办</a></li>
+								<li><a href="/securitiesaccount/pra">个人补办</a></li>
+							</ul>
+						</li>
+						<li class="has-dropdown">
+							<a href="#">销户</a>
+							<ul class="dropdown">
+								<li><a href="/securitiesaccount/cca">法人销户</a></li>
+								<li><a href="/securitiesaccount/pca">个人销户</a></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</nav>
+<div class="container-wrap">
+<div class="hkh">
+<div class="fg">
+    <img src="/images/fg.jpg" width="440px"height="4px">
+</div>
+<div class="ph">
+<p style="font-size:20px;color:#A92443;font-weight:bold">个人证券账户开户</p>
+</div>
+<form id="poaccount">
+<div class="kh">
+	<div class="txb">
+            <input id="poaim0" required='' type='text' name="name" onblur="checkFill('#poaim0', '#poawm0')">
+            <label alt='请输入开户人姓名' placeholder='姓名'></label>
+			<div id="poawm0" class="mxb">姓名栏不能为空</div>
+    </div>
+	<div class="txb">
+        <div class="rt" style="font-weight:bold">
+		<p>请选择开户人性别</p>
+		</div>
+		<div class="r1">
+			<label for="male" >男性</label>
+			<input required='' type="radio" name="gender" value="male" checked="true"/>
+		</div>
+		<div class="r2">
+			<label for="female" >女性</label>
+			<input required='' type="radio" name="gender" value="female"/>
+		</div>
+    </div>
+    <div class="txb">
+            <input id="poaim1" required='' type='text' name="identityid" onblur="checkDiffer('#poaim1', '#poawm1','#poaim7', '#poawm7',0,0)">
+            <label alt='请输入开户人身份证号码' placeholder='身份证号码'></label>
+			<div id="poawm1" class="mxb">身份证错误</div>
+    </div>
+	<div class="txb">
+            <input id="poaim2" required='' type='text' name="homeaddress" onblur="checkFill('#poaim2', '#poawm2')">
+            <label alt='请输入开户人家庭地址' placeholder='家庭地址'></label>
+			<div id="poawm2" class="mxb">家庭地址栏不能为空</div>
+    </div>
+	<div class="txb">
+            <input id="poaim3" required='' type='text' name="work" onblur="checkFill('#poaim3', '#poawm3')">
+            <label alt='请输入开户人职业' placeholder='职业'></label>
+			<div id="poawm3" class="mxb">职业栏不能为空</div>
+    </div>
+	<div class="txb">
+            <!--<input id="poaim4" required='' type='text' name="educationback" onblur="checkFill('#poaim4', '#poawm4')">
+            <label alt='请输入开户人学历' placeholder='学历'></label>-->
+			<div class="rt" style="font-weight:bold">
+				<p>请选择开户人学历</p>
+			</div>
+			<div class="r1">
+				<select name="educationback">
+					<option value="小学及以下">小学及以下</option>
+					<option value="初中">初中</option>
+					<option value="高中">中专/高中</option>
+					<option value="专科">专科</option>
+					<option value="本科">本科</option>
+					<option value="研究生及以上">研究生及以上</option>
+					<option value="其他">其他</option>
+				</select>
+			</div>
+			<div id="poawm4" class="mxb">学历栏不能为空</div>
+    </div>
+	<div class="txb">
+			<input id="poaim5" required='' type='text' name="workaddress" onblur="checkFill('#poaim5', '#poawm5')">
+			<label alt='请输入开户人工作单位' placeholder='工作单位'></label>
+			<div id="poawm5" class="mxb">工作单位栏不能为空</div>
+    </div>
+</div>
+
+<div class="kh1">
+	<div class="txb">
+            <input id="poaim6" required='' type='text' name="phonenumber" onblur="checkPhoneNumber('#poaim6', '#poawm6')">
+            <label alt='请输入开户人联系电话' placeholder='联系电话'></label>
+			<div id="poawm6" class="mxb">联系电话栏不能为空</div>
+    </div>
+	<div class="txb">
+		<div class="rt" style="font-weight:bold">
+		<p>是否为代办</p>
+		</div>
+		<div class="r1">
+			<label for="yes" >是</label>
+			<input required='' type="radio" name="agent" value="yes"  onclick="document.getElementById('poaagd').style.display='';"/>
+		</div>
+		<div class="r2">
+			<label for="no" >否</label>
+			<input required='' type="radio" name="agent" value="no" checked="true" onclick="document.getElementById('poaagd').style.display='none';document.getElementById('poaagi').value='';"/>
+		</div>
+	</div>
+	<div class="txb" id='poaagd' style="display: none">
+            <input id="poaim7" required='' type='text' style="" id='poaagi' name="agentid" onblur="checkDiffer('#poaim1', '#poawm1','#poaim7', '#poawm7',0,1)">
+            <label alt='请输入代办人身份证号' placeholder='代办人身份证号'></label>
+			<div id="poawm7" class="mxb">代办人身份证号栏不能为空</div>
+    </div>
+</div>
+</form>
+<div class="kh2" align=center>
+<button type="button" class="btn btn-default" id="submit" onclick="window.location.href='/securitiesaccount/poa'">提交</button></td>
+</div>
+<div class="kh3" align=center>
+<button type="button" class="btn btn-default"  onclick="window.location.href='/securitiesaccount'">取消</button></td>
+</div>
+</div>
+</div>
+<!-- jQuery -->
+<script src="/javascripts/jquery1.min.js"></script>
+<!-- jQuery Easing -->
+<script src="/javascripts/jquery.easing.1.3.js"></script>
+<!-- Bootstrap -->
+<script src="/javascripts/forAB/bootstrap1.min.js"></script>
+<!-- Waypoints -->
+<script src="/javascripts/jquery.waypoints.min.js"></script>
+<!-- Flexslider -->
+<script src="/javascripts/jquery.flexslider-min.js"></script>
+<!-- Magnific Popup -->
+<script src="/javascripts/jquery.magnific-popup.min.js"></script>
+<script src="/javascripts/magnific-popup-options.js"></script>
+<!-- Counters -->
+<script src="/javascripts/jquery.countTo.js"></script>
+<!-- Main -->
+<script src="/javascripts/main.js"></script>
+
+</body>
+</html>

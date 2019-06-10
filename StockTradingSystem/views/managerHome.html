@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>资金账户子系统-管理员首页</title>
+	<link type="text/css" rel="stylesheet" href="/stylesheets/core.css">
+	<link type="text/css" rel="stylesheet" href="/stylesheets/home.css">
+	<link type="text/css" rel="stylesheet" href="/stylesheets/calendar.css">
+	<script src="/javascripts/jquery-3.4.1.js"></script>
+	<script src="/javascripts/calendar.js"></script>
+	<script src="/javascripts/managerOrders.js"></script>
+
+</head>
+<body>
+
+<!-- capital head begin -->
+	<header class="capital-header">
+		<div class="capital-entered">
+			<div class="capital-header-content capital-flex">
+				<div class="capital-column">
+					<a href='/managerLogin/managerHome' class="capital-column-capital-logo">
+						<img src="/images/icon/capital-logo.png" title="" about="" alt="">
+					</a>
+				</div>
+			</div>
+		</div>
+	</header>
+<!-- capital head end -->
+
+<!-- capital content begin -->
+	<section>
+		<div class="capital-content-slide">
+			<div class="capital-flex">
+				<!-- left begin -->
+				<div class="capital-column capital-column-2">
+					<div class="capital-menu">
+						<ul>
+							<li class="capital-menu-item">
+								<a href='/managerLogin/managerHome'  class="active">首页</a>
+							</li>
+							<li class="capital-menu-item">
+								<span class="capital-menu-sub-title">操作</span>
+								<ul>
+									<li>
+										<a href='/managerLogin/managerHome/Register'>账户注册</a>
+									</li>
+									<li>
+										<a href='/managerLogin/managerHome/PasswordChange'>密码修改</a>
+									</li>
+									<li>
+										<a href='/managerLogin/managerHome/ReportLoss'>账户挂失</a>
+									</li>
+									<li>
+										<a href='/managerLogin/managerHome/MakeUp'>账户补办</a>
+									</li>
+									<li>
+										<a href='/managerLogin/managerHome/Close'>账户销户</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- left end -->
+				<!-- center begin -->
+				<div class="capital-column capital-column-8">
+					<div class="capital-right-head">
+						<div class="capital-right-page-info">
+							<div class="capital-user-photo">
+								<a href="javascript:;">
+									<img src="/images/icon/photo.jpg" title="" about="" alt="">
+								</a>
+							</div>
+							<div class="capital-user-info">
+								<div class="capital-user-info-name capital-flex">
+									<a href="info.html">你好！</a>
+								</div>
+								<div class="capital-user-info-func capital-flex">
+									<span class="capital-tag"><%= workerid %></span>
+									<form id="managerLogoutOrder">
+										<input class="capital-user-info-func1" type="button" id="managerlogout" value="退出">
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+						
+					<div class="capital-loading-box-left">
+						<div id="calendar" class="calendar"></div>
+					</div>
+
+					<div class="capital-loading-box-right">
+						<div class="capital-loading-box-right-info">
+							<dl>
+								<dt>活期储蓄结息规则</dt>
+								<dd>活期储蓄（存折）存款每年结息一次（每年的六月三十日为结息日）。结息时把“元”以上利息并入本金，“元”以下角分部分转入下年利息余额内。活期储蓄在存入期间遇有利率调整，按结息日挂牌公告的活期储蓄存款利率计算利息。</dd>
+								<dd>因此，管理员需要在每年的六年三十日进行所有用户的资金账户结息操作按钮。登录管理界面后请确认今日日期并按照规则进行操作。</dd>
+							</dl>
+						
+							<div class="capital-reg-form-button1">
+								<input class="capital-body-submit1" type="button" id="managerInterest630" value="结算">
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<!-- center end -->
+				<!-- right begin-->
+				<div class="capital-column capital-column-1">
+					<img src="/images/ad/ad.jpg" alt="">
+				</div>
+				<!-- right end-->
+			</div>
+		</div>
+	</section>
+<!-- capital content end -->
+</body>
+</html>
