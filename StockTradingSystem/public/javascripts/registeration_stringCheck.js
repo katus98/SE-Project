@@ -53,7 +53,6 @@ $(document).ready(function () {
                         gotoURL += 'personId=' + PrefixInteger(data.personId, 10) + '&';
                         gotoURL += 'name=' + data.name + '&';
                         gotoURL += 'type=' + data.type;
-                        //todo
                         $.message({
                             message: data.remark,
                             type: 'success'
@@ -62,7 +61,6 @@ $(document).ready(function () {
                             $(window).attr('location', gotoURL);
                         }, 2500);
                     } else {
-                        //todo
                         $.message({
                             message: data.remark,
                             type: 'error'
