@@ -5,8 +5,8 @@ var router = express.Router();
 var dbConnection = require('../database/MySQLquery');
 
 // 引入自定义模块接口
-var capitalUsers = require('../interfaces/capitalUsers');
-var capitalAccountUsers = require('../interfaces/capitalAccountUsers');
+var capitalUsers = require('../sqlClasses/CapitalUsers');
+var capitalAccountUsers = require('../sqlClasses/CapitalAccountUsers');
 
 // 登录页面
 router.get('/', function(req, res, next) {
@@ -43,8 +43,7 @@ router.get('/userHome/Withdraw', function(req, res, next) {
             capitalaccountid : req.session.capitalaccountid,
             accountid : ("" + req.session.capitalaccountid)
         });
-    }
-    else{
+    } else {
         res.redirect("/userLogin");
     }
 });

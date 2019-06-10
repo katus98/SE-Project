@@ -195,6 +195,32 @@ function Stock() {
             });
         }
     };
+    /*
+    方法名称：checkStockClearByPersonid
+    实现功能：通过personId查询持股表确认该账户下股票是否清空
+    传入参数：personId（整数）、回调函数
+    回调参数：字符串：清空与否
+    编程者：黄欣雨
+    * */
+    this.checkStockClearByPersonid = function (personId, callback) {
+        let getSql="SELECT max(stocknum) AS msn FROM stockhold WHERE personid= ?";
+        let SqlParams = [personId];
+        dbQuery(getSql, SqlParams,function (err, result) {
+            if (err) {
+                console.log('[SELECT ERROR] - ', err.message);
+                return;
+            }
+            if (result.length > 0) {
+                if (result[0].msn == 0) {
+                    callback('StockClear');
+                } else {
+                    callback('StockUnclear');
+                }
+            } else {
+                callback('notFound');
+            }
+        });
+    };
     /****插入方法****/
     //todo: 这里自己写就好了，应该没有其他小组会调用
     /****更新方法****/

@@ -7,6 +7,7 @@ var calculateInterest = require('../publicFunctionInterfaces/CalculateInterest')
 function capitalAccountManagement () {
 	// 资金账户注册
 	this.register = function (tradepassWord, cashpassWord, identificationid, relatedsecuritiesaccountid, callback) {
+		let re0 = {result: false, capitalAccountId: 1000000, remark: ''};
 		let capitalaccountid = 1000000;
 		let selectSql = "SELECT max(capitalaccountid) as MAXID FROM capitalaccount";
         dbQuery(selectSql, [], function (err, result) {
@@ -33,7 +34,8 @@ function capitalAccountManagement () {
 						console.log('[SELECT ERROR] - ', err.message);
 						return;
 					} else if (result.length == 0) {
-						callback("请输入正确的关联证券账户和身份证号码！");
+						re0.remark = "请输入正确的关联证券账户和身份证号码！";
+						callback(re0);
 					} else {
 						let checkSqlTwo = "SELECT * FROM capitalaccount WHERE relatedsecuritiesaccountid = "
 										 + relatedsecuritiesaccountid + " AND capitalaccountstate = \'normal\'";
@@ -42,7 +44,8 @@ function capitalAccountManagement () {
 								console.log('[SELECT ERROR] - ', err.message);
 								return;
 							} else if (result.length > 0) {
-								callback("相关联的证券账户已存在资金账户！");
+								re0.remark = "相关联的证券账户已存在资金账户！";
+								callback(re0);
 							} else {
 								let insertSql = "INSERT into capitalaccount(capitalaccountid,tradepassWord,cashpassWord,identificationid,\
 												relatedsecuritiesaccountid) values (" + capitalaccountid +",\"" + tradepassWord + "\""+
@@ -52,7 +55,10 @@ function capitalAccountManagement () {
 										console.log('[INSERT ERROR] - ', err.message);
 										return;
 									} else {
-										callback('资金账户注册成功！您的资金账户ID为:' + capitalaccountid);
+										re0.result = true;
+										re0.capitalAccountId = capitalaccountid;
+										re0.remark = '资金账户注册成功！您的资金账户ID为:' + capitalaccountid;
+										callback(re0);
 									}
 								});
 							}

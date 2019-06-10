@@ -24,8 +24,7 @@ router.get('/managerHome', function(req, res, next) {
 router.get('/managerHome/Register', function(req, res, next) {
     if(req.session.ismanagerlogin) {
         res.render('managerRegister',{workerid: (""+req.session.managerid)});
-    }
-    else {
+    } else {
         res.redirect("/managerLogin");
     }
 });
@@ -91,7 +90,7 @@ router.post('/capitalAccountRegister', function (req, res) {
 	    management.register(req.body.tradepassWord,req.body.cashpassWord,
 	    					req.body.identificationid,parseInt(req.body.relatedsecuritiesaccountid),
 	    					function (result) {
-	      	let returnText = "" + result;
+	      	let returnText = "" + result.remark;
 	        res.end(returnText);
 	    });
 	}
