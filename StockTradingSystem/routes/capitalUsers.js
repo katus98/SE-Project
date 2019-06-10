@@ -39,9 +39,13 @@ router.get('/userHome/Deposit', function(req, res, next) {
 
 router.get('/userHome/Withdraw', function(req, res, next) {
     if (req.session.islogin) {
-        res.render('userWithdraw', {
-            capitalaccountid : req.session.capitalaccountid,
-            accountid : ("" + req.session.capitalaccountid)
+        let getSql = 'SELECT * FROM capitalaccount WHERE capitalaccountid = ' + req.session.capitalaccountid;
+        dbConnection(getSql, [], function(err, result){
+            res.render('userWithdraw', {
+                capitalaccountid : req.session.capitalaccountid,
+                accountid : ("" + req.session.capitalaccountid),
+                remained: ("" + result[0].availablemoney.toFixed(2))
+            });
         });
     } else {
         res.redirect("/userLogin");
@@ -143,7 +147,6 @@ router.post('/capitalAccountFundOut', function (req, res) {
 
 // 查询收支记录
 router.post('/capitalDetails', function (req, res) {
-
     try {
         var param=req.session.capitalaccountid;
         var users = new capitalAccountUsers();

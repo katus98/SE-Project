@@ -3,7 +3,7 @@ let dbQuery = require('../database/MySQLquery');
 
 function FindBack () {
     this.pfindback = function (data, req, callback) {
-        let getSql = "select personalaccount.state as s,personalaccount.personid as p,personalaccount.accountid as a from personalaccount,(select max(registertime) as r from personalaccount  where identityid="+'"'+req.body.identityid+'"'+") as u where personalaccount.registertime=u.r and personalaccount.identityid="+'"'+req.body.identityid+'"';
+        let getSql = "select personalaccount.state as s,personalaccount.personid as p,personalaccount.accountid as a from personalaccount,(select max(registertime) as r from personalaccount where identityid="+'"'+req.body.identityid+'"'+") as u where personalaccount.registertime=u.r and personalaccount.identityid="+'"'+req.body.identityid+'"';
         dbQuery(getSql, [], function (err, result) {
             if (err) {
                 console.log('[SELECT MAX ACCOUNTID ERROR] - ', err.message);
@@ -11,8 +11,12 @@ function FindBack () {
                 return;
             } else {
                 if (result.length > 0) {
-                    if (result[0].s=='normal') {callback(-1);}
-                    if (result[0].s=='logout') {callback(-2);}
+                    if (result[0].s=='normal') {
+                        callback(-1);
+                    }
+                    if (result[0].s=='logout') {
+                        callback(-2);
+                    }
                     if (result[0].s=='frozen') {
                         // 给idreference表插入数据
                         let getSql = "insert into idreference(accountid,personid) values(?,?)";
@@ -30,7 +34,7 @@ function FindBack () {
                                 let getSql2="insert into personalaccount(accountid,name,gender,identityid,homeaddress,work,educationback,workaddress,phonenumber,agentid,personid) values("+
                                             '"' +data.a+'"' +","+'"' +req.body.name+'"' +","+'"' +req.body.gender+'"' +","+'"' +req.body.identityid+'"' +","+'"' +req.body.homeaddress+'"' +","+'"' +req.body.work+'"' +","+'"' +req.body.educationback+'"' +","+'"' +req.body.workaddress+'"' +
                                             ","+'"' +req.body.phonenumber+'"' +","+'"' +req.body.agentid+'"' +","+'"' +result[0].p+'"' +")";
-                                dbQuery(getSql2, [], function(err,result2){
+                                dbQuery(getSql2, [], function(err, result2){
                                     if (err) {
                                         console.log('[INSERT TO PERSONALACCOUNT ERROR] -', err.message);
                                         callback(-4);
@@ -89,15 +93,18 @@ function FindBack () {
                 callback(-4);
                 return;
             }
-            if(result.length>0)
-            {
-            	if(result[0].s=='normal') {callback(-1);}
-                if(result[0].s=='logout') {callback(-2);}
+            if (result.length > 0) {
+            	if(result[0].s=='normal') {
+            	    callback(-1);
+            	}
+                if(result[0].s=='logout') {
+                    callback(-2);
+                }
                 if(result[0].s=='frozen')
                 {
 	                // 给idreference表插入数据
 	                let getSql1 = "insert into idreference(accountid,personid) values(?,?)";
-	                let SqlParams1 = [data.a, data.p];
+	                let SqlParams1 = [data.a, result[0].p];
 	                dbQuery(getSql1, SqlParams1, function (err, result1) {
 	                    if (err) {
 	                        console.log('[INSERT TO IDREFERENCE ERROR] - ', err.message);

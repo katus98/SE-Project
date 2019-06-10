@@ -116,7 +116,7 @@ router.post('/cra', function (req, res) {
         // 符合条件可以进行操作
         console.log('openAccount对象建好');
         oaccount.currentcaccount(function(result){
-            let fback=new findBack();
+            let fback = new findBack();
             fback.cfindback(result, req, function(result2){
                 console.log(result2);
                 if (result2==-3) {

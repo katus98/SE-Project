@@ -94,71 +94,47 @@ insert into
 insert into
 	stockhold(personid, stockid, stocknum, stockcost) 
 	select distinct personid, code, 0 as stocknum, 0.00 as stockcost from idreference cross join stock;
-update stockhold set stocknum = 1000000, stockcost = 12 where personid <> 3 and stockid = "000001";
-update stockhold set stocknum = 5201024, stockcost = 3.7 where personid <> 3 and stockid = "000004";
-update stockhold set stocknum = 6000000 where personid <> 3 and stockid = "000002";
-update stockhold set stocknum = 5201024 where personid <> 3 and stockid = "000003";
-update stockhold set stocknum = 6000000 where personid <> 3 and stockid = "000011";
-update stockhold set stocknum = 5201024 where personid <> 3 and stockid = "000012";
+update stockhold set stocknum = 100000, stockcost = 12.79 where personid > 1000000000 and stockid = "000001";
+update stockhold set stocknum = 100000, stockcost = 3.73 where personid > 1000000000 and stockid = "000004";
+update stockhold set stocknum = 100000, stockcost = 29.53 where personid > 1000000000 and stockid = "000002";
+update stockhold set stocknum = 100000, stockcost = 19.6 where personid > 1000000000 and stockid = "000003";
+update stockhold set stocknum = 100000, stockcost = 6.5 where personid > 1000000000 and stockid = "000005";
+update stockhold set stocknum = 100000, stockcost = 8.26 where personid > 1000000000 and stockid = "000006";
+update stockhold set stocknum = 100000, stockcost = 4.67 where personid > 1000000000 and stockid = "000007";
+update stockhold set stocknum = 100000, stockcost = 6.88 where personid > 1000000000 and stockid = "000008";
+update stockhold set stocknum = 100000, stockcost = 3.97 where personid > 1000000000 and stockid = "000009";
+update stockhold set stocknum = 100000, stockcost = 11.15 where personid > 1000000000 and stockid = "000010";
+update stockhold set stocknum = 100000, stockcost = 16.64 where personid > 1000000000 and stockid = "000019";
+update stockhold set stocknum = 100000, stockcost = 15.98 where personid > 1000000000 and stockid = "000020";
 -- 请根据需要进一步补充
 
 -- Group-B
 insert into 
 	capitalaccount(capitalaccountid, tradepassword, cashpassword, identificationid, relatedsecuritiesaccountid, capitalaccountstate, availablemoney, frozenmoney, interestremained)
 	values
-	(2019007, 'skrvip', '989898', '210211200001016666', 0, 'normal', 98000000000.00, 0.00, 0.00),
+	(2019007, 'skrgod', '980818', '210211200001016666', 0, 'normal', 98000000000.00, 0.00, 0.00),
 	(2019101, '115165', '495165', '412726198412232666', 1, 'normal', 4121544214.38, 50000.00, 3.45),
 	(2019102, '198273', '976164', '481892196608162588', 2, 'normal', 56127.96, 0.00, 8.96),
 	(2019103, '847922', '254929', '456387199006252698', null, 'frozen', 0.00, 9551.16, 2.39),
 	(2019104, '516951', '717921', '464892198509152896', 3, 'logout', 0.00, 0.00, 0.00),
 	(2019105, '115165', '495385', '412726199705168866', 4, 'normal', 4141701624.38, 50000.00, 3.45),
-	(2019106, '196273', '972194', '419252196608162588', 1000000005, 'normal', 56127.96, 0.00, 8.96),
+	(2019106, '2345670', '2345670', '419252196608162588', 1000000005, 'normal', 56127.96, 0.00, 8.96),
 	(2019107, '896922', '289229', '491527199006252698', null, 'frozen', 0.00, 9551.16, 2.39),
 	(2019108, '516921', '714921', '429891198509152896', null, 'logout', 0.00, 0.00, 0.00),
-	(2019109, '113965', '493965', '481192198412232666', 1000000004, 'normal', 414897456424.38, 0.00, 3.45),
-	(2019110, '198783', '977964', '429212196608162588', 1000000003, 'normal', 56127.96, 0.00, 8.96),
+	(2019109, '2345670', '2345670', '481192198412232666', 1000000004, 'normal', 41489.38, 0.00, 3.45),
+	(2019110, '2345670', '2345670', '429212196608162588', 1000000003, 'normal', 56127.96, 0.00, 8.96),
 	(2019111, '846952', '254829', '491470199006252698', null, 'frozen', 0.00, 9551.16, 2.39),
 	(2019112, '518951', '799921', '464098198509152896', null, 'logout', 0.00, 0.00, 0.00),
-	(2019113, '585165', '491865', '419126198412232666', 1000000001, 'normal', 4124488814.38, 0.00, 3.45),
-	(2019114, '168273', '992164', '481892196908162588', 1000000002, 'normal', 5614781427.96, 0.00, 8.96),
+	(2019113, '2345670', '2345670', '419126198412232666', 1000000001, 'normal', 41244.38, 0.00, 3.45),
+	(2019114, '2345670', '2345670', '481892196908162588', 1000000002, 'normal', 56147.96, 0.00, 8.96),
 	(2019115, '848922', '251489', '456387199908526998', null, 'frozen', 0.00, 9551.16, 2.39),
 	(2019116, '511851', '715591', '464892198908091796', 5, 'normal', 0.00, 0.00, 0.00);
 
 insert into 
 	jobberworker(jobberworkerid, jobberworkerpassword)
 	values
-	(2019001, '1111'), 
-	(2019002, '1111'), 
-	(2019003, '1111'), 
-	(2019004, '1111'), 
-	(2019005, '1111'), 
-	(2019006, '1111'), 
-	(2019007, '1111'), 
-	(2019008, '1111'), 
-	(2019010, '1111'), 
-	(2019011, '1111'), 
-	(2019012, '1111'), 
-	(2019013, '1111'), 
-	(2019014, '1111'), 
-	(2019015, '1111'), 
-	(2019016, '1111');
-
-insert into 
-	capitalaccountio(capitalaccountid, ioamount, moneytype, iodescription)
-	values
-	(2019101, 4124.389, 'RMB', '无'), 
-	(2019102, 3162.431, 'RMB', '无'), 
-	(2019103, 7126.334, 'RMB', '无'), 
-	(2019104, 9743.464, 'RMB', '无'), 
-	(2019105, 1297.137, 'RMB', '无'), 
-	(2019106, 4522.941, 'RMB', '无'), 
-	(2019107, 4175.549, 'RMB', '无'), 
-	(2019108, 1762.912, 'RMB', '无'), 
-	(2019109, 7527.136, 'RMB', '无'), 
-	(2019110, 4524.961, 'RMB', '无'), 
-	(2019111, 2452.314, 'RMB', '无'), 
-	(2019112, 3124.527, 'RMB', '无'), 
-	(2019113, 8524.452, 'RMB', '无'), 
-	(2019114, 8964.372, 'RMB', '无'), 
-	(2019115, 4524.278, 'RMB', '无'), 
-	(2019116, 2724.878, 'RMB', '无'); 
+	(2019001, 'wangyilin'), 
+	(2019002, 'subin'), 
+	(2019003, 'liangshuchen'), 
+	(2019004, 'limingtao'), 
+	(2019005, 'sunkeran');
