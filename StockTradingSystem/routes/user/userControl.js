@@ -34,7 +34,7 @@ module.exports = function () {
         }
         data.success = true;
         res.end(data);
-    })
+    });
 
 
     router.get('/index', (req, res) => {
@@ -277,7 +277,7 @@ module.exports = function () {
     });
 
     router.post('/searchByID', (req, res, next) => {
-        console.log("xxxx-----------------121312321--------------------------------------------------------------");
+        //console.log("xxxx-----------------121312321--------------------------------------------------------------");
         var sqlQuery;
         var params;
         sqlQuery = "with\n" +
@@ -771,8 +771,14 @@ module.exports = function () {
     router.post('/orderSubmit', function (req, res) {
         console.log(req.body);
         req.body.userId = req.session['admin_id'];
+        let res0 = {result: false, remark: ""};
+        let promise0 = new Promise(function (resolve, reject) {
+            let match = new Match();
+            match.getStateOfMatch(function (result) {
+                resolve(result.start);
+            });
+        });
         let promise1 = new Promise(function (resolve, reject) {
-            let res0 = {result: false, remark: ""};
             let user = new User();
             user.checkAllAccountValidity(parseInt(req.body.userId), function (result0) {
                 if (result0.result === true) {
@@ -866,33 +872,54 @@ module.exports = function () {
                 }
             });
         });
-        promise1.then(function (res0) {
-            res.end(JSON.stringify(res0));
-            if (res0.result === true) {
-                console.log("指令加入缓存成功！");
+        promise0.then(function (res00) {
+            if (res00) {
+                promise1.then(function (res0) {
+                    res.end(JSON.stringify(res0));
+                    if (res0.result === true) {
+                        console.log("指令加入缓存成功！");
+                    }
+                });
+            } else {
+                res0.remark = '尚未开盘!';
+                res.end(JSON.stringify(res0));
             }
         });
     });
 
     router.post('/withdrawInstruction', function (req, res) {
+        let res0 = {result: false, remark: ''};
         console.log("Start undo operation:");
         console.log(req.body);
+        let promise0 = new Promise(function (resolve, reject) {
+            let match = new Match();
+            match.getStateOfMatch(function (result) {
+                resolve(result.start);
+            });
+        });
         if(req.body.type == 'BUY '){
             req.body.type = 'buy'
         }
         else if(req.body.type == 'SELL'){
             req.body.type = 'sell'
         }
-        // console.log(req.body.type + " and " +  req.body.id)
-        let instruction = new Instructions();
-        instruction.withdrawInstruction(req.body.type, parseInt(req.body.id), function (result) {
-            if (result === true) {
-                res.end("撤回成功!");
+        promise0.then(function (result0) {
+            if (result0) {
+                let instruction = new Instructions();
+                instruction.withdrawInstruction(req.body.type, parseInt(req.body.id), function (result) {
+                    res0.result = result;
+                    if (result === true) {
+                        res0.remark = "撤回成功!";
+                    } else {
+                        res0.remark = "撤回失败!";
+                    }
+                    res.end(JSON.stringify(res0));
+                });
             } else {
-                res.end("撤回失败!");
+                res0.remark = "尚未开盘!";
+                res.end(JSON.stringify(res0));
             }
         });
-
     });
 
 

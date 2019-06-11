@@ -649,9 +649,9 @@
                     alert("由于系统原因查询失败!");
                 }
             }
-        )
+        );
         undoTable.ajax.reload();
-    })
+    });
 </script>
 
 <!--fn_UNDO-->
@@ -665,19 +665,26 @@
                     type:type,
                     id:id,
                 },
-
-                success:function(result){
-                    $.message('撤销成功');
-                    // alert(result);
+                dataType: 'json',
+                success: function (result) {
+                    if (result.result) {
+                        $.message({
+                            message:result.remark
+                        });
+                    } else {
+                        $.message({
+                            message:''+result.remark,
+                            type: 'warning'
+                        });
+                    }
                     console.log("undo successfully");
                     undoTable.ajax.reload();
                 },
                 error: function () {
                     $.message({
-                        message:'由于系统原因查询失败!',
-                        type:'error'
+                        message: '由于系统原因查询失败!',
+                        type: 'error'
                     });
-                    // alert("由于系统原因查询失败!");
                 }
             }
         );
@@ -731,8 +738,8 @@
                 console.log("select unsuccessfully");
                 alert("Error!Something Wrong!");
             }
-        })
-    })
+        });
+    });
 </script>
 
 </body>
