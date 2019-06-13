@@ -464,6 +464,11 @@ html, body {
   width: 100%;
 }
 
+#capUser-btn {
+  float: left;
+  width: 100%;
+}
+
 ion-icon {
   font-size: 64px;
   color: #367CE3;
