@@ -122,21 +122,21 @@ function SecuritiesAccount() {
     回调参数：字符串：匹配与否
     编程者：黄欣雨
     * */
-    this.checkSecuritiesAccountidAndIdentityid = function (accountId, identityId, callback) {
-        let getSql = "SELECT identityid FROM ";
+    this.checkSecuritiesAccountidAndIdentityid=function(accountId,identityId,callback){
+        let getSql = "SELECT max(accountid) as ma FROM ";
         if (accountId < 1000000000) {
-            getSql += "personalaccount where accountid= ?";
+            getSql += "personalaccount where identityid= ?";
         } else {
-            getSql+="corporateaccount where accountid= ?";
+            getSql += "corporateaccount where identityid= ?";
         }
-        let getSqlParams = [accountId];
+        let getSqlParams = [identityId];
         dbQuery(getSql, getSqlParams, function (err, result) {
             if (err) {
                 console.log('[SELECT ERROR] - ', err.message);
                 return;
             }
             if (result.length > 0) {
-                if (result[0].identityid == identityId) {
+                if(result[0].ma == accountId){
                     callback('Match');
                 } else {
                     callback('notMatch');

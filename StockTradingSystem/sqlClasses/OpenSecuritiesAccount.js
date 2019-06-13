@@ -58,6 +58,15 @@ function OpenAccount() {
                                     callback(-3);
                                     return;
                                 }
+                                let getSql33='select DATE_FORMAT(registertime,"%Y-%m-%d %T") as r from personalaccount where accountid='+'"'+data.a+'"';
+                                dbQuery(getSql33, [], function(err,result){
+                                    if (err) {
+                                        console.log('[GET registertime ERROR] -', err.message);
+                                        callback(-3);
+                                        return;
+                                    }
+                                    callback(result[0].r);
+                                });
                             });
                         } else {
                             //如果不存在代办人，那么插入数据时，不需要插入代办人属性
@@ -71,10 +80,19 @@ function OpenAccount() {
                                     callback(-3);
                                     return;
                                 }
+                                let getSql33='select DATE_FORMAT(registertime,"%Y-%m-%d %T") as r from personalaccount where accountid='+'"'+data.a+'"';
+                                dbQuery(getSql33,[],function(err,result){
+                                    if (err) {
+                                        console.log('[GET registertime ERROR] -', err.message);
+                                        callback(-3);
+                                        return;
+                                    }
+                                    callback(result[0].r);
+                                });
                             });
                         }
                     });
-                    callback(1);
+                    //callback(1);
                 }
             }
         });
@@ -186,6 +204,7 @@ function OpenAccount() {
         dbQuery(addSql, addSqlParams, function (err, result) {
             if (err) {
                 console.log('[SELECT STOCKNUM ERROR] - ', err.message);
+                callback(-1);
                 return;
             }
             callback(1);
