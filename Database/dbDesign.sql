@@ -8,15 +8,19 @@ use StockTradingSys;
 -- 股票表
 drop table if exists stock;
 create table stock(
-	code varchar(20) primary key,   -- 股票ID
+	code varchar(40) primary key,   -- 股票ID
 	name_stock varchar(100),   -- 股票名称
 	current_price numeric(25, 2),   -- 实时价格
 	last_endprice numeric(25, 2),   -- 昨日收盘价
 	today_startprice numeric(25, 2),   -- 今日开盘价
-	amount bigint,   -- 总发行量
+	high_price numeric(25, 2),  -- 当前最高价
+	low_price numeric(25, 2),  -- 当前最低价
+	volumn numeric(25, 2),  -- 价值体量
+	turnover bigint default 5000,   -- 转手
+	amount bigint default 10000000,   -- 总发行量
 	permission boolean default true,   -- 本股票是否允许交易
 	notification varchar(500) default null,   -- 通知
-	percentagepricechange numeric(10, 3) default 100000,   -- 最大涨跌幅
+	percentagepricechange numeric(10, 2) default 0.1,   -- 最大涨跌幅
 	st boolean default false   -- 是否为ST股票
 );
 
@@ -31,6 +35,16 @@ create table stock_history(
 	notification varchar(500) default null,   -- 当日通知
 	time date,   -- 日期
 	primary key(code, time)
+);
+
+-- 股票管理员表
+DROP TABLE IF EXISTS security_practitioner;
+CREATE TABLE security_practitioner(
+	id VARCHAR(20) PRIMARY KEY,
+	password VARCHAR(30),
+	authority MEDIUMTEXT,
+	face MEDIUMBLOB,
+	phone VARCHAR(11)
 );
 
 -- Group-A
