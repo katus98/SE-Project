@@ -42,7 +42,7 @@ function getDetails (json, eleId) {
         page = e.target.getAttribute('json-page');
         renderPage();
     });
-    
+
 
     function renderPage(){
         //alert(page);
@@ -164,20 +164,20 @@ function AntiSqlValid(oField)
     }
 }
 
-function clearNoNum(obj){ 
+function clearNoNum(obj){
     obj.value = obj.value.replace(/[^\d.]/g,"");  //清除“数字”和“.”以外的字符  
     obj.value = obj.value.replace(/\.{2,}/g,"."); //只保留第一个. 清除多余的  
-    obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$","."); 
+    obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
     obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3');//只能输入两个小数  
     if(obj.value.indexOf(".")< 0 && obj.value !=""){//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额 
-        obj.value= parseFloat(obj.value); 
+        obj.value= parseFloat(obj.value);
     }
 }
 
 function WithdrawAll(){
-	var remained = document.getElementById("remained").innerHTML;
-	document.getElementById("amount_w").value = remained;
-	return false;
+    var remained = document.getElementById("remained").innerHTML;
+    document.getElementById("amount_w").value = remained;
+    return false;
 }
 
 $(document).ready(function () {
@@ -198,14 +198,14 @@ $(document).ready(function () {
             url: "/userLogin/capitalUsersLogin",
             data: $("#usersLoginOrder").serialize(),
             success: function (result) {
-                alert(result);              
+                alert(result);
                 if(result!='用户不存在或密码错误！'){
                     window.location.href = '/userLogin/userHome';
                 }
                 else{
                     window.location.reload();
                 }
-                
+
             },
             error: function () {
                 alert("由于系统原因登录指令发出失败!");
@@ -272,11 +272,20 @@ $(document).ready(function () {
             url: "/userLogin/capitalDetails",
             data: $("#usersDetailsOrder").serialize(),
             success: function (result) {
-                getDetails(result, "tabDetails");
+                if(result=="账号信息异常！")
+                {
+                    getDetails({}, "tabDetails");
+                }
+                else
+                {
+                    getDetails(result, "tabDetails");
+                }
+
                 alert("查询成功!");
             },
             error: function () {
                 alert("由于系统原因查询失败!");
+                //alert(error.message);
             }
         });
     });
@@ -288,14 +297,14 @@ $(document).ready(function () {
             url: "/userLogin/capitalUsersLogout",
             data: {},
             success: function (result) {
-                alert(result);               
+                alert(result);
                 if(result=='退出资金账户系统成功！'){
                     window.location.href = '/userLogin';
                 }
                 else{
                     window.location.reload();
                 }
-                
+
             },
             error: function () {
                 alert("由于系统原因退出指令发出失败!");

@@ -58,8 +58,7 @@ router.get('/userHome/CapitalDetails',function(req, res, next){
             capitalaccountid: req.session.capitalaccountid,
             accountid: ("" + req.session.capitalaccountid)
         });
-    }
-    else{
+    } else {
         res.redirect("/userLogin");
     }
 });
