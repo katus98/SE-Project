@@ -528,23 +528,23 @@
 
 <!--fn_BID-->
 <script>
-    function fn_getmoneyaccount(cp) {
-        var availablemoney;
-        $.ajax(
-            {
-                url:'/user/Trading_instructions/get_availablemoney',
-                type:'POST',
-                success:function(results){
-                    availablemoney = results;
-                    // return results;
-                    var json = $.parseJSON(results);
-                    var element_share = document.getElementById("bid_share");
-                    element_share.placeholder = "1-" + Math.ceil(availablemoney/cp);
-                    element_share.value = '';
-                }
-            }
-        );
-    }
+    // function fn_getmoneyaccount(cp) {
+    //     var availablemoney;
+    //     $.ajax(
+    //         {
+    //             url:'/user/Trading_instructions/get_availablemoney',
+    //             type:'POST',
+    //             success:function(results){
+    //                 availablemoney = results;
+    //                 // return results;
+    //                 var json = $.parseJSON(results);
+    //                 var element_share = document.getElementById("bid_share");
+    //                 element_share.placeholder = "1-" + Math.ceil(availablemoney/cp);
+    //                 element_share.value = '';
+    //             }
+    //         }
+    //     );
+    // }
 
     function fn_BID(code, cp, lp, tp) {
         var element_stockid = document.getElementById("bid_stockid");
@@ -554,7 +554,7 @@
         element_stockid.value = code;
         element_price.placeholder = (cp+lp+tp)/3;
         element_price.value = '';
-        fn_getmoneyaccount(cp);
+        // fn_getmoneyaccount(cp);
 
         alert("SELECT OPERATION SUCCESSFULLY !!!");
     }

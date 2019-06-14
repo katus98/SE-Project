@@ -412,10 +412,11 @@ module.exports = function () {
 
     router.post('/checkFloorCeil', (req, res) => {
         console.log("Dividing line ------------------------------------------------------------------");
-        var sql = "SELECT * FROM stock WHERE code = " + req.body.stockid;
+        var sql = "SELECT * FROM stock WHERE code = '" + req.body.stockid +"'";
         dbQuery(sql, "",function (error, results) {
             if (error) {
                 console.log('[SELECT ERROR] -------------------------------------------------------- ', error.message);
+                // console.log(sql+);
                 return;
             }
             console.log(results);
