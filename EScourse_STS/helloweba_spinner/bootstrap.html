@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0">
+<title>演示：jQuery数字加减插件</title>
+<!--bootstrap-->
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+<link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+<link href="bootstrap/bootstrap-spinner.css" rel="stylesheet">
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script src="bootstrap/jquery.spinner.min.js"></script>
+<!--bootstrap-->
+<link rel="stylesheet" href="../css/main.css" />
+<style type="text/css">
+.demo{width:560px; margin:20px auto 0 auto; }
+.demo h4{padding:10px 2px; font-size:14px; font-weight:bold}
+.demo p{line-height:32px}
+@media screen and (max-width: 360px) {.demo {width:340px}}
+</style>
+</head>
+
+<body>
+<div id="header">
+   <div id="logo"><h1><a href="http://www.helloweba.com" title="返回helloweba首页">helloweba</a></h1></div>
+</div>
+
+<div id="main">
+   <h2 class="top_title"><a href="http://www.helloweba.com/view-blog-282.html">jQuery数字加减插件</a></h2>
+   
+   <div class="demo">
+		<h4>示例2：bootstrap风格，右侧加减。</h4>
+		<p>最小1，最大10，每次加减1，默认1</p>
+		<div class="input-group spinner" data-trigger="spinner" id="spinner">
+			<input type="text" class="form-control" value="1" data-max="10" data-min="1" data-step="1">
+			<div class="input-group-addon">
+				<a href="javascript:;" class="spin-up" data-spin="up"><i class="icon-sort-up"></i></a>
+				<a href="javascript:;" class="spin-down" data-spin="down"><i class="icon-sort-down"></i></a>
+			</div>
+		</div>
+		<p>最小0，最大100，每次加减10，默认0</p>
+		<div class="input-group spinner" data-trigger="spinner">
+          <input type="text" class="form-control" value="0" data-max="100" data-min="0" data-step="10" >
+          <div class="input-group-addon">
+            <a href="javascript:;" class="spin-up" data-spin="up"><i class="icon-sort-up"></i></a>
+            <a href="javascript:;" class="spin-down" data-spin="down"><i class="icon-sort-down"></i></a>
+          </div>
+        </div>
+   </div>
+   
+  
+  <br/>
+</div>
+
+<div id="footer">
+    <p>Powered by helloweba.com  允许转载、修改和使用本站的DEMO，但请注明出处：<a href="http://www.helloweba.com">www.helloweba.com</a></p>
+</div>
+</body>
+</html>

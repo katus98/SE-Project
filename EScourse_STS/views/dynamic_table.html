@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="ThemeBucket">
+  <link rel="shortcut icon" href="#" type="image/png">
+  <title>Dynamic Table</title>
+
+  <!--dynamic table-->
+  <link rel="stylesheet" href="/css/jquery.dataTables.min.css" />
+  <!--dialog-->
+    <link rel="stylesheet" href="/css/dialog/remodal.css">
+    <link rel="stylesheet" href="/css/dialog/remodal-default-theme.css">
+
+
+  <link href="/js/advanced-datatable/css/demo_page.css" rel="stylesheet" />
+  <link href="/js/advanced-datatable/css/demo_table.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/js/data-tables/DT_bootstrap.css" />
+  <link rel="stylesheet" href="/js/switch-components/switch.css">
+  <!--<link rel="stylesheet" href="/js/switch-components/switch2.css">-->
+  <link href="/css/style.css" rel="stylesheet">
+  <link href="/css/style-responsive.css" rel="stylesheet">
+
+
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+  <script src="/js/html5shiv.js"></script>
+  <script src="/js/respond.min.js"></script>
+  <![endif]-->
+
+<!--Relevant with SPINNER-->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+<body class="sticky-header">
+
+<section>
+    <!-- left side start-->
+    <div class="left-side sticky-left-side">
+
+        <!--logo and iconic logo start-->
+        <div class="logo">
+            <a href="home"><img src="/images/logo.png" alt=""></a>
+        </div>
+        <div class="logo-icon text-center">
+            <a href="home"><img src="/images/logo_icon.png" alt=""></a>
+        </div>
+        <!--logo and iconic logo end-->
+
+        <div class="left-side-inner">
+
+            <!-- visible to small devices only -->
+            <div class="visible-xs hidden-sm hidden-md hidden-lg">
+                <div class="media logged-user">
+                    <img alt="" src="/images/photos/user-avatar.png" class="media-object">
+                    <div class="media-body">
+                        <h4><a href="#">John Doe</a></h4>
+                        <span>"Hello There..."</span>
+                    </div>
+                </div>
+
+                <h5 class="left-nav-title">Account Information</h5>
+                <ul class="nav nav-pills nav-stacked custom-nav">
+                    <li><a href="#"><i class="fa fa-user"></i> <span>Profile</span></a></li>
+                    <li><a href="#"><i class="fa fa-cog"></i> <span>Settings</span></a></li>
+                    <li><a href="#"><i class="fa fa-sign-out"></i> <span>Sign Out</span></a></li>
+                </ul>
+            </div>
+
+            <!--sidebar nav start-->
+            <ul class="nav nav-pills nav-stacked custom-nav">
+                <li><a href="home"><i class="fa fa-home"></i> <span>总面板</span></a></li>
+                <!--li class="menu-list"><a href=""><i class="fa fa-laptop"></i> <span>Layouts</span></a>
+                   <ul class="sub-menu-list">
+                       <li><a href="blank_page.html"> Blank Page</a></li>
+                       <li><a href="boxed_view.html"> Boxed Page</a></li>
+                       <li><a href="leftmenu_collapsed_view.html"> Sidebar Collapsed</a></li>
+                       <li><a href="horizontal_menu.html"> Horizontal Menu</a></li>
+
+                   </ul>
+               </li--> <!--layouts-->
+
+                <li class="menu-list nav-active"><a href="#"><i class="fa fa-th-list"></i> <span>股票详细信息</span></a>
+                    <ul class="sub-menu-list">
+                        <!--<li><a href="basic_table"> 普通股票 </a></li>-->
+                        <li class="active"><a href="dynamic_table">权限股票</a></li>
+                        <!--li><a href="responsive_table.html"> Responsive Table</a></li>
+                        <li><a href="editable_table.html"> Edit Table</a></li-->
+                    </ul>
+                </li> <!--data table-->
+                <!--<li class="menu-list"><a href=""><i class="fa fa-book"></i> <span>UI Elements</span></a>-->
+                    <!--<ul class="sub-menu-list">-->
+                        <!--<li><a href="general.html"> General</a></li>-->
+                        <!--<li><a href="buttons.html"> Buttons</a></li>-->
+                        <!--<li><a href="tabs-accordions.html"> Tabs & Accordions</a></li>-->
+                        <!--<li><a href="typography.html"> Typography</a></li>-->
+                        <!--<li><a href="slider.html"> Slider</a></li>-->
+                        <!--<li><a href="panels.html"> Panels</a></li>-->
+                    <!--</ul>-->
+                <!--</li> &lt;!&ndash;UI Elements&ndash;&gt;-->
+                <!--<li class="menu-list"><a href=""><i class="fa fa-cogs"></i> <span>Components</span></a>-->
+                    <!--<ul class="sub-menu-list">-->
+                        <!--<li><a href="grids.html"> Grids</a></li>-->
+                        <!--<li><a href="gallery.html"> Media Gallery</a></li>-->
+                        <!--<li><a href="calendar.html"> Calendar</a></li>-->
+                        <!--<li><a href="tree_view.html"> Tree View</a></li>-->
+                        <!--<li><a href="nestable.html"> Nestable</a></li>-->
+
+                    <!--</ul>-->
+                <!--</li> &lt;!&ndash;components&ndash;&gt;-->
+
+                <!--<li><a href="fontawesome.html"><i class="fa fa-bullhorn"></i> <span>Fontawesome</span></a></li>-->
+
+                <!--li class="menu-list"><a href=""><i class="fa fa-envelope"></i> <span>Mail</span></a>
+                    <ul class="sub-menu-list">
+                        <li><a href="mail.html"> Inbox</a></li>
+                        <li><a href="mail_compose.html"> Compose Mail</a></li>
+                        <li><a href="mail_view.html"> View Mail</a></li>
+                    </ul>
+                </li--> <!--mail-->
+
+                <!--<li class="menu-list"><a href=""><i class="fa fa-tasks"></i> <span>Forms</span></a>-->
+                    <!--<ul class="sub-menu-list">-->
+                        <!--<li><a href="form_layouts.html"> Form Layouts</a></li>-->
+                        <!--<li><a href="form_advanced_components.html"> Advanced Components</a></li>-->
+                        <!--<li><a href="form_wizard.html"> Form Wizards</a></li>-->
+                        <!--<li><a href="form_validation.html"> Form Validation</a></li>-->
+                        <!--<li><a href="editors.html"> Editors</a></li>-->
+                        <!--<li><a href="inline_editors.html"> Inline Editors</a></li>-->
+                        <!--<li><a href="pickers.html"> Pickers</a></li>-->
+                        <!--<li><a href="dropzone.html"> Dropzone</a></li>-->
+                        <!--<li><a href="http://www.weidea.net"> More</a></li>-->
+                    <!--</ul>-->
+                <!--</li> &lt;!&ndash;forms&ndash;&gt;-->
+                <!--<li class="menu-list"><a href=""><i class="fa fa-bar-chart-o"></i> <span>Charts</span></a>-->
+                    <!--<ul class="sub-menu-list">-->
+                        <!--<li><a href="flot_chart.html"> Flot Charts</a></li>-->
+                        <!--<li><a href="morris.html"> Morris Charts</a></li>-->
+                        <!--<li><a href="chartjs.html"> Chartjs</a></li>-->
+                        <!--<li><a href="c3chart.html"> C3 Charts</a></li>-->
+                    <!--</ul>-->
+                <!--</li> &lt;!&ndash;charts&ndash;&gt;-->
+
+
+                <!--li class="menu-list"><a href="#"><i class="fa fa-map-marker"></i> <span>Maps</span></a>
+                    <ul class="sub-menu-list">
+                        <li><a href="google_map.html"> Google Map</a></li>
+                        <li><a href="vector_map.html"> Vector Map</a></li>
+                    </ul>
+                </li--> <!--map-->
+                <!--li class="menu-list"><a href=""><i class="fa fa-file-text"></i> <span>Extra Pages</span></a>
+                    <ul class="sub-menu-list">
+                        <li><a href="profile.html"> Profile</a></li>
+                        <li><a href="invoice.html"> Invoice</a></li>
+                        <li><a href="pricing_table.html"> Pricing Table</a></li>
+                        <li><a href="timeline.html"> Timeline</a></li>
+                        <li><a href="blog_list.html"> Blog List</a></li>
+                        <li><a href="blog_details.html"> Blog Details</a></li>
+                        <li><a href="directory.html"> Directory </a></li>
+                        <li><a href="chat.html"> Chat </a></li>
+                        <li><a href="404.html"> 404 Error</a></li>
+                        <li><a href="500.html"> 500 Error</a></li>
+                        <li><a href="registration.html"> Registration Page</a></li>
+                        <li><a href="lock_screen.html"> Lockscreen </a></li>
+                    </ul>
+                </li--> <!--extra page-->
+
+                <!--li><a href="login.html"><i class="fa fa-sign-in"></i> <span>Login Page</span></a></li-->
+
+            </ul>
+            <!--sidebar nav end-->
+
+        </div>
+    </div>
+    <!-- left side end-->
+    
+    <!-- main content start-->
+    <div class="main-content" >
+
+        <!-- header section start-->
+        <div class="header-section">
+
+        <!--toggle button start-->
+        <a class="toggle-btn"><i class="fa fa-bars"></i></a>
+        <!--toggle button end-->
+
+        <!--search start-->
+        <!--<form class="searchform" action="index.html" method="post">-->
+            <!--<input type="text" class="form-control" name="keyword" placeholder="这里搜索..." />-->
+        <!--</form>-->
+        <!--search end-->
+
+        <!--notification menu start -->
+        <div class="menu-right">
+            <ul class="notification-menu">
+
+            </ul>
+        </div>
+        <!--notification menu end -->
+
+        </div>
+        <!-- header section end-->
+
+        <!-- page heading start-->
+        <div class="page-heading">
+            <h3>
+                权限股票
+            </h3>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#">总面板</a>
+                </li>
+                <li>
+                    <a href="#">股票详细信息</a>
+                </li>
+                <li class="active"> 权限股票 </li>
+            </ul>
+        </div>
+        <!-- page heading end-->
+
+        <!--body wrapper start-->
+        <div class="wrapper">
+        <div class="row">
+        <div class="col-sm-12">
+        <section class="panel">
+        <header class="panel-heading">
+            权限股票一览
+            <span class="tools pull-right">
+                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                <a href="javascript:;" class="fa fa-times"></a>
+             </span>
+        </header>
+        <div class="panel-body">
+        <div class="adv-table">
+        <table id="hidden-table-info" class="display table table-bordered">
+        <!--<thead>-->
+            <!--<tr>-->
+                <!--<th class="hidden-phone">股票代码</th>-->
+                <!--<th class="hidden-phone">股票名称</th>-->
+                <!--<th>成交价</th>-->
+                <!--<th>变化</th>-->
+                <!--<th>变化幅度(%)</th>-->
+                <!--<th>开盘价</th>-->
+                <!--<th>收盘价</th>-->
+                <!--<th>最高价</th>-->
+                <!--<th>最低价</th>-->
+                <!--<th>转手</th>-->
+                <!--<th>总金</th>-->
+                <!--<th>交易状态</th>-->
+            <!--</tr>-->
+        <!--</thead>-->
+        <!--<tbody>-->
+            <!--<tr class="gradeX">-->
+                <!--<td>aaa</td>-->
+                <!--<td>bbb</td>-->
+                <!--<td class="hidden-phone">ccc</td>-->
+                <!--<td class="center hidden-phone">4</td>-->
+                <!--<td class="center hidden-phone">4</td>-->
+                <!--<td class="center hidden-phone">5</td>-->
+                <!--<td class="center hidden-phone">X</td>-->
+                <!--<td class="center hidden-phone">X</td>-->
+                <!--<td class="center hidden-phone">X</td>-->
+                <!--<td class="center hidden-phone">X</td>-->
+                <!--<td class="center hidden-phone">X</td>-->
+                <!--<td class="center hidden-phone">-->
+                    <!--<label class="switch"><input type="checkbox" checked><span class="slider round"></span></label>-->
+                <!--</td>-->
+            <!--</tr>-->
+        <!--</tbody>-->
+        </table>
+
+
+        <div class="remodal" data-remodal-id="modal" aria-labelledby="modal1Title" aria-describedby="modal1Desc">
+            <a data-remodal-action="close" class="remodal-close"></a>
+            <div id="stock_id"></div>
+            <h4 >买指令</h4>
+            <table id="buy-data" class="display table table-bordered"></table>
+            <h4 >卖指令</h4>
+            <table id="sell-data" class="display table table-bordered"></table>
+            <!--<table id="sell-data" class="display table table-bordered"></table>-->
+            <!--<a data-remodal-action="cancel" class="remodal-cancel" href="#">Cancel</a>-->
+            <a data-remodal-action="confirm" class="remodal-confirm" href="#">OK</a>
+        </div>
+
+        </div>
+        </div>
+        </section>
+        </div>
+        </div>
+        </div>
+        <!--body wrapper end-->
+
+        <!--footer section start-->
+        <footer>
+            2019 &copy; 股票中央交易系统 作者 <a href="http://www.zju.edu.cn/" target="_blank">E组</a>
+        </footer>
+        <!--footer section end-->
+
+
+    </div>
+    <!-- main content end-->
+</section>
+
+
+<!-- Placed js at the end of the document so the pages load faster -->
+<script src="/js/STS_E/jquery-3.3.1.js"></script>
+<!--<script src="/js/jquery-1.10.2.min.js"></script>-->
+<script src="/js/jquery-ui-1.9.2.custom.min.js"></script>
+<!--<script src="/js/jquery-migrate-1.2.1.min.js"></script>-->
+<script src="/js/bootstrap.min.js"></script>
+<!--<script src="/js/modernizr.min.js"></script>-->
+<script src="/js/jquery.nicescroll.js"></script>
+
+<!--dynamic table-->
+<!--<script type="text/javascript" language="javascript" src="/js/advanced-datatable/js/jquery.dataTables.js"></script>-->
+<script type="text/javascript" src="/js/STS_E/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/js/data-tables/DT_bootstrap.js"></script>
+<!--<script src="/js/STS_E/render_table.js"></script>-->
+
+<script src="/js/utils.js"></script>
+
+<!--dialog-->
+<script src="/js/STS_E/dialog/remodal.js"></script>
+
+<!--dynamic table initialization -->
+<script src="/js/STS_E/dynamic_table_init.js"></script>
+
+<!--common scripts for all pages-->
+<script src="/js/scripts.js"></script>
+
+
+
+</body>
+</html>

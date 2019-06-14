@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="ThemeBucket">
+  <link rel="shortcut icon" href="#" type="image/png">
+  <title>Dynamic Table</title>
+
+  <!--dynamic table-->
+    <link rel="stylesheet" href="/css/jquery.dataTables.min.css" />
+  <link href="/js/advanced-datatable/css/demo_page.css" rel="stylesheet" />
+  <link href="/js/advanced-datatable/css/demo_table.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/js/data-tables/DT_bootstrap.css" />
+  <link rel="stylesheet" href="/js/switch-components/switch.css">
+  <!--<link rel="stylesheet" href="/js/switch-components/switch2.css">-->
+  <link href="/css/style.css" rel="stylesheet">
+  <link href="/css/style-responsive.css" rel="stylesheet">
+
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+  <script src="/js/html5shiv.js"></script>
+  <script src="/js/respond.min.js"></script>
+  <![endif]-->
+
+<!--Relevant with SPINNER-->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+<body class="sticky-header">
+
+<section>
+    <!-- left side start-->
+    <div class="left-side sticky-left-side">
+
+        <!--logo and iconic logo start-->
+        <div class="logo">
+            <a href="home"><img src="/images/logo.png" alt=""></a>
+        </div>
+        <div class="logo-icon text-center">
+            <a href="home"><img src="/images/logo_icon.png" alt=""></a>
+        </div>
+        <!--logo and iconic logo end-->
+
+        <div class="left-side-inner">
+
+            <!-- visible to small devices only -->
+            <div class="visible-xs hidden-sm hidden-md hidden-lg">
+                <div class="media logged-user">
+                    <img alt="" src="/images/photos/user-avatar.png" class="media-object">
+                    <div class="media-body">
+                        <h4><a href="#">John Doe</a></h4>
+                        <span>"Hello There..."</span>
+                    </div>
+                </div>
+
+                <h5 class="left-nav-title">Account Information</h5>
+                <ul class="nav nav-pills nav-stacked custom-nav">
+                    <li><a href="#"><i class="fa fa-user"></i> <span>Profile</span></a></li>
+                    <li><a href="#"><i class="fa fa-cog"></i> <span>Settings</span></a></li>
+                    <li><a href="#"><i class="fa fa-sign-out"></i> <span>Sign Out</span></a></li>
+                </ul>
+            </div>
+
+            <!--sidebar nav start-->
+            <ul class="nav nav-pills nav-stacked custom-nav">
+                <li><a href="home"><i class="fa fa-home"></i> <span>总面板</span></a></li>
+
+                <li class="menu-list nav-active"><a href="#"><i class="fa fa-th-list"></i> <span>股票详细信息</span></a>
+                    <ul class="sub-menu-list">
+                        <li class="active"><a href="basic_table"> 普通股票 </a></li>
+                        <li ><a href="dynamic_table">权限股票</a></li>
+                        <!--li><a href="responsive_table.html"> Responsive Table</a></li>
+                        <li><a href="editable_table.html"> Edit Table</a></li-->
+                    </ul>
+                </li> <!--data table-->
+
+            </ul>
+            <!--sidebar nav end-->
+
+        </div>
+    </div>
+    <!-- left side end-->
+    
+    <!-- main content start-->
+    <div class="main-content" >
+
+        <!-- header section start-->
+        <div class="header-section">
+
+        <!--toggle button start-->
+        <a class="toggle-btn"><i class="fa fa-bars"></i></a>
+        <!--toggle button end-->
+
+        <!--search start-->
+        <!--<form class="searchform" action="index.html" method="post">-->
+            <!--<input type="text" class="form-control" name="keyword" placeholder="这里搜索..." />-->
+        <!--</form>-->
+        <!--search end-->
+
+        <!--notification menu start -->
+        <div class="menu-right">
+            <ul class="notification-menu">
+
+            </ul>
+        </div>
+        <!--notification menu end -->
+
+        </div>
+        <!-- header section end-->
+
+        <!-- page heading start-->
+        <div class="page-heading">
+            <h3>
+                权限股票
+            </h3>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#">总面板</a>
+                </li>
+                <li>
+                    <a href="#">股票详细信息</a>
+                </li>
+                <li class="active"> 权限股票 </li>
+            </ul>
+        </div>
+        <!-- page heading end-->
+
+        <!--body wrapper start-->
+        <div class="wrapper">
+        <div class="row">
+        <div class="col-sm-12">
+        <section class="panel">
+        <header class="panel-heading">
+            权限股票一览
+            <span class="tools pull-right">
+                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                <a href="javascript:;" class="fa fa-times"></a>
+             </span>
+        </header>
+        <div class="panel-body">
+        <div class="adv-table">
+
+
+        </div>
+        </div>
+        </section>
+        </div>
+        </div>
+        </div>
+        <!--body wrapper end-->
+
+        <!--footer section start-->
+        <footer>
+            2019 &copy; 股票中央交易系统 作者 <a href="http://www.zju.edu.cn/" target="_blank">E组</a>
+        </footer>
+        <!--footer section end-->
+
+
+    </div>
+    <!-- main content end-->
+</section>
+
+
+<!-- Placed js at the end of the document so the pages load faster -->
+<script src="/js/STS_E/jquery-3.3.1.js"></script>
+<!--<script src="/js/jquery-1.10.2.min.js"></script>-->
+<script src="/js/jquery-ui-1.9.2.custom.min.js"></script>
+<!--<script src="/js/jquery-migrate-1.2.1.min.js"></script>-->
+<script src="/js/bootstrap.min.js"></script>
+<!--<script src="/js/modernizr.min.js"></script>-->
+<script src="/js/jquery.nicescroll.js"></script>
+
+<!--dynamic table-->
+<!--<script type="text/javascript" language="javascript" src="/js/advanced-datatable/js/jquery.dataTables.js"></script>-->
+<script type="text/javascript" src="/js/STS_E/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/js/data-tables/DT_bootstrap.js"></script>
+<!--<script src="/js/STS_E/render_table.js"></script>-->
+
+<script src="/js/utils.js"></script>
+
+
+<!--common scripts for all pages-->
+<script src="/js/scripts.js"></script>
+
+
+
+</body>
+</html>

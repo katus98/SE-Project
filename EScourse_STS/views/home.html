@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="keywords" content="admin, dashboard, bootstrap, template, flat, modern, theme, responsive, fluid, retina, backend, html5, css, css3">
+  <meta name="description" content="">
+  <meta name="author" content="ThemeBucket">
+  <link rel="shortcut icon" href="#" type="image/png">
+
+  <title>股票交易中央管理系统</title>
+
+  <!--icheck-->
+  <link href="/js/iCheck/skins/minimal/minimal.css" rel="stylesheet">
+  <link href="/js/iCheck/skins/square/square.css" rel="stylesheet">
+  <link href="/js/iCheck/skins/square/red.css" rel="stylesheet">
+  <link href="/js/iCheck/skins/square/blue.css" rel="stylesheet">
+
+  <!--dashboard calendar-->
+  <link href="./css/clndr.css" rel="stylesheet">
+
+  <!--Morris Chart CSS -->
+  <link rel="stylesheet" href="js/morris-chart/morris.css">
+
+  <!--common-->
+  <link href="./css/style.css" rel="stylesheet">
+  <link href="./css/style-responsive.css" rel="stylesheet">
+
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+  <script src="js/html5shiv.js"></script>
+  <script src="js/respond.min.js"></script>
+  <![endif]-->
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!-- left side start-->
+    <div class="left-side sticky-left-side">
+
+        <!--logo and iconic logo start-->
+        <div class="logo">
+            <a href="home"><img src="images/logo.png" alt=""></a>
+        </div>
+
+        <div class="logo-icon text-center">
+            <a href="home"><img src="images/logo_icon.png" alt=""></a>
+        </div>
+        <!--logo and iconic logo end-->
+
+        <div class="left-side-inner">
+
+            <!-- visible to small devices only -->
+            <!--<div class="visible-xs hidden-sm hidden-md hidden-lg">-->
+                <!--<div class="media logged-user">-->
+                    <!--<img alt="" src="images/photos/user-avatar.png" class="media-object">-->
+                    <!--<div class="media-body">-->
+                        <!--<h4><a href="#">John Doe</a></h4>-->
+                        <!--<span>"Hello There..."</span>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <!--<h5 class="left-nav-title">Account Information</h5>-->
+                <!--<ul class="nav nav-pills nav-stacked custom-nav">-->
+                  <!--<li><a href="#"><i class="fa fa-user"></i> <span>Profile</span></a></li>-->
+                  <!--<li><a href="#"><i class="fa fa-cog"></i> <span>Settings</span></a></li>-->
+                  <!--<li><a href="#"><i class="fa fa-sign-out"></i> <span>Sign Out</span></a></li>-->
+                <!--</ul>-->
+            <!--</div>-->
+
+            <!--sidebar nav start-->
+            <ul class="nav nav-pills nav-stacked custom-nav">
+                <li class="active"><a href="home"><i class="fa fa-home"></i> <span>总面板</span></a></li>
+                <!--li class="menu-list"><a href=""><i class="fa fa-laptop"></i> <span>Layouts</span></a>
+                    <ul class="sub-menu-list">
+                        <li><a href="blank_page.html"> Blank Page</a></li>
+                        <li><a href="boxed_view.html"> Boxed Page</a></li>
+                        <li><a href="leftmenu_collapsed_view.html"> Sidebar Collapsed</a></li>
+                        <li><a href="horizontal_menu.html"> Horizontal Menu</a></li>
+
+                    </ul>
+                </li--> <!--layouts-->
+
+                <li class="menu-list"><a href="#"><i class="fa fa-th-list"></i> <span>股票详细信息</span></a>
+                    <ul class="sub-menu-list">
+                        <!--<li><a href="basic_table"> 普通股票 </a></li>-->
+                        <li><a id="dynamic_table"> 权限股票 </a></li>
+                        <!--<li><a href="responsive_table.html"> Responsive Table</a></li>-->
+                        <!--<li><a href="editable_table.html"> Edit Table</a></li>-->
+                    </ul>
+                </li> <!--data table-->
+
+
+            </ul>
+            <!--sidebar nav end-->
+
+        </div>
+    </div>
+    <!-- left side end-->
+    
+    <!-- main content start-->
+    <div class="main-content" >
+
+        <!-- header section start-->
+        <div class="header-section">
+
+            <!--toggle button start-->
+            <a class="toggle-btn"><i class="fa fa-bars"></i></a>
+            <!--toggle button end-->
+
+            <!--search start-->
+            <!--<form class="searchform" action="index.html" method="post">-->
+                <!--<input type="text" class="form-control" name="keyword" placeholder="Search here..." />-->
+            <!--</form>-->
+            <!--search end-->
+
+            <!--notification menu start -->
+            <div class="menu-right">
+                <ul class="notification-menu">
+                    <li>
+                        <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <img src="images/photos/user-avatar.png" alt="" />
+
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
+                            <!--<li><a href="#"><i class="fa fa-user"></i>  </a></li>-->
+                            <li><a href="change_password"><i class="fa fa-cog"></i> 更改信息 </a></li>
+                            <li id="logout"><a href="#"><i class="fa fa-sign-out"></i> 登出 </a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+            <!--notification menu end -->
+
+        </div>
+        <!-- header section end-->
+
+        <!-- page heading start-->
+        <div class="page-heading">
+            <h3>
+                数据面板
+            </h3>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#">数据面板</a>
+                </li>
+                <li class="active"> 我的数据面板 </li>
+            </ul>
+            <!--<div class="state-info">-->
+                <!--<section class="panel">-->
+                    <!--<div class="panel-body">-->
+                        <!--<div class="summary">-->
+                            <!--<span>yearly expense</span>-->
+                            <!--<h3 class="red-txt">$ 45,600</h3>-->
+                        <!--</div>-->
+                        <!--<div id="income" class="chart-bar"></div>-->
+                    <!--</div>-->
+                <!--</section>-->
+                <!--<section class="panel">-->
+                    <!--<div class="panel-body">-->
+                        <!--<div class="summary">-->
+                            <!--<span>yearly  income</span>-->
+                            <!--<h3 class="green-txt">$ 45,600</h3>-->
+                        <!--</div>-->
+                        <!--<div id="expense" class="chart-bar"></div>-->
+                    <!--</div>-->
+                <!--</section>-->
+            <!--</div>-->
+        </div>
+        <!-- page heading end-->
+
+        <!--body wrapper start-->
+
+        <div class="wrapper" style="display:none">
+            <div class="row">
+                <div class="col-md-6">
+                    <!--statistics start-->
+                    <div class="row state-overview">
+                        <div class="col-md-6 col-xs-12 col-sm-6">
+                            <div class="panel purple">
+                                <div class="symbol">
+                                    <i class="fa fa-gavel"></i>
+                                </div>
+                                <div class="state-value">
+                                    <div class="value">230</div>
+                                    <div class="title">New Order</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-12 col-sm-6">
+                            <div class="panel red">
+                                <div class="symbol">
+                                    <i class="fa fa-tags"></i>
+                                </div>
+                                <div class="state-value">
+                                    <div class="value">3490</div>
+                                    <div class="title">Copy Sold</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row state-overview">
+                        <div class="col-md-6 col-xs-12 col-sm-6">
+                            <div class="panel blue">
+                                <div class="symbol">
+                                    <i class="fa fa-money"></i>
+                                </div>
+                                <div class="state-value">
+                                    <div class="value">22014</div>
+                                    <div class="title"> Total Revenue</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-12 col-sm-6">
+                            <div class="panel green">
+                                <div class="symbol">
+                                    <i class="fa fa-eye"></i>
+                                </div>
+                                <div class="state-value">
+                                    <div class="value">390</div>
+                                    <div class="title"> Unique Visitors</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--statistics end-->
+                </div>
+                <div class="col-md-6">
+                    <!--more statistics box start-->
+                    <div class="panel deep-purple-box">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-7 col-sm-7 col-xs-7">
+                                    <div id="graph-donut" class="revenue-graph"></div>
+
+                                </div>
+                                <div class="col-md-5 col-sm-5 col-xs-5">
+                                    <ul class="bar-legend">
+                                        <li><span class="blue"></span> Open rate</li>
+                                        <li><span class="green"></span> Click rate</li>
+                                        <li><span class="purple"></span> Share rate</li>
+                                        <li><span class="red"></span> Unsubscribed rate</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--more statistics box end-->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="panel">
+                        <div class="panel-body">
+                            <div class="row revenue-states">
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <h4>Monthly revenue report</h4>
+                                    <div class="icheck">
+                                        <div class="square-red single-row">
+                                            <div class="checkbox ">
+                                                <input type="checkbox" checked>
+                                                <label>Online</label>
+                                            </div>
+                                        </div>
+                                        <div class="square-blue single-row">
+                                            <div class="checkbox ">
+                                                <input type="checkbox">
+                                                <label>Offline </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <ul class="revenue-nav">
+                                        <li><a href="#">weekly</a></li>
+                                        <li><a href="#">monthly</a></li>
+                                        <li class="active"><a href="#">yearly</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="clearfix">
+                                        <div id="main-chart-legend" class="pull-right">
+                                        </div>
+                                    </div>
+
+                                    <div id="main-chart">
+                                        <div id="main-chart-container" class="main-chart">
+                                        </div>
+                                    </div>
+                                    <ul class="revenue-short-info">
+                                        <li>
+                                            <h1 class="red">15%</h1>
+                                            <p>Server Load</p>
+                                        </li>
+                                        <li>
+                                            <h1 class="purple">30%</h1>
+                                            <p>Disk Space</p>
+                                        </li>
+                                        <li>
+                                            <h1 class="green">84%</h1>
+                                            <p>Transferred</p>
+                                        </li>
+                                        <li>
+                                            <h1 class="blue">28%</h1>
+                                            <p>Temperature</p>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="panel">
+                        <header class="panel-heading">
+                            goal progress
+                            <span class="tools pull-right">
+                                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                                <a href="javascript:;" class="fa fa-times"></a>
+                             </span>
+                        </header>
+                        <div class="panel-body">
+                            <ul class="goal-progress">
+                                <li>
+                                    <div class="prog-avatar">
+                                        <img src="images/photos/user1.png" alt=""/>
+                                    </div>
+                                    <div class="details">
+                                        <div class="title">
+                                            <a href="#">John Doe</a> - Project Lead
+                                        </div>
+                                        <div class="progress progress-xs">
+                                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 70%">
+                                                <span class="">70%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="prog-avatar">
+                                        <img src="images/photos/user2.png" alt=""/>
+                                    </div>
+                                    <div class="details">
+                                        <div class="title">
+                                            <a href="#">Cameron Doe</a> - Sales
+                                        </div>
+                                        <div class="progress progress-xs">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 91%">
+                                                <span class="">91%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="prog-avatar">
+                                        <img src="images/photos/user3.png" alt=""/>
+                                    </div>
+                                    <div class="details">
+                                        <div class="title">
+                                            <a href="#">Hoffman Doe</a> - Support
+                                        </div>
+                                        <div class="progress progress-xs">
+                                            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                                <span class="">40%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="prog-avatar">
+                                        <img src="images/photos/user4.png" alt=""/>
+                                    </div>
+                                    <div class="details">
+                                        <div class="title">
+                                            <a href="#">Jane Doe</a> - Marketing
+                                        </div>
+                                        <div class="progress progress-xs">
+                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+                                                <span class="">20%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="prog-avatar">
+                                        <img src="images/photos/user5.png" alt=""/>
+                                    </div>
+                                    <div class="details">
+                                        <div class="title">
+                                            <a href="#">Hoffman Doe</a> - Support
+                                        </div>
+                                        <div class="progress progress-xs">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+                                                <span class="">45%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="text-center"><a href="#">View all Goals</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="panel">
+                        <div class="panel-body extra-pad">
+                            <h4 class="pros-title">prospective <span>leads</span></h4>
+                            <div class="row">
+                                <div class="col-sm-4 col-xs-4">
+                                    <div id="p-lead-1"></div>
+                                    <p class="p-chart-title">Laptop</p>
+                                </div>
+                                <div class="col-sm-4 col-xs-4">
+                                    <div id="p-lead-2"></div>
+                                    <p class="p-chart-title">iPhone</p>
+                                </div>
+                                <div class="col-sm-4 col-xs-4">
+                                    <div id="p-lead-3"></div>
+                                    <p class="p-chart-title">iPad</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="panel">
+                        <div class="panel-body extra-pad">
+                            <div class="col-sm-6 col-xs-6">
+                                <div class="v-title">Visits</div>
+                                <div class="v-value">10,090</div>
+                                <div id="visit-1"></div>
+                                <div class="v-info">Pages/Visit</div>
+                            </div>
+                            <div class="col-sm-6 col-xs-6">
+                                <div class="v-title">Unique Visitors</div>
+                                <div class="v-value">8,173</div>
+                                <div id="visit-2"></div>
+                                <div class="v-info">Avg. Visit Duration</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+
+                    <div class="panel green-box">
+                        <div class="panel-body extra-pad">
+                            <div class="row">
+                                <div class="col-sm-6 col-xs-6">
+                                    <div class="knob">
+                                        <span class="chart" data-percent="79">
+                                            <span class="percent">79% <span class="sm">New Visit</span></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-xs-6">
+                                    <div class="knob">
+                                        <span class="chart" data-percent="56">
+                                            <span class="percent">56% <span class="sm">Bounce rate</span></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="panel">
+                        <div class="panel-body">
+                            <div class="calendar-block ">
+                                <div class="cal1">
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="panel">
+                        <header class="panel-heading">
+                            Todo List
+                            <span class="tools pull-right">
+                                <a class="fa fa-chevron-down" href="javascript:;"></a>
+                                <a class="fa fa-times" href="javascript:;"></a>
+                             </span>
+                        </header>
+                        <div class="panel-body">
+                            <ul class="to-do-list" id="sortable-todo">
+                                <li class="clearfix">
+                                    <span class="drag-marker">
+                                    <i></i>
+                                    </span>
+                                    <div class="todo-check pull-left">
+                                        <input type="checkbox" value="None" id="todo-check"/>
+                                        <label for="todo-check"></label>
+                                    </div>
+                                    <p class="todo-title">
+                                        Dashboard Design & Wiget placement
+                                    </p>
+                                    <div class="todo-actionlist pull-right clearfix">
+
+                                        <a href="#" class="todo-remove"><i class="fa fa-times"></i></a>
+                                    </div>
+                                </li>
+                                <li class="clearfix">
+                                    <span class="drag-marker">
+                                    <i></i>
+                                    </span>
+                                    <div class="todo-check pull-left">
+                                        <input type="checkbox" value="None" id="todo-check1"/>
+                                        <label for="todo-check1"></label>
+                                    </div>
+                                    <p class="todo-title">
+                                        Wireframe prepare for new design
+                                    </p>
+                                    <div class="todo-actionlist pull-right clearfix">
+
+                                        <a href="#" class="todo-remove"><i class="fa fa-times"></i></a>
+                                    </div>
+                                </li>
+                                <li class="clearfix">
+                                    <span class="drag-marker">
+                                    <i></i>
+                                    </span>
+                                    <div class="todo-check pull-left">
+                                        <input type="checkbox" value="None" id="todo-check2"/>
+                                        <label for="todo-check2"></label>
+                                    </div>
+                                    <p class="todo-title">
+                                        UI perfection testing for Mega Section
+                                    </p>
+                                    <div class="todo-actionlist pull-right clearfix">
+
+                                        <a href="#" class="todo-remove"><i class="fa fa-times"></i></a>
+                                    </div>
+                                </li>
+                                <li class="clearfix">
+                                    <span class="drag-marker">
+                                    <i></i>
+                                    </span>
+                                    <div class="todo-check pull-left">
+                                        <input type="checkbox" value="None" id="todo-check3"/>
+                                        <label for="todo-check3"></label>
+                                    </div>
+                                    <p class="todo-title">
+                                        Wiget & Design placement
+                                    </p>
+                                    <div class="todo-actionlist pull-right clearfix">
+
+                                        <a href="#" class="todo-remove"><i class="fa fa-times"></i></a>
+                                    </div>
+                                </li>
+                                <li class="clearfix">
+                                    <span class="drag-marker">
+                                    <i></i>
+                                    </span>
+                                    <div class="todo-check pull-left">
+                                        <input type="checkbox" value="None" id="todo-check4"/>
+                                        <label for="todo-check4"></label>
+                                    </div>
+                                    <p class="todo-title">
+                                        Development & Wiget placement
+                                    </p>
+                                    <div class="todo-actionlist pull-right clearfix">
+
+                                        <a href="#" class="todo-remove"><i class="fa fa-times"></i></a>
+                                    </div>
+                                </li>
+
+                            </ul>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form role="form" class="form-inline">
+                                        <div class="form-group todo-entry">
+                                            <input type="text" placeholder="Enter your ToDo List" class="form-control" style="width: 100%">
+                                        </div>
+                                        <button class="btn btn-primary pull-right" type="submit">+</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="panel blue-box twt-info">
+                        <div class="panel-body">
+                            <h3>19 Februay 2014</h3>
+
+                            <p>AdminEx is new model of admin
+                            dashboard <a href="#">http://t.co/3laCVziTw4</a>
+                            4 days ago by John Doe</p>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-body">
+                            <div class="media usr-info">
+                                <a href="#" class="pull-left">
+                                    <img class="thumb" src="/images/photos/user2.png" alt=""/>
+                                </a>
+                                <div class="media-body">
+                                    <h4 class="media-heading">Mila Watson</h4>
+                                    <span>Senior UI Designer</span>
+                                    <p>I use to design websites and applications for the web.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-footer custom-trq-footer">
+                            <ul class="user-states">
+                                <li>
+                                    <i class="fa fa-heart"></i> 127
+                                </li>
+                                <li>
+                                    <i class="fa fa-eye"></i> 853
+                                </li>
+                                <li>
+                                    <i class="fa fa-user"></i> 311
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div id="main" style="width: 800px;height:600px; text-align:center; left: 50px"></div>
+            <!--<div class="panel panel-primary">-->
+                <!--<div class="panel-heading">-->
+                    <!--Panel title-->
+                    <!--<span class="tools pull-right">-->
+                        <!--<a href="javascript:;" class="fa fa-chevron-down"></a>-->
+                        <!--<a href="javascript:;" class="fa fa-times"></a>-->
+                     <!--</span>-->
+                <!--</div>-->
+                <!--<div class="panel-body">-->
+                    <!--Panel content-->
+                <!--</div>-->
+            <!--</div>-->
+        </div>
+
+
+        <!--body wrapper end-->
+
+        <!--footer section start-->
+        <footer>
+            2019 &copy; 股票中央交易系统 作者 <a href="http://www.zju.edu.cn/" target="_blank">E组</a>
+        </footer>
+        <!--footer section end-->
+
+
+    </div>
+    <!-- main content end-->
+</section>
+
+<!-- Placed js at the end of the document so the pages load faster -->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/jquery-ui-1.9.2.custom.min.js"></script>
+<script src="/js/jquery-migrate-1.2.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/modernizr.min.js"></script>
+<script src="/js/jquery.nicescroll.js"></script>
+
+<!--easy pie chart-->
+<script src="/js/easypiechart/jquery.easypiechart.js"></script>
+<script src="/js/easypiechart/easypiechart-init.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.2.1/echarts.min.js" crossorigin="anonymous"></script>
+
+<!--Sparkline Chart-->
+<script src="/js/sparkline/jquery.sparkline.js"></script>
+<script src="/js/sparkline/sparkline-init.js"></script>
+
+<!--icheck -->
+<script src="/js/iCheck/jquery.icheck.js"></script>
+<script src="/js/icheck-init.js"></script>
+
+<!-- jQuery Flot Chart-->
+<script src="/js/flot-chart/jquery.flot.js"></script>
+<script src="/js/flot-chart/jquery.flot.tooltip.js"></script>
+<script src="/js/flot-chart/jquery.flot.resize.js"></script>
+
+
+<!--Morris Chart-->
+<script src="/js/morris-chart/morris.js"></script>
+<script src="/js/morris-chart/raphael-min.js"></script>
+
+<!--Calendar-->
+<script src="/js/calendar/clndr.js"></script>
+<script src="/js/calendar/evnt.calendar.init.js"></script>
+<script src="/js/calendar/moment-2.2.1.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+
+<!--common scripts for all pages-->
+<script src="/js/scripts.js"></script>
+
+<!--Dashboard Charts-->
+<script src="/dashboard-chart-init.js"></script>
+
+<!--Log Out-->
+<script src="/js/STS_E/logout.js"></script>
+
+<!--Page Turn-->
+<script src="/js/STS_E/home_turn.js"></script>
+
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+
+    var upColor = '#ec0000';
+    var upBorderColor = '#8A0000';
+    var downColor = '#00da3c';
+    var downBorderColor = '#008F28';
+
+
+    // 数据意义：开盘(open)，收盘(close)，最低(lowest)，最高(highest)
+    var data0 = splitData([
+        ['2019/1/24', 2320.26,2320.26,2287.3,2362.94],
+        ['2019/1/25', 2300,2291.3,2288.26,2308.38],
+        ['2019/1/28', 2295.35,2346.5,2295.35,2346.92],
+        ['2019/1/29', 2347.22,2358.98,2337.35,2363.8],
+        ['2019/1/30', 2360.75,2382.48,2347.89,2383.76],
+        ['2019/1/31', 2383.43,2385.42,2371.23,2391.82],
+        ['2019/2/1', 2377.41,2419.02,2369.57,2421.15],
+        ['2019/2/4', 2425.92,2428.15,2417.58,2440.38],
+        ['2019/2/5', 2411,2433.13,2403.3,2437.42],
+        ['2019/2/6', 2432.68,2434.48,2427.7,2441.73],
+        ['2019/2/7', 2430.69,2418.53,2394.22,2433.89],
+        ['2019/2/8', 2416.62,2432.4,2414.4,2443.03],
+        ['2019/2/18', 2441.91,2421.56,2415.43,2444.8],
+        ['2019/2/19', 2420.26,2382.91,2373.53,2427.07],
+        ['2019/2/20', 2383.49,2397.18,2370.61,2397.94],
+        ['2019/2/21', 2378.82,2325.95,2309.17,2378.82],
+        ['2019/2/22', 2322.94,2314.16,2308.76,2330.88],
+        ['2019/2/25', 2320.62,2325.82,2315.01,2338.78],
+        ['2019/2/26', 2313.74,2293.34,2289.89,2340.71],
+        ['2019/2/27', 2297.77,2313.22,2292.03,2324.63],
+        ['2019/2/28', 2322.32,2365.59,2308.92,2366.16],
+        ['2019/3/1', 2364.54,2359.51,2330.86,2369.65],
+        ['2019/3/4', 2332.08,2273.4,2259.25,2333.54],
+        ['2019/3/5', 2274.81,2326.31,2270.1,2328.14],
+        ['2019/3/6', 2333.61,2347.18,2321.6,2351.44],
+        ['2019/3/7', 2340.44,2324.29,2304.27,2352.02],
+        ['2019/3/8', 2326.42,2318.61,2314.59,2333.67],
+        ['2019/3/11', 2314.68,2310.59,2296.58,2320.96],
+        ['2019/3/12', 2309.16,2286.6,2264.83,2333.29],
+        ['2019/3/13', 2282.17,2263.97,2253.25,2286.33],
+        ['2019/3/14', 2255.77,2270.28,2253.31,2276.22],
+        ['2019/3/15', 2269.31,2278.4,2250,2312.08],
+        ['2019/3/18', 2267.29,2240.02,2239.21,2276.05],
+        ['2019/3/19', 2244.26,2257.43,2232.02,2261.31],
+        ['2019/3/20', 2257.74,2317.37,2257.42,2317.86],
+        ['2019/3/21', 2318.21,2324.24,2311.6,2330.81],
+        ['2019/3/22', 2321.4,2328.28,2314.97,2332],
+        ['2019/3/25', 2334.74,2326.72,2319.91,2344.89],
+        ['2019/3/26', 2318.58,2297.67,2281.12,2319.99],
+        ['2019/3/27', 2299.38,2301.26,2289,2323.48],
+        ['2019/3/28', 2273.55,2236.3,2232.91,2273.55],
+        ['2019/3/29', 2238.49,2236.62,2228.81,2246.87],
+        ['2019/4/1', 2229.46,2234.4,2227.31,2243.95],
+        ['2019/4/2', 2234.9,2227.74,2220.44,2253.42],
+        ['2019/4/3', 2232.69,2225.29,2217.25,2241.34],
+        ['2019/4/8', 2196.24,2211.59,2180.67,2212.59],
+        ['2019/4/9', 2215.47,2225.77,2215.47,2234.73],
+        ['2019/4/10', 2224.93,2226.13,2212.56,2233.04],
+        ['2019/4/11', 2236.98,2219.55,2217.26,2242.48],
+        ['2019/4/12', 2218.09,2206.78,2204.44,2226.26],
+        ['2019/4/15', 2199.91,2181.94,2177.39,2204.99],
+        ['2019/4/16', 2169.63,2194.85,2165.78,2196.43],
+        ['2019/4/17', 2195.03,2193.8,2178.47,2197.51],
+        ['2019/4/18', 2181.82,2197.6,2175.44,2206.03],
+        ['2019/4/19', 2201.12,2244.64,2200.58,2250.11],
+        ['2019/4/22', 2236.4,2242.17,2232.26,2245.12],
+        ['2019/4/23', 2242.62,2184.54,2182.81,2242.62],
+        ['2019/4/24', 2187.35,2218.32,2184.11,2226.12],
+        ['2019/4/25', 2213.19,2199.31,2191.85,2224.63],
+        ['2019/4/26', 2203.89,2177.91,2173.86,2210.58],
+        ['2019/5/2', 2170.78,2174.12,2161.14,2179.65],
+        ['2019/5/3', 2179.05,2205.5,2179.05,2222.81],
+        ['2019/5/6', 2212.5,2231.17,2212.5,2236.07],
+        ['2019/5/7', 2227.86,2235.57,2219.44,2240.26],
+        ['2019/5/8', 2242.39,2246.3,2235.42,2255.21],
+        ['2019/5/9', 2246.96,2232.97,2221.38,2247.86],
+        ['2019/5/10', 2228.82,2246.83,2225.81,2247.67],
+        ['2019/5/13', 2247.68,2241.92,2231.36,2250.85],
+        ['2019/5/14', 2238.9,2217.01,2205.87,2239.93],
+        ['2019/5/15', 2217.09,2224.8,2213.58,2225.19],
+        ['2019/5/16', 2221.34,2251.81,2210.77,2252.87],
+        ['2019/5/17', 2249.81,2282.87,2248.41,2288.09],
+        ['2019/5/20', 2286.33,2299.99,2281.9,2309.39],
+        ['2019/5/21', 2297.11,2305.11,2290.12,2305.3],
+        ['2019/5/22', 2303.75,2302.4,2292.43,2314.18],
+        ['2019/5/23', 2293.81,2275.67,2274.1,2304.95],
+        ['2019/5/24', 2281.45,2288.53,2270.25,2292.59],
+        ['2019/5/27', 2286.66,2293.08,2283.94,2301.7],
+        ['2019/5/28', 2293.4,2321.32,2281.47,2322.1],
+        ['2019/5/29', 2323.54,2324.02,2321.17,2334.33],
+        ['2019/5/30', 2316.25,2317.75,2310.49,2325.72],
+        ['2019/5/31', 2320.74,2300.59,2299.37,2325.53],
+        ['2019/6/3', 2300.21,2299.25,2294.11,2313.43],
+        ['2019/6/4', 2297.1,2272.42,2264.76,2297.1],
+        ['2019/6/5', 2270.71,2270.93,2260.87,2276.86],
+        ['2019/6/6', 2264.43,2242.11,2240.07,2266.69],
+        ['2019/6/7', 2242.26,2210.9,2205.07,2250.63],
+        ['2019/6/13', 2190.1,2148.35,2126.22,2190.1]
+    ]);
+
+
+    function splitData(rawData) {
+        var categoryData = [];
+        var values = []
+        for (var i = 0; i < rawData.length; i++) {
+            categoryData.push(rawData[i].splice(0, 1)[0]);
+            values.push(rawData[i])
+        }
+        return {
+            categoryData: categoryData,
+            values: values
+        };
+    }
+
+    function calculateMA(dayCount) {
+        var result = [];
+        for (var i = 0, len = data0.values.length; i < len; i++) {
+            if (i < dayCount) {
+                result.push('-');
+                continue;
+            }
+            var sum = 0;
+            for (var j = 0; j < dayCount; j++) {
+                sum += data0.values[i - j][1];
+            }
+            result.push(sum / dayCount);
+        }
+        return result;
+    }
+
+
+
+    option = {
+        title: {
+            text: '上证指数',
+            left: 0
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross'
+            }
+        },
+        legend: {
+            data: ['日K', 'MA5', 'MA10', 'MA20', 'MA30']
+        },
+        grid: {
+            left: '10%',
+            right: '10%',
+            bottom: '15%'
+        },
+        xAxis: {
+            type: 'category',
+            data: data0.categoryData,
+            scale: true,
+            boundaryGap : false,
+            axisLine: {onZero: false},
+            splitLine: {show: false},
+            splitNumber: 20,
+            min: 'dataMin',
+            max: 'dataMax'
+        },
+        yAxis: {
+            scale: true,
+            splitArea: {
+                show: true
+            }
+        },
+        dataZoom: [
+            {
+                type: 'inside',
+                start: 50,
+                end: 100
+            },
+            {
+                show: true,
+                type: 'slider',
+                y: '90%',
+                start: 50,
+                end: 100
+            }
+        ],
+        series: [
+            {
+                name: '日K',
+                type: 'candlestick',
+                data: data0.values,
+                itemStyle: {
+                    normal: {
+                        color: upColor,
+                        color0: downColor,
+                        borderColor: upBorderColor,
+                        borderColor0: downBorderColor
+                    }
+                },
+                markPoint: {
+                    label: {
+                        normal: {
+                            formatter: function (param) {
+                                return param != null ? Math.round(param.value) : '';
+                            }
+                        }
+                    },
+                    data: [
+                        {
+                            name: 'XX标点',
+                            coord: ['2019/5/31', 2300],
+                            value: 2300,
+                            itemStyle: {
+                                normal: {color: 'rgb(41,60,85)'}
+                            }
+                        },
+                        {
+                            name: 'highest value',
+                            type: 'max',
+                            valueDim: 'highest'
+                        },
+                        {
+                            name: 'lowest value',
+                            type: 'min',
+                            valueDim: 'lowest'
+                        },
+                        {
+                            name: 'average value on close',
+                            type: 'average',
+                            valueDim: 'close'
+                        }
+                    ],
+                    tooltip: {
+                        formatter: function (param) {
+                            return param.name + '<br>' + (param.data.coord || '');
+                        }
+                    }
+                },
+                markLine: {
+                    symbol: ['none', 'none'],
+                    data: [
+                        [
+                            {
+                                name: 'from lowest to highest',
+                                type: 'min',
+                                valueDim: 'lowest',
+                                symbol: 'circle',
+                                symbolSize: 10,
+                                label: {
+                                    normal: {show: false},
+                                    emphasis: {show: false}
+                                }
+                            },
+                            {
+                                type: 'max',
+                                valueDim: 'highest',
+                                symbol: 'circle',
+                                symbolSize: 10,
+                                label: {
+                                    normal: {show: false},
+                                    emphasis: {show: false}
+                                }
+                            }
+                        ],
+                        {
+                            name: 'min line on close',
+                            type: 'min',
+                            valueDim: 'close'
+                        },
+                        {
+                            name: 'max line on close',
+                            type: 'max',
+                            valueDim: 'close'
+                        }
+                    ]
+                }
+            },
+            {
+                name: 'MA5',
+                type: 'line',
+                data: calculateMA(5),
+                smooth: true,
+                lineStyle: {
+                    normal: {opacity: 0.5}
+                }
+            },
+            {
+                name: 'MA10',
+                type: 'line',
+                data: calculateMA(10),
+                smooth: true,
+                lineStyle: {
+                    normal: {opacity: 0.5}
+                }
+            },
+            {
+                name: 'MA20',
+                type: 'line',
+                data: calculateMA(20),
+                smooth: true,
+                lineStyle: {
+                    normal: {opacity: 0.5}
+                }
+            },
+            {
+                name: 'MA30',
+                type: 'line',
+                data: calculateMA(30),
+                smooth: true,
+                lineStyle: {
+                    normal: {opacity: 0.5}
+                }
+            },
+
+        ]
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+</script>
+</body>
+</html>
+
+
+
+

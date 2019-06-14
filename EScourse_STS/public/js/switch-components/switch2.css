@@ -1,0 +1,63 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+html {
+    margin: 2em;
+    background: #f0f0f0;
+    text-align: center;
+}
+
+section {
+    width: 160px;
+    display: inline-block;
+}
+input {
+    display: block;
+    opacity: 0;
+}
+label {
+    width: 60px;
+    height: 30px;
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    background: rgb(189, 189, 189);
+    border-radius: 30px;
+
+    transition: background-color 0.4s;
+    -moz-transition: background-color 0.4s;
+    -webkit-transition: background-color 0.4s;
+}
+label:after {
+    left: 0;
+    width: 20px;
+    height: 20px;
+    margin: 5px;
+    content: '';
+    position: absolute;
+    background: #FFF;
+    border-radius: 10px;
+}
+input:checked + label {
+    background: rgb(39, 173, 95);
+}
+input:checked + label:after {
+    left: auto;
+    right: 0;
+}
+
+p {
+    font: normal 8px/40px Arial;
+    color: rgb(189, 189, 189);
+    display: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+input:checked ~ p:nth-of-type(1) {
+    color: rgb(39, 173, 95);
+    display: block;
+}
+input:not(:checked) ~ p:nth-of-type(2) {
+    display: block;
+}
