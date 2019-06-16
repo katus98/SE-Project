@@ -164,7 +164,7 @@ module.exports = function () {
             }
 
         })
-        }else if(Pwd.toString() == 'option2'){
+        } else if (Pwd.toString() == 'option2') {
             dbQuery(sqlQuery2, params, function (error, results) {
                 if (error) {
                     console.log('[UPDATE ERROR] - ', error.message);
@@ -181,7 +181,8 @@ module.exports = function () {
             })
         }
     });
-
+    
+    router.post('/changePassword/change', (req, res, next) => {
         var sqlQuery = "UPDATE capitalaccount SET tradepassword = ? WHERE capitalaccountid = ?";
         var params = [req.body.f_Npassword1, req.body.f_username];
         console.log(req.body);
@@ -201,8 +202,6 @@ module.exports = function () {
 
         })
     });
-
-
     return router;
 };
 
