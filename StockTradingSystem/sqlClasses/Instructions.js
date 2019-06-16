@@ -138,7 +138,43 @@ function Instructions() {
             callback(res);
         });
     };
-
+    /*
+    方法名称：getIfCanLogout
+    实现功能：获取能否销户
+    传入参数：personId、回调函数
+    回调参数：res = false / true
+    编程者：孙克染
+    * */
+    this.getIfCanLogout = function (personId, callback) {
+        let res = false;
+        let getSql1 = "SELECT * FROM asks WHERE status = ? AND uid = ?";
+        let getSql2 = "SELECT * FROM bids WHERE status = ? AND uid = ?";
+        let getSqlParams = ['partial', personId];
+        dbQuery(getSql1, getSqlParams, function (err, result) {
+            if (err) {
+                console.log("ERROR: Instructions: getIfHaveValidInstruction1");
+                console.log('[INSERT ERROR] - ', err.message);
+                return;
+            }
+            if (result.length > 0) {
+                callback(res);
+            } else {
+                dbQuery(getSql2, getSqlParams, function (err, result) {
+                    if (err) {
+                        console.log("ERROR: Instructions: getIfHaveValidInstruction2");
+                        console.log('[INSERT ERROR] - ', err.message);
+                        return;
+                    }
+                    if (result.length > 0) {
+                        callback(res);
+                    } else {
+                        res = true;
+                        callback(res);
+                    }
+                });
+            }
+        });
+    };
     /****插入方法****/
     /*
     方法名称：addTempInstructions
