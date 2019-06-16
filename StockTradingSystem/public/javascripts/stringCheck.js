@@ -31,7 +31,7 @@ function isRegisterUserName(s, notation) {
 //校验密码
 //只能输入6-20个字母、数字、下划线
 function isPassword(s, notation) {
-    var patrn = /^(\w){6,20}$/;
+    var patrn = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/;
     if(!patrn.exec(s)){
         notation.css("display","block");
         return false;
