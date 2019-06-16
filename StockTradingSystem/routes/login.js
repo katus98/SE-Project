@@ -90,32 +90,98 @@ module.exports = function () {
 
     router.post('/changePassword/change', (req, res, next) => {
         var sqlQuery = "select tradepassword from capitalaccount where capitalaccountid = ?";
+        var sqlQuery2 = "select cashpassword from capitalaccount where capitalaccountid = ?";
         var params = [req.body.f_username];
+        var Pwd = req.body.Pwd;
+
         console.log(req.body);
-        dbQuery(sqlQuery, params, function (error, results) {
+        if(Pwd.toString() == 'option1') {
+            dbQuery(sqlQuery, params, function (error, results) {
+                if (error) {
+                    console.log('[SELECT ERROR] - ', error.message);
+                    var msg = {"success": false};
+                    res.send(msg).end();
+                    return;
+                }
+                else if (results.length > 0) {
+
+                    if (results[0].tradepassword.toString() != req.body.f_password.toString()) {
+                        var msg = {"success": false};
+                        res.send(msg).end();
+                        return;
+                    } else {
+                        next();
+                    }
+                } else {
+                    var msg = {"success": false};
+                    res.send(msg).end();
+                }
+            })
+        }else if(Pwd.toString() == 'option2'){
+            dbQuery(sqlQuery2, params, function (error, results) {
+                if (error) {
+                    console.log('[SELECT ERROR] - ', error.message);
+                    var msg = {"success": false};
+                    res.send(msg).end();
+                    return;
+                }
+                else if (results.length > 0) {
+
+                    if (results[0].cashpassword.toString() != req.body.f_password.toString()) {
+                        var msg = {"success": false};
+                        res.send(msg).end();
+                        return;
+                    } else {
+                        next();
+                    }
+                } else {
+                    var msg = {"success": false};
+                    res.send(msg).end();
+                }
+            })
+        }
+    });
+
+    router.post('/changePassword/change', (req, res, next) => {
+        var sqlQuery = "UPDATE capitalaccount SET tradepassword = ? WHERE capitalaccountid = ?";
+        var sqlQuery2 = "UPDATE capitalaccount SET cashpassword = ? WHERE capitalaccountid = ?";
+        var params = [req.body.f_Npassword1, req.body.f_username];
+        console.log(req.body);
+        var Pwd = req.body.Pwd;
+
+        if(Pwd.toString() == 'option1'){
+            dbQuery(sqlQuery, params, function (error, results) {
             if (error) {
-                console.log('[SELECT ERROR] - ', error.message);
+                console.log('[UPDATE ERROR] - ', error.message);
                 var msg = {"success": false};
                 res.send(msg).end();
                 return;
+            } else {
+                console.log(results);
+                var msg = {"success": true};
+                res.send(msg).end();
+                return;
             }
-            else if(results.length > 0) {
 
-                if (results[0].tradepassword.toString() != req.body.f_password.toString()) {
+        })
+        }else if(Pwd.toString() == 'option2'){
+            dbQuery(sqlQuery2, params, function (error, results) {
+                if (error) {
+                    console.log('[UPDATE ERROR] - ', error.message);
                     var msg = {"success": false};
                     res.send(msg).end();
                     return;
                 } else {
-                    next();
+                    console.log(results);
+                    var msg = {"success": true};
+                    res.send(msg).end();
+                    return;
                 }
-            }else{
-                var msg={"success":false};
-                res.send(msg).end();
-            }
-        })
+
+            })
+        }
     });
 
-    router.post('/changePassword/change', (req, res, next) => {
         var sqlQuery = "UPDATE capitalaccount SET tradepassword = ? WHERE capitalaccountid = ?";
         var params = [req.body.f_Npassword1, req.body.f_username];
         console.log(req.body);
