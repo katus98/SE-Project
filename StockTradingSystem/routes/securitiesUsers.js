@@ -5,6 +5,7 @@ var findBack = require('../sqlClasses/FindBackSecuritiesAccount');
 var loseAccount = require('../sqlClasses/LoseSecuritiesAccount');
 var Stock = require('../sqlClasses/Stock');
 var Securitiesaccount = require('../sqlClasses/SecuritiesAccount');
+var Instructions=require('../sqlClasses/Instructions');
 
 // 补零
 function PrefixInteger(num, length) {
@@ -31,7 +32,7 @@ router.post('/poa', function (req, res) {
             else if(result2==-2){res.end("您已经开户，不能够重新开户");}
             else if(result2==-3){res.end("数据库错误");}
             else{
-                oaccount.initstockhold(result,function(result3){
+                oaccount.initstockhold(result.p,function(result3){
                     console.log(result3);
                     if(result3==1){
                         /*oaccount.getregistertime(result.a,function (result4) {
@@ -70,7 +71,7 @@ router.post('/coa',function(req,res){
                 res.end("数据库错误");
             }
             else {
-                oaccount.initstockhold(result, function (result3) {
+                oaccount.initstockhold(result.p, function (result3) {
                     if(result3==1) {
                         res.end("开户成功。" + "\n" + "您的证券账户号码为：" + PrefixInteger(result.a, 11) + "\n");
                     }
@@ -181,22 +182,30 @@ router.post('/cca',function(req,res){
     console.log(req.body);
     var stock=new Stock();
     var securitiesaccount=new Securitiesaccount();
+    var instructions=new Instructions();
     securitiesaccount.checkSecuritiesAccountidAndIdentityid(parseInt(req.body.accountid),req.body.identityid,function(result){
         if(result=='Match'){
             securitiesaccount.getSecuritiesAccountStateBySecuritiesAccountId(parseInt(req.body.accountid),function(result){
                 if(result=='normal'||result=='frozen'){
-                    securitiesaccount.getPersonIdBySecuritiesAccountId(parseInt(req.body.accountid),function(result){
-                        stock.checkStockClearByPersonid(parseInt(result),function(result){
+                    securitiesaccount.getPersonIdBySecuritiesAccountId(parseInt(req.body.accountid),function(result11){
+                        stock.checkStockClearByPersonid(parseInt(result11),function(result){
                             if(result=='StockClear'){
-                                securitiesaccount.stateChangetoLogoutbyAccountid(parseInt(req.body.accountid),function(result){
-                                    res.end("销户成功");
+                                instructions.getIfCanLogout(parseInt(result11),function (result) {
+                                    if(result){
+                                        securitiesaccount.stateChangetoLogoutbyAccountid(parseInt(req.body.accountid),function(result){
+                                            res.end("销户成功");
+                                        });
+                                    }
+                                    else{
+                                        res.end("股票交易进程未结束，无法销户");
+                                    }
                                 });
                             }
                             else if(result=='StockUnclear'){
                                 res.end("该账户名下的股票未清空");
                             }
                             else{
-                                res.end("该账户的持股记录未初始化");
+                                res.end("该账户的持股记录未初始化,无法销户");
                             }
                         });
                     });
@@ -210,7 +219,7 @@ router.post('/cca',function(req,res){
             });
         }
         else if(result=='notMatch'){
-            res.end("输入的身份证号码与证券账户号码不匹配");
+            res.end("输入的身份证号码与证券账户号码不匹配,无法销户");
         }
         else{
             res.end("没有该证券账户");
@@ -226,22 +235,30 @@ router.post('/pca',function(req,res){
     console.log(req.body);
     var stock=new Stock();
     var securitiesaccount=new Securitiesaccount();
+    var instructions=new Instructions();
     securitiesaccount.checkSecuritiesAccountidAndIdentityid(parseInt(req.body.accountid),req.body.identityid,function(result){
         if(result=='Match'){
             securitiesaccount.getSecuritiesAccountStateBySecuritiesAccountId(parseInt(req.body.accountid),function(result){
                 if(result=='normal'||result=='frozen'){
-                    securitiesaccount.getPersonIdBySecuritiesAccountId(parseInt(req.body.accountid),function(result){
-                        stock.checkStockClearByPersonid(parseInt(result),function(result){
+                    securitiesaccount.getPersonIdBySecuritiesAccountId(parseInt(req.body.accountid),function(result11){
+                        stock.checkStockClearByPersonid(parseInt(result11),function(result){
                             if(result=='StockClear'){
-                                securitiesaccount.stateChangetoLogoutbyAccountid(parseInt(req.body.accountid),function(result){
-                                    res.end("销户成功");
+                                instructions.getIfCanLogout(parseInt(result11),function (result) {
+                                    if(result){
+                                        securitiesaccount.stateChangetoLogoutbyAccountid(parseInt(req.body.accountid),function(result){
+                                            res.end("销户成功");
+                                        });
+                                    }
+                                    else{
+                                        res.end("股票交易进程未结束，无法销户");
+                                    }
                                 });
                             }
                             else if(result=='StockUnclear'){
-                                res.end("该账户名下的股票未清空");
+                                res.end("该账户名下的股票未清空,无法销户");
                             }
                             else{
-                                res.end("该账户的持股记录未初始化");
+                                res.end("该账户的持股记录未初始化,无法销户");
                             }
                         });
                     });
@@ -255,7 +272,7 @@ router.post('/pca',function(req,res){
             });
         }
         else if(result=='notMatch'){
-            res.end("该身份证号码名下的有效证券账户号码与输入的证券账户号码不匹配");
+            res.end("该身份证号码名下的有效证券账户号码与输入的证券账户号码不匹配,无法销户");
         }
         else{
             res.end("没有该证券账户");
