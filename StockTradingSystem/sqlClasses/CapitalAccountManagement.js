@@ -2,6 +2,10 @@
 var dbQuery = require('../database/MySQLquery');
 // 计算利息类
 var calculateInterest = require('../publicFunctionInterfaces/CalculateInterest');
+//user类
+var User = require('../publicFunctionInterfaces/Users');
+//instructions类
+var Instructions = require('../sqlClasses/Instructions');
 
 // 资金账户管理类
 function capitalAccountManagement () {
@@ -180,32 +184,49 @@ function capitalAccountManagement () {
 
     //资金账户销户
     this.close = function (capitalaccountid, cashpassWord,identificationid,callback) {
-        let checkSqlOne = "SELECT * FROM capitalaccount WHERE capitalaccountid = " + capitalaccountid + 
-        				" AND capitalaccountstate = \"normal\" AND cashpassWord = \'"+ cashpassWord + "\'"+
-        				" AND identificationid = \'" + identificationid + "\'";
-        dbQuery(checkSqlOne,[], function (err, result) {
-            if (err) {
-                console.log('[SELECT ERROR] - ', err.message);
-                return;
-            }
-            if (result.length > 0) {
-                if(result[0].availablemoney != 0.0 || result[0].interestremained != 0.0) {
-                  	callback('请取出所有的可用资金，然后再进行销户！');
-                } else {
-					let closeSql = "UPDATE capitalaccount SET capitalaccountstate = \'logout\' WHERE capitalaccountid = "+capitalaccountid;
-					dbQuery(closeSql,[], function (err, result) {
-						if (err) {
-							console.log('[UPDATE ERROR] - ', err.message);
-							return;
-						} else {
-							callback('资金账户注销成功！');
-						}
-					});
-                }
-            } else {
-            	callback('资金账户信息输入错误，或账户状态异常！');
-            }
-        });
+    	var instructions = new Instructions();
+    	var user = new User();
+    	user.getPersonIdByCapitalAccountId(capitalaccountid,function(res1){
+    		instructions.getIfCanLogout(res1.personId,function(res2)
+    		{
+    			if(res2==false)
+    			{
+    				callback('股票交易进程未结束，无法销户');
+    				return;
+    			}
+    			else
+    			{
+    			    let checkSqlOne = "SELECT * FROM capitalaccount WHERE capitalaccountid = " + capitalaccountid + 
+			        				" AND capitalaccountstate = \"normal\" AND cashpassWord = \'"+ cashpassWord + "\'"+
+			        				" AND identificationid = \'" + identificationid + "\'";
+			        dbQuery(checkSqlOne,[], function (err, result) {
+			            if (err) {
+			                console.log('[SELECT ERROR] - ', err.message);
+			                return;
+			            }
+			            if (result.length > 0) {
+			                if(result[0].availablemoney != 0.0 || result[0].interestremained != 0.0) {
+			                  	callback('请取出所有的可用资金，然后再进行销户！');
+			                } else {
+								let closeSql = "UPDATE capitalaccount SET capitalaccountstate = \'logout\' WHERE capitalaccountid = "+capitalaccountid;
+								dbQuery(closeSql,[], function (err, result) {
+									if (err) {
+										console.log('[UPDATE ERROR] - ', err.message);
+										return;
+									} else {
+										callback('资金账户注销成功！');
+									}
+								});
+			                }
+			            } else {
+			            	callback('资金账户信息输入错误，或账户状态异常！');
+			            }
+			        });
+    			}
+
+    		});
+    	});
+			
     };
 
     // 资金账户修改密码(存取款密码)
