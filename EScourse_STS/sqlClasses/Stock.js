@@ -359,21 +359,32 @@ function Stock() {
     编程者：陈玮烨、杨清杰、孙克染
      */
     this.updateStockHistoryAtClosing = function (callback) {
+        let deleteDuplicateHistorySQL = "DELETE FROM stock_history WHERE time = current_date();";
         let modSql = "INSERT INTO stock_history " +
             "(select code, highest, lowest, today_startprice, current_price, notification, current_date() " +
             "from stock natural left outer join ( " +
             "    select code, max(matchprice) as highest, min(matchprice) as lowest " +
             "    from matchs " +
             "    group by code) as aa);";
-        dbQuery(modSql, [], function (err, result) {
+        
+        dbQuery(deleteDuplicateHistorySQL, [], function(err, result){
             if (err) {
                 console.log("ERROR: Stock: updateStockHistoryAtClosing");
                 console.log('[UPDATE ERROR] - ', err.message);
                 callback(false);
                 return;
             }
-            callback(true);
+            dbQuery(modSql, [], function (err, result) {
+                if (err) {
+                    console.log("ERROR: Stock: updateStockHistoryAtClosing");
+                    console.log('[UPDATE ERROR] - ', err.message);
+                    callback(false);
+                    return;
+                }
+                callback(true);
+            });
         });
+
     };
 
     /**
