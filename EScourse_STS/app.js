@@ -14,7 +14,6 @@ var app = express();
 
 // config
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 var loginRouter = require('./routes/login');
 var logoutRouter = require('./routes/logout');
 var homeRouter  = require('./routes/home');
@@ -49,7 +48,6 @@ app.use(session({
 // router level middleware setting
 // app.use(mount point, router)
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/login', loginRouter);
 app.use('/home',  homeRouter );
 app.use('/logout', logoutRouter);
