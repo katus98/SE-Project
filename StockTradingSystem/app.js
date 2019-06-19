@@ -20,7 +20,7 @@ var capitalUsersRouter = require("./routes/capitalUsers");
 // 证券业务管理平台路由
 var securitiesUsersRouter = require('./routes/securitiesUsers');
 // 临时后台总控
-var homeRouter = require("./routes/home");
+//var homeRouter = require("./routes/home");
 
 var app = express();
 app.all('*', function(req, res, next) {
@@ -89,7 +89,7 @@ app.use('/userLogin', capitalUsersRouter);
 // 证券业务管理平台路由
 app.use('/securitiesaccount', securitiesUsersRouter);
 // 临时后台总控
-app.use('/home', homeRouter);
+//app.use('/home', homeRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
