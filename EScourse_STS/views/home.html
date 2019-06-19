@@ -1,38 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <meta name="keywords" content="admin, dashboard, bootstrap, template, flat, modern, theme, responsive, fluid, retina, backend, html5, css, css3">
-  <meta name="description" content="">
-  <meta name="author" content="ThemeBucket">
-  <link rel="shortcut icon" href="#" type="image/png">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="keywords" content="admin, dashboard, bootstrap, template, flat, modern, theme, responsive, fluid, retina, backend, html5, css, css3">
+    <meta name="description" content="">
+    <meta name="author" content="ThemeBucket">
+    <link rel="shortcut icon" href="#" type="image/png">
 
-  <title>股票交易中央管理系统</title>
+    <title>股票交易中央管理系统</title>
 
-  <!--icheck-->
-  <link href="/js/iCheck/skins/minimal/minimal.css" rel="stylesheet">
-  <link href="/js/iCheck/skins/square/square.css" rel="stylesheet">
-  <link href="/js/iCheck/skins/square/red.css" rel="stylesheet">
-  <link href="/js/iCheck/skins/square/blue.css" rel="stylesheet">
+    <!--icheck-->
+    <link href="/js/iCheck/skins/minimal/minimal.css" rel="stylesheet">
+    <link href="/js/iCheck/skins/square/square.css" rel="stylesheet">
+    <link href="/js/iCheck/skins/square/red.css" rel="stylesheet">
+    <link href="/js/iCheck/skins/square/blue.css" rel="stylesheet">
 
-  <!--dashboard calendar-->
-  <link href="./css/clndr.css" rel="stylesheet">
+    <!--dashboard calendar-->
+    <link href="/css/clndr.css" rel="stylesheet">
     <link rel="stylesheet" href="/js/switch-components/switch.css">
 
 
-  <!--Morris Chart CSS -->
-  <!--<link rel="stylesheet" href="/js/morris-chart/morris.css">-->
+    <!--Morris Chart CSS -->
+    <!--<link rel="stylesheet" href="/js/morris-chart/morris.css">-->
 
-  <!--common-->
-  <link href="./css/style.css" rel="stylesheet">
-  <link href="./css/style-responsive.css" rel="stylesheet">
+    <!--common-->
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/style-responsive.css" rel="stylesheet">
 
-  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!--[if lt IE 9]>
-  <script src="js/html5shiv.js"></script>
-  <script src="js/respond.min.js"></script>
-  <![endif]-->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/js/html5shiv.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
 </head>
 
 <body class="sticky-header">
@@ -136,8 +136,13 @@
                             </span>
                         </header>
                         <div class="panel-body">
-                            <label class="switch"><input type="checkbox" checked size="0.1"><span class="slider round"></span></label><Br>
-                            <label class="switch"><input type="checkbox" checked size="0.1"><span class="slider round"></span></label>
+                            <div style="height: 40px; line-height: 30px;">
+                                <label class="switch"><input type="checkbox" size="0.1" id="conIM"><span class="slider round"></span></label>&nbsp;大盘控制<Br>
+                            </div>
+                            <div style="height: 40px; line-height: 30px;">
+                                <label class="switch"><input type="checkbox" size="0.1" id="conAUTO"><span class="slider round"></span></label>&nbsp;大盘自动控制
+                            </div>
+                            <div id="temp" style="visibility: hidden;"><%= state1 %><%= state2 %></div>
                         </div>
                     </section>
                 </div>
@@ -524,6 +529,8 @@
     // 使用刚指定的配置项和数据显示图表。
     myChart.setOption(option);
 </script>
+<script src="/js/jquery-3.4.1.js"></script>
+<script src="/js/home_trading.js"></script>
 </body>
 </html>
 
