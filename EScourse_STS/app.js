@@ -21,7 +21,6 @@ var homeRouter  = require('./routes/home' );
 var tableRouter = require('./routes/dynamic_table');
 var registrationRouter = require('./routes/registration');
 var changepswRouter = require('./routes/change_password');
-var basictableRouter = require('./routes/basic_table');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -57,7 +56,6 @@ app.use('/logout', logoutRouter);
 app.use('/dynamic_table', tableRouter);
 app.use('/registration', registrationRouter);
 app.use('/change_password', changepswRouter);
-app.use('/basic_table', basictableRouter);
 //---------------- MIDDLEWARE ----------------//
 
 
