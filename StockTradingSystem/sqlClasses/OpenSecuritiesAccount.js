@@ -19,7 +19,7 @@ function OpenAccount() {
     };
     // 个人开户的插入操作
     this.insertpaccount = function (data, req, callback) {
-        //首先我们判断一下是否是重复开户
+        // 首先我们判断一下是否是重复开户
         let getSql0 = "select personalaccount.state as s from personalaccount,(select max(registertime) as r from personalaccount  where identityid="+'"'+req.body.identityid+'"'+") as u where personalaccount.registertime=u.r and personalaccount.identityid="+'"'+req.body.identityid+'"';
         dbQuery(getSql0,[],function(err,result){
             if (err) {
@@ -115,8 +115,7 @@ function OpenAccount() {
                 } else if (result[0].s === 'normal') {
                     callback(-2);
                 }
-            }
-            else {
+            } else {
                 // 给idreference表插入数据
                 let addSql = "insert into idreference(accountid, personid) values(?, ?)";
                 let addSqlParams = [data.a, data.p];
@@ -125,8 +124,8 @@ function OpenAccount() {
                         console.log('[INSERT TO IDREFERENCE ERROR] - ', err.message);
                         return;
                     }
-                    //如果不存在代办人，那么插入数据时，不需要插入代办人属性
-                    //给personalaccount表插入数据
+                    // 如果不存在代办人，那么插入数据时，不需要插入代办人属性
+                    // 给personalaccount表插入数据
                     let addSql2 = "insert into personalaccount(accountid, name, gender, identityid, homeaddress, work, educationback, workaddress, phonenumber, personid) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     let addSqlParams2 = [data.a, req.body.name, req.body.gender, req.body.idCardNumber, req.body.address, req.body.job, req.body.education, req.body.company, req.body.phone, data.p];
                     dbQuery(addSql2, addSqlParams2, function (err, result) {
@@ -134,9 +133,9 @@ function OpenAccount() {
                             console.log('[INSERT TO PERSONALACCOUNT ERROR] -', err.message);
                             return;
                         }
+                        callback(1);
                     });
                 });
-                callback(1);
             }
         });
     };

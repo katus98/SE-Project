@@ -22,7 +22,9 @@ router.post('/register', function (req, res, next) {
     let result0 = {result: false, securitiesAccountId: '', capitalAccountId: 2019101, personId: '', name: '', type: '自然人', remark: ''};
     let openSecuritiesAccount = new OpenSecuritiesAccount();
     openSecuritiesAccount.currentpaccount(function (result) {
+        console.log(result);
         openSecuritiesAccount.insertpaccountQuick(result, req, function (result2) {
+            console.log(result2);
             if (result2 === -1) {
                 result0.remark = '您的证券账户已经冻结，可以补办，但不能够重复开户；如有补办需求，请到线下证券交易事务所进行。';
                 res.end(JSON.stringify(result0));
@@ -31,11 +33,13 @@ router.post('/register', function (req, res, next) {
                 res.end(JSON.stringify(result0));
             } else {
                 openSecuritiesAccount.initstockhold(result.p, function(result3){
+                    console.log(result3);
                     result0.securitiesAccountId = result.a;
                     result0.personId = result.p;
                     result0.name = req.body.name;
                     let capitalAccountManagement = new CapitalAccountManagement();
                     capitalAccountManagement.register(req.body.loginPassword, req.body.moneyPassword, req.body.idCardNumber, result0.securitiesAccountId, function (result4) {
+                        console.log(result4);
                         if (result4.result) {
                             result0.result = true;
                             result0.capitalAccountId = result4.capitalAccountId;
