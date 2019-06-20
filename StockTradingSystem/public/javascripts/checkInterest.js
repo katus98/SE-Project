@@ -57,4 +57,4 @@ function sendMessage() {
 }
 
 // checkInterest();
-// var int=self.setInterval("sendMessage()",5000);
+var int=self.setInterval("sendMessage()",5000);
