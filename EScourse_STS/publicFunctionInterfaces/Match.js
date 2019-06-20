@@ -351,14 +351,18 @@ function Match() {
     * */
     this.startMatching = function (callback) {
         start = true;
-        callback(true);
+        Match.startMatchInSQL(function (result) {
+            callback(result);
+        });
     };
     // todo:
     // Note: Repetitive stopping matching in a day would invoke a bug due to a constraint on the table stock_history
     // which only allows 1 record per code per day.
     this.stopMatching = function (callback) {
         start = false;
-
+        Match.stopMatchInSQL(function (result) {
+            console.log('stop in sql');
+        });
         let capitalAccount = new CapitalAccount();
         let stocks= new Stock();
         let instruction = new Instructions();
@@ -396,10 +400,42 @@ function Match() {
     编程者：孙克染
     * */
     this.getStateOfMatch = function (callback) {
-        let result = {start: false, flag: false};
-        result.start = start;
-        result.flag = flag;
-        callback(result);
+        let result0 = {start: false, flag: false};
+        let sql = 'SELECT status FROM matchstate';
+        dbQuery(sql, [], function (err, result) {
+            if (err) {
+                console.log("ERROR: Match: getStateOfMatch");
+                console.log('[SELECT ERROR] - ', err.message);
+                return;
+            }
+            result0.start = result[0].status;
+            result0.flag = flag;
+            callback(result0);
+        });
+    };
+    Match.stopMatchInSQL = function (callback) {
+        let sql = 'UPDATE matchstate SET status = false';
+        dbQuery(sql, [], function (err, result) {
+            if (err) {
+                console.log("ERROR: Match: stopMatchInSQL");
+                console.log('[SELECT ERROR] - ', err.message);
+                callback(false);
+                return;
+            }
+            callback(true);
+        });
+    };
+    Match.startMatchInSQL = function (callback) {
+        let sql = 'UPDATE matchstate SET status = true';
+        dbQuery(sql, [], function (err, result) {
+            if (err) {
+                console.log("ERROR: Match: startMatchInSQL");
+                console.log('[SELECT ERROR] - ', err.message);
+                callback(false);
+                return;
+            }
+            callback(true);
+        });
     };
 }
 

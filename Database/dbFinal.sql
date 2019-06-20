@@ -6,6 +6,13 @@ use StockTradingSys;
 
 -- 建立表格 ----------------
 
+drop table if exists matchstate;
+create table matchstate(
+	status boolean default false
+);
+
+insert into matchstate(status) values(false);
+
 -- Group-E
 -- 股票表
 drop table if exists stock;
